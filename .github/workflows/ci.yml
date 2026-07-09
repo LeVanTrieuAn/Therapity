@@ -1,0 +1,198 @@
+name: Build and Push Docker Image
+
+on:
+  push:
+    branches: ["main", "master"]
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+  build-and-push-image:
+    runs-on: [self-hosted, linux]
+    permissions:
+      contents: write
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Bump Version
+        run: |
+          VERSION_FILE="frontend/version.txt"
+          if [ -f "$VERSION_FILE" ]; then
+            CURRENT_VERSION=$(cat $VERSION_FILE)
+            NEW_VERSION=$(awk "BEGIN {printf \"%.1f\", $CURRENT_VERSION + 0.1}")
+            echo "$NEW_VERSION" > $VERSION_FILE
+            echo "Bumped version from $CURRENT_VERSION to $NEW_VERSION"
+          else
+            echo "0.1" > $VERSION_FILE
+            echo "Created version.txt with version 0.1"
+            NEW_VERSION="0.1"
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add $VERSION_FILE
+          git commit -m "chore: bump frontend version to $NEW_VERSION [skip ci]" || echo "No changes to commit"
+          git push || echo "Warning: Direct push to main branch failed (possibly due to branch protection). Building Docker image with local version bump anyway."
+
+      - name: Lowercase IMAGE_NAME
+        run: echo "IMAGE_NAME_LOWER=${IMAGE_NAME,,}" >> $GITHUB_ENV
+        env:
+          IMAGE_NAME: ${{ github.repository }}
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        env:
+          NODE_OPTIONS: "--dns-result-order=ipv4first"
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_LOWER }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=sha
+
+      - name: Build and push Docker image
+        run: |
+          IMAGE_TAG="${{ env.REGISTRY }}/${{ env.IMAGE_NAME_LOWER }}:sha-$(echo ${{ github.sha }} | cut -c1-7)"
+          BRANCH_TAG="${{ env.REGISTRY }}/${{ env.IMAGE_NAME_LOWER }}:${{ github.ref_name }}"
+          
+          docker build -t $IMAGE_TAG -t $BRANCH_TAG .
+          
+          push_with_retry() {
+            local tag=$1
+            local max_attempts=5
+            local attempt=1
+            local delay=5
+            
+            while [ $attempt -le $max_attempts ]; do
+              echo "Pushing $tag (Attempt $attempt of $max_attempts)..."
+              if docker push $tag; then
+                echo "Successfully pushed $tag!"
+                return 0
+              fi
+              echo "Warning: Push failed on attempt $attempt. Retrying in $delay seconds..."
+              sleep $delay
+              attempt=$((attempt + 1))
+              delay=$((delay * 2))
+            done
+            
+            echo "Error: Failed to push $tag after $max_attempts attempts."
+            return 1
+          }
+          
+          push_with_retry $IMAGE_TAG
+          push_with_retry $BRANCH_TAG
+
+      - name: Checkout k3s-apps repository
+        if: github.event_name != 'pull_request'
+        run: |
+          rm -rf k3s-apps
+          git clone https://token:${{ secrets.GH_PAT }}@git.innoria.com/inno-devops/k3s-apps.git k3s-apps
+
+      - name: Install kubeseal
+        if: github.event_name != 'pull_request'
+        run: |
+          KUBESEAL_VERSION="0.27.1"
+          curl -L "https://github.com/bitnami-labs/sealed-secrets/releases/download/v${KUBESEAL_VERSION}/kubeseal-${KUBESEAL_VERSION}-linux-amd64.tar.gz" -o "kubeseal-${KUBESEAL_VERSION}-linux-amd64.tar.gz"
+          tar -xvzf kubeseal-${KUBESEAL_VERSION}-linux-amd64.tar.gz kubeseal
+          chmod +x kubeseal
+
+      - name: Create and Seal Secrets
+        if: github.event_name != 'pull_request'
+        run: |
+          # Xuất certificate từ Github Secret ra file
+          echo "${{ secrets.SEALED_SECRETS_CERT }}" > sealed-secrets-cert.pem
+
+          # Mã hóa secret offline bằng certificate
+          B64_KEY=$(echo -n "${{ secrets.OPENAI_API_KEY }}" | base64 -w0)
+          B64_OPENROUTER_API_KEY=$(echo -n "${{ secrets.OPENROUTER_API_KEY }}" | base64 -w0)
+          B64_SMTP_USER=$(echo -n "${{ secrets.SMTP_USER }}" | base64 -w0)
+          B64_SMTP_PASSWORD=$(echo -n "${{ secrets.SMTP_PASSWORD }}" | base64 -w0)
+          B64_LLM_BASE_URL=$(echo -n "${{ secrets.LLM_BASE_URL }}" | base64 -w0)
+          B64_LLM_MODEL=$(echo -n "${{ secrets.LLM_MODEL }}" | base64 -w0)
+          B64_CMS_BASE_URL=$(echo -n "${{ secrets.CMS_BASE_URL }}" | base64 -w0)
+          B64_CMS_API_KEY=$(echo -n "${{ secrets.CMS_API_KEY }}" | base64 -w0)
+          B64_VOICE_API_KEY=$(echo -n "${{ secrets.VOICE_API_KEY }}" | base64 -w0)
+          B64_VOICE_GET_API_KEY=$(echo -n "${{ secrets.VOICE_GET_API_KEY }}" | base64 -w0)
+
+          # Tạo file YAML chuẩn (tránh dùng kubectl)
+          echo "apiVersion: v1" > secret.yaml
+          echo "kind: Secret" >> secret.yaml
+          echo "metadata:" >> secret.yaml
+          echo "  name: thapsang-secrets" >> secret.yaml
+          echo "  namespace: thapsang" >> secret.yaml
+          echo "type: Opaque" >> secret.yaml
+          echo "data:" >> secret.yaml
+          echo "  OPENAI_API_KEY: $B64_KEY" >> secret.yaml
+          echo "  OPENROUTER_API_KEY: $B64_OPENROUTER_API_KEY" >> secret.yaml
+          echo "  SMTP_USER: $B64_SMTP_USER" >> secret.yaml
+          echo "  SMTP_PASSWORD: $B64_SMTP_PASSWORD" >> secret.yaml
+          echo "  LLM_BASE_URL: $B64_LLM_BASE_URL" >> secret.yaml
+          echo "  LLM_MODEL: $B64_LLM_MODEL" >> secret.yaml
+          echo "  CMS_BASE_URL: $B64_CMS_BASE_URL" >> secret.yaml
+          echo "  CMS_API_KEY: $B64_CMS_API_KEY" >> secret.yaml
+          echo "  VOICE_API_KEY: $B64_VOICE_API_KEY" >> secret.yaml
+          echo "  VOICE_GET_API_KEY: $B64_VOICE_GET_API_KEY" >> secret.yaml
+
+          ./kubeseal --cert sealed-secrets-cert.pem --format yaml < secret.yaml > k3s-apps/apps/thapsang/thapsang-sealed-secrets.yaml
+
+      - name: Update manifest and push to k3s-apps
+        if: github.event_name != 'pull_request'
+        run: |
+          MANIFEST_PATH="apps/thapsang/thapsang-deployment.yaml"
+          IMAGE="${{ env.REGISTRY }}/${{ env.IMAGE_NAME_LOWER }}"
+
+          TAG="sha-$(echo ${{ github.sha }} | cut -c1-7)"
+
+          cd k3s-apps
+          sed -i "s|image: \(['\"]*\)${IMAGE}:[^'\"]*\(['\"]*\)|image: \1${IMAGE}:${TAG}\2|gI" ${MANIFEST_PATH}
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add ${MANIFEST_PATH} apps/thapsang/thapsang-sealed-secrets.yaml
+          git commit -m "ci(thapsang): auto-update image to ${TAG} and sealed secrets" || echo "No changes to commit"
+          # Tự động đẩy lên branch chính của remote
+          REMOTE_BRANCH=$(git rev-parse --abbrev-ref origin/HEAD | cut -d'/' -f2)
+          git push origin HEAD:${REMOTE_BRANCH:-main}
+
+      - name: Send Telegram Notification
+        if: always() && github.event_name != 'pull_request'
+        run: |
+          STATUS="✅ SUCCESS"
+          URL_INFO='\n<b>URL:</b> <a href=\"https://thapsang.mojo.vn\">https://thapsang.mojo.vn</a>'
+          if [ "${{ job.status }}" != "success" ]; then
+            STATUS="❌ FAILED"
+            URL_INFO=""
+          fi
+          
+          # Lấy nội dung commit message mới nhất
+          COMMIT_MSG=$(git log -1 --pretty=format:"%s")
+          # Escape các ký tự HTML và chuỗi để an toàn khi gửi qua Telegram/JSON
+          COMMIT_MSG="${COMMIT_MSG//&/&amp;}"
+          COMMIT_MSG="${COMMIT_MSG//</&lt;}"
+          COMMIT_MSG="${COMMIT_MSG//>/&gt;}"
+          COMMIT_MSG="${COMMIT_MSG//\"/\\\"}"
+
+          curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "chat_id": "${{ secrets.TELEGRAM_CHAT_ID }}",
+              "message_thread_id": "${{ secrets.TELEGRAM_TOPIC_ID }}",
+              "parse_mode": "HTML",
+              "text": "<b>[CI/CD Thapsang]</b> Build & Deploy Pipeline\n<b>Status:</b> '"$STATUS"'\n<b>Commit:</b> <a href=\"https://github.com/${{ github.repository }}/commit/${{ github.sha }}\">'"$COMMIT_MSG"'</a>\n<b>Branch:</b> ${{ github.ref_name }}\n<b>Actor:</b> ${{ github.actor }}'"$URL_INFO"'\n<a href=\"https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\">View Workflow Run</a>"
+            }'

@@ -1,0 +1,1380 @@
+{
+    "368487800635392": {
+        "id": "367916999901184",
+        "author_name": "trieuan3499@gmail.com",
+        "author_avatar": "https://thapsang.digiforce.vn/storage/uploads/upload_075ae41b37b04953b5801e93f007d0fe-9k9son.jpeg",
+        "content": "123456",
+        "graph_data": {
+            "nodes": [
+                {
+                    "id": "n1",
+                    "label": "Thiếu mục tiêu",
+                    "color": "#e9c400"
+                },
+                {
+                    "id": "n3",
+                    "label": "Lướt điện thoại",
+                    "color": "#e9c400"
+                },
+                {
+                    "id": "n4",
+                    "label": "Muốn phát triển",
+                    "color": "#ffb4ab"
+                },
+                {
+                    "id": "n5",
+                    "label": "Giải trí sau mệt",
+                    "color": "#ffb4ab"
+                },
+                {
+                    "id": "n6",
+                    "label": "Không có cách khác",
+                    "color": "#ffb4ab"
+                },
+                {
+                    "id": "n7",
+                    "label": "Chưa nghĩ ra",
+                    "color": "#e9c400"
+                },
+                {
+                    "id": "n8",
+                    "label": "Cách khác tốn năng lượng",
+                    "color": "#e9c400"
+                },
+                {
+                    "id": "n9",
+                    "label": "Có cách thư giãn + phát triển?",
+                    "color": "#e9c400"
+                }
+            ],
+            "edges": [
+                {
+                    "source": "n3",
+                    "target": "n1",
+                    "label": "Hậu quả",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n4",
+                    "target": "n3",
+                    "label": "Nhưng",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n5",
+                    "target": "n3",
+                    "label": "Lý do",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n5",
+                    "target": "n4",
+                    "label": "Mâu thuẫn",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n6",
+                    "target": "n4",
+                    "label": "Ngăn cản",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n6",
+                    "target": "n3",
+                    "label": "Biện hộ",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n6",
+                    "target": "n7",
+                    "label": "Mâu thuẫn",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n8",
+                    "target": "n6",
+                    "label": "Lý do",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n8",
+                    "target": "n4",
+                    "label": "Mâu thuẫn",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n9",
+                    "target": "n4",
+                    "label": "Hướng tới",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n9",
+                    "target": "n5",
+                    "label": "Cũng muốn thư giãn",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n9",
+                    "target": "n6",
+                    "label": "Mâu thuẫn với không có cách khác",
+                    "is_contradiction": true
+                }
+            ]
+        },
+        "timestamp": "2026-06-03T04:21:35.985Z",
+        "likes": 0,
+        "shares": 0,
+        "post_status": "active",
+        "post_privacy": "public",
+        "liked_by": [],
+        "comments": []
+    },
+    "368487806926848": {
+        "id": "367916999901184",
+        "author_name": "trieuan3499@gmail.com",
+        "author_avatar": "https://thapsang.digiforce.vn/storage/uploads/upload_075ae41b37b04953b5801e93f007d0fe-9k9son.jpeg",
+        "content": "123456",
+        "graph_data": {
+            "nodes": [
+                {
+                    "id": "n1",
+                    "label": "Thiếu mục tiêu",
+                    "color": "#e9c400"
+                },
+                {
+                    "id": "n3",
+                    "label": "Lướt điện thoại",
+                    "color": "#e9c400"
+                },
+                {
+                    "id": "n4",
+                    "label": "Muốn phát triển",
+                    "color": "#ffb4ab"
+                },
+                {
+                    "id": "n5",
+                    "label": "Giải trí sau mệt",
+                    "color": "#ffb4ab"
+                },
+                {
+                    "id": "n6",
+                    "label": "Không có cách khác",
+                    "color": "#ffb4ab"
+                },
+                {
+                    "id": "n7",
+                    "label": "Chưa nghĩ ra",
+                    "color": "#e9c400"
+                },
+                {
+                    "id": "n8",
+                    "label": "Cách khác tốn năng lượng",
+                    "color": "#e9c400"
+                },
+                {
+                    "id": "n9",
+                    "label": "Có cách thư giãn + phát triển?",
+                    "color": "#e9c400"
+                }
+            ],
+            "edges": [
+                {
+                    "source": "n3",
+                    "target": "n1",
+                    "label": "Hậu quả",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n4",
+                    "target": "n3",
+                    "label": "Nhưng",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n5",
+                    "target": "n3",
+                    "label": "Lý do",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n5",
+                    "target": "n4",
+                    "label": "Mâu thuẫn",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n6",
+                    "target": "n4",
+                    "label": "Ngăn cản",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n6",
+                    "target": "n3",
+                    "label": "Biện hộ",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n6",
+                    "target": "n7",
+                    "label": "Mâu thuẫn",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n8",
+                    "target": "n6",
+                    "label": "Lý do",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n8",
+                    "target": "n4",
+                    "label": "Mâu thuẫn",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n9",
+                    "target": "n4",
+                    "label": "Hướng tới",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n9",
+                    "target": "n5",
+                    "label": "Cũng muốn thư giãn",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n9",
+                    "target": "n6",
+                    "label": "Mâu thuẫn với không có cách khác",
+                    "is_contradiction": true
+                }
+            ]
+        },
+        "timestamp": "2026-06-03T04:21:35.985Z",
+        "likes": 0,
+        "shares": 0,
+        "post_status": "active",
+        "post_privacy": "public",
+        "liked_by": [],
+        "comments": []
+    },
+    "368487813218304": {
+        "id": "367916999901184",
+        "author_name": "trieuan3499@gmail.com",
+        "author_avatar": "https://thapsang.digiforce.vn/storage/uploads/upload_075ae41b37b04953b5801e93f007d0fe-9k9son.jpeg",
+        "content": "123456",
+        "graph_data": {
+            "nodes": [
+                {
+                    "id": "n1",
+                    "label": "Thiếu mục tiêu",
+                    "color": "#e9c400"
+                },
+                {
+                    "id": "n3",
+                    "label": "Lướt điện thoại",
+                    "color": "#e9c400"
+                },
+                {
+                    "id": "n4",
+                    "label": "Muốn phát triển",
+                    "color": "#ffb4ab"
+                },
+                {
+                    "id": "n5",
+                    "label": "Giải trí sau mệt",
+                    "color": "#ffb4ab"
+                },
+                {
+                    "id": "n6",
+                    "label": "Không có cách khác",
+                    "color": "#ffb4ab"
+                },
+                {
+                    "id": "n7",
+                    "label": "Chưa nghĩ ra",
+                    "color": "#e9c400"
+                },
+                {
+                    "id": "n8",
+                    "label": "Cách khác tốn năng lượng",
+                    "color": "#e9c400"
+                },
+                {
+                    "id": "n9",
+                    "label": "Có cách thư giãn + phát triển?",
+                    "color": "#e9c400"
+                }
+            ],
+            "edges": [
+                {
+                    "source": "n3",
+                    "target": "n1",
+                    "label": "Hậu quả",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n4",
+                    "target": "n3",
+                    "label": "Nhưng",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n5",
+                    "target": "n3",
+                    "label": "Lý do",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n5",
+                    "target": "n4",
+                    "label": "Mâu thuẫn",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n6",
+                    "target": "n4",
+                    "label": "Ngăn cản",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n6",
+                    "target": "n3",
+                    "label": "Biện hộ",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n6",
+                    "target": "n7",
+                    "label": "Mâu thuẫn",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n8",
+                    "target": "n6",
+                    "label": "Lý do",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n8",
+                    "target": "n4",
+                    "label": "Mâu thuẫn",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n9",
+                    "target": "n4",
+                    "label": "Hướng tới",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n9",
+                    "target": "n5",
+                    "label": "Cũng muốn thư giãn",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n9",
+                    "target": "n6",
+                    "label": "Mâu thuẫn với không có cách khác",
+                    "is_contradiction": true
+                }
+            ]
+        },
+        "timestamp": "2026-06-03T04:21:35.985Z",
+        "likes": 0,
+        "shares": 0,
+        "post_status": "active",
+        "post_privacy": "public",
+        "liked_by": [],
+        "comments": []
+    },
+    "368488173928448": {
+        "id": "367916999901184",
+        "author_name": "trieuan3499@gmail.com",
+        "author_avatar": "https://thapsang.digiforce.vn/storage/uploads/upload_075ae41b37b04953b5801e93f007d0fe-9k9son.jpeg",
+        "content": "123456",
+        "graph_data": {
+            "nodes": [
+                {
+                    "id": "n1",
+                    "label": "Thiếu mục tiêu",
+                    "color": "#e9c400"
+                },
+                {
+                    "id": "n3",
+                    "label": "Lướt điện thoại",
+                    "color": "#e9c400"
+                },
+                {
+                    "id": "n4",
+                    "label": "Muốn phát triển",
+                    "color": "#ffb4ab"
+                },
+                {
+                    "id": "n5",
+                    "label": "Giải trí sau mệt",
+                    "color": "#ffb4ab"
+                },
+                {
+                    "id": "n6",
+                    "label": "Không có cách khác",
+                    "color": "#ffb4ab"
+                },
+                {
+                    "id": "n7",
+                    "label": "Chưa nghĩ ra",
+                    "color": "#e9c400"
+                },
+                {
+                    "id": "n8",
+                    "label": "Cách khác tốn năng lượng",
+                    "color": "#e9c400"
+                },
+                {
+                    "id": "n9",
+                    "label": "Có cách thư giãn + phát triển?",
+                    "color": "#e9c400"
+                }
+            ],
+            "edges": [
+                {
+                    "source": "n3",
+                    "target": "n1",
+                    "label": "Hậu quả",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n4",
+                    "target": "n3",
+                    "label": "Nhưng",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n5",
+                    "target": "n3",
+                    "label": "Lý do",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n5",
+                    "target": "n4",
+                    "label": "Mâu thuẫn",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n6",
+                    "target": "n4",
+                    "label": "Ngăn cản",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n6",
+                    "target": "n3",
+                    "label": "Biện hộ",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n6",
+                    "target": "n7",
+                    "label": "Mâu thuẫn",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n8",
+                    "target": "n6",
+                    "label": "Lý do",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n8",
+                    "target": "n4",
+                    "label": "Mâu thuẫn",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n9",
+                    "target": "n4",
+                    "label": "Hướng tới",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n9",
+                    "target": "n5",
+                    "label": "Cũng muốn thư giãn",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n9",
+                    "target": "n6",
+                    "label": "Mâu thuẫn với không có cách khác",
+                    "is_contradiction": true
+                }
+            ]
+        },
+        "timestamp": "2026-06-03T04:21:35.985Z",
+        "likes": 0,
+        "shares": 1,
+        "post_status": "active",
+        "post_privacy": "public",
+        "liked_by": [],
+        "comments": []
+    },
+    "368489706946560": {
+        "id": "367916999901184",
+        "author_name": "trieuan3499@gmail.com",
+        "author_avatar": "https://thapsang.digiforce.vn/storage/uploads/upload_075ae41b37b04953b5801e93f007d0fe-9k9son.jpeg",
+        "content": "123456",
+        "graph_data": {
+            "nodes": [
+                {
+                    "id": "n1",
+                    "label": "Thiếu mục tiêu",
+                    "color": "#e9c400"
+                },
+                {
+                    "id": "n3",
+                    "label": "Lướt điện thoại",
+                    "color": "#e9c400"
+                },
+                {
+                    "id": "n4",
+                    "label": "Muốn phát triển",
+                    "color": "#ffb4ab"
+                },
+                {
+                    "id": "n5",
+                    "label": "Giải trí sau mệt",
+                    "color": "#ffb4ab"
+                },
+                {
+                    "id": "n6",
+                    "label": "Không có cách khác",
+                    "color": "#ffb4ab"
+                },
+                {
+                    "id": "n7",
+                    "label": "Chưa nghĩ ra",
+                    "color": "#e9c400"
+                },
+                {
+                    "id": "n8",
+                    "label": "Cách khác tốn năng lượng",
+                    "color": "#e9c400"
+                },
+                {
+                    "id": "n9",
+                    "label": "Có cách thư giãn + phát triển?",
+                    "color": "#e9c400"
+                }
+            ],
+            "edges": [
+                {
+                    "source": "n3",
+                    "target": "n1",
+                    "label": "Hậu quả",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n4",
+                    "target": "n3",
+                    "label": "Nhưng",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n5",
+                    "target": "n3",
+                    "label": "Lý do",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n5",
+                    "target": "n4",
+                    "label": "Mâu thuẫn",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n6",
+                    "target": "n4",
+                    "label": "Ngăn cản",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n6",
+                    "target": "n3",
+                    "label": "Biện hộ",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n6",
+                    "target": "n7",
+                    "label": "Mâu thuẫn",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n8",
+                    "target": "n6",
+                    "label": "Lý do",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n8",
+                    "target": "n4",
+                    "label": "Mâu thuẫn",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n9",
+                    "target": "n4",
+                    "label": "Hướng tới",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n9",
+                    "target": "n5",
+                    "label": "Cũng muốn thư giãn",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n9",
+                    "target": "n6",
+                    "label": "Mâu thuẫn với không có cách khác",
+                    "is_contradiction": true
+                }
+            ]
+        },
+        "timestamp": "2026-06-03T04:21:35.985Z",
+        "likes": 0,
+        "shares": 2,
+        "post_status": "active",
+        "post_privacy": "public",
+        "liked_by": [],
+        "comments": []
+    },
+    "368490136862720": {
+        "id": "367916999901184",
+        "author_name": "trieuan3499@gmail.com",
+        "author_avatar": "https://thapsang.digiforce.vn/storage/uploads/upload_075ae41b37b04953b5801e93f007d0fe-9k9son.jpeg",
+        "content": "123456",
+        "graph_data": {
+            "nodes": [
+                {
+                    "id": "n1",
+                    "label": "Thiếu mục tiêu",
+                    "color": "#e9c400"
+                },
+                {
+                    "id": "n3",
+                    "label": "Lướt điện thoại",
+                    "color": "#e9c400"
+                },
+                {
+                    "id": "n4",
+                    "label": "Muốn phát triển",
+                    "color": "#ffb4ab"
+                },
+                {
+                    "id": "n5",
+                    "label": "Giải trí sau mệt",
+                    "color": "#ffb4ab"
+                },
+                {
+                    "id": "n6",
+                    "label": "Không có cách khác",
+                    "color": "#ffb4ab"
+                },
+                {
+                    "id": "n7",
+                    "label": "Chưa nghĩ ra",
+                    "color": "#e9c400"
+                },
+                {
+                    "id": "n8",
+                    "label": "Cách khác tốn năng lượng",
+                    "color": "#e9c400"
+                },
+                {
+                    "id": "n9",
+                    "label": "Có cách thư giãn + phát triển?",
+                    "color": "#e9c400"
+                }
+            ],
+            "edges": [
+                {
+                    "source": "n3",
+                    "target": "n1",
+                    "label": "Hậu quả",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n4",
+                    "target": "n3",
+                    "label": "Nhưng",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n5",
+                    "target": "n3",
+                    "label": "Lý do",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n5",
+                    "target": "n4",
+                    "label": "Mâu thuẫn",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n6",
+                    "target": "n4",
+                    "label": "Ngăn cản",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n6",
+                    "target": "n3",
+                    "label": "Biện hộ",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n6",
+                    "target": "n7",
+                    "label": "Mâu thuẫn",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n8",
+                    "target": "n6",
+                    "label": "Lý do",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n8",
+                    "target": "n4",
+                    "label": "Mâu thuẫn",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n9",
+                    "target": "n4",
+                    "label": "Hướng tới",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n9",
+                    "target": "n5",
+                    "label": "Cũng muốn thư giãn",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n9",
+                    "target": "n6",
+                    "label": "Mâu thuẫn với không có cách khác",
+                    "is_contradiction": true
+                }
+            ]
+        },
+        "timestamp": "2026-06-03T04:21:35.985Z",
+        "likes": 0,
+        "shares": 3,
+        "post_status": "active",
+        "post_privacy": "public",
+        "liked_by": [],
+        "comments": []
+    },
+    "368491445485568": {
+        "id": "367916999901184",
+        "author_name": "trieuan3499@gmail.com",
+        "author_avatar": "https://thapsang.digiforce.vn/storage/uploads/upload_075ae41b37b04953b5801e93f007d0fe-9k9son.jpeg",
+        "content": "123456",
+        "graph_data": {
+            "nodes": [
+                {
+                    "id": "n1",
+                    "label": "Thiếu mục tiêu",
+                    "color": "#e9c400"
+                },
+                {
+                    "id": "n3",
+                    "label": "Lướt điện thoại",
+                    "color": "#e9c400"
+                },
+                {
+                    "id": "n4",
+                    "label": "Muốn phát triển",
+                    "color": "#ffb4ab"
+                },
+                {
+                    "id": "n5",
+                    "label": "Giải trí sau mệt",
+                    "color": "#ffb4ab"
+                },
+                {
+                    "id": "n6",
+                    "label": "Không có cách khác",
+                    "color": "#ffb4ab"
+                },
+                {
+                    "id": "n7",
+                    "label": "Chưa nghĩ ra",
+                    "color": "#e9c400"
+                },
+                {
+                    "id": "n8",
+                    "label": "Cách khác tốn năng lượng",
+                    "color": "#e9c400"
+                },
+                {
+                    "id": "n9",
+                    "label": "Có cách thư giãn + phát triển?",
+                    "color": "#e9c400"
+                }
+            ],
+            "edges": [
+                {
+                    "source": "n3",
+                    "target": "n1",
+                    "label": "Hậu quả",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n4",
+                    "target": "n3",
+                    "label": "Nhưng",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n5",
+                    "target": "n3",
+                    "label": "Lý do",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n5",
+                    "target": "n4",
+                    "label": "Mâu thuẫn",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n6",
+                    "target": "n4",
+                    "label": "Ngăn cản",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n6",
+                    "target": "n3",
+                    "label": "Biện hộ",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n6",
+                    "target": "n7",
+                    "label": "Mâu thuẫn",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n8",
+                    "target": "n6",
+                    "label": "Lý do",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n8",
+                    "target": "n4",
+                    "label": "Mâu thuẫn",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n9",
+                    "target": "n4",
+                    "label": "Hướng tới",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n9",
+                    "target": "n5",
+                    "label": "Cũng muốn thư giãn",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n9",
+                    "target": "n6",
+                    "label": "Mâu thuẫn với không có cách khác",
+                    "is_contradiction": true
+                }
+            ]
+        },
+        "timestamp": "2026-06-03T04:21:35.985Z",
+        "likes": 0,
+        "shares": 4,
+        "post_status": "active",
+        "post_privacy": "public",
+        "liked_by": [],
+        "comments": []
+    },
+    "368491565023232": {
+        "id": "367916999901184",
+        "author_name": "trieuan3499@gmail.com",
+        "author_avatar": "https://thapsang.digiforce.vn/storage/uploads/upload_075ae41b37b04953b5801e93f007d0fe-9k9son.jpeg",
+        "content": "123456",
+        "graph_data": {
+            "nodes": [
+                {
+                    "id": "n1",
+                    "label": "Thiếu mục tiêu",
+                    "color": "#e9c400"
+                },
+                {
+                    "id": "n3",
+                    "label": "Lướt điện thoại",
+                    "color": "#e9c400"
+                },
+                {
+                    "id": "n4",
+                    "label": "Muốn phát triển",
+                    "color": "#ffb4ab"
+                },
+                {
+                    "id": "n5",
+                    "label": "Giải trí sau mệt",
+                    "color": "#ffb4ab"
+                },
+                {
+                    "id": "n6",
+                    "label": "Không có cách khác",
+                    "color": "#ffb4ab"
+                },
+                {
+                    "id": "n7",
+                    "label": "Chưa nghĩ ra",
+                    "color": "#e9c400"
+                },
+                {
+                    "id": "n8",
+                    "label": "Cách khác tốn năng lượng",
+                    "color": "#e9c400"
+                },
+                {
+                    "id": "n9",
+                    "label": "Có cách thư giãn + phát triển?",
+                    "color": "#e9c400"
+                }
+            ],
+            "edges": [
+                {
+                    "source": "n3",
+                    "target": "n1",
+                    "label": "Hậu quả",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n4",
+                    "target": "n3",
+                    "label": "Nhưng",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n5",
+                    "target": "n3",
+                    "label": "Lý do",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n5",
+                    "target": "n4",
+                    "label": "Mâu thuẫn",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n6",
+                    "target": "n4",
+                    "label": "Ngăn cản",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n6",
+                    "target": "n3",
+                    "label": "Biện hộ",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n6",
+                    "target": "n7",
+                    "label": "Mâu thuẫn",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n8",
+                    "target": "n6",
+                    "label": "Lý do",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n8",
+                    "target": "n4",
+                    "label": "Mâu thuẫn",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n9",
+                    "target": "n4",
+                    "label": "Hướng tới",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n9",
+                    "target": "n5",
+                    "label": "Cũng muốn thư giãn",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n9",
+                    "target": "n6",
+                    "label": "Mâu thuẫn với không có cách khác",
+                    "is_contradiction": true
+                }
+            ]
+        },
+        "timestamp": "2026-06-03T04:21:35.985Z",
+        "likes": 0,
+        "shares": 5,
+        "post_status": "active",
+        "post_privacy": "public",
+        "liked_by": [],
+        "comments": []
+    },
+    "368491730698240": {
+        "id": "367914749657088",
+        "author_name": "trieu",
+        "author_avatar": "https://lh3.googleusercontent.com/a/default-user",
+        "content": "Test post from local script",
+        "graph_data": {
+            "nodes": [],
+            "edges": []
+        },
+        "timestamp": "2026-06-03T11:03:41.262Z",
+        "likes": 1,
+        "shares": 0,
+        "post_status": "active",
+        "post_privacy": "public",
+        "liked_by": [],
+        "comments": []
+    },
+    "368491992842240": {
+        "id": "367916999901184",
+        "author_name": "trieuan3499@gmail.com",
+        "author_avatar": "https://thapsang.digiforce.vn/storage/uploads/upload_075ae41b37b04953b5801e93f007d0fe-9k9son.jpeg",
+        "content": "123456",
+        "graph_data": {
+            "nodes": [
+                {
+                    "id": "n1",
+                    "label": "Thiếu mục tiêu",
+                    "color": "#e9c400"
+                },
+                {
+                    "id": "n3",
+                    "label": "Lướt điện thoại",
+                    "color": "#e9c400"
+                },
+                {
+                    "id": "n4",
+                    "label": "Muốn phát triển",
+                    "color": "#ffb4ab"
+                },
+                {
+                    "id": "n5",
+                    "label": "Giải trí sau mệt",
+                    "color": "#ffb4ab"
+                },
+                {
+                    "id": "n6",
+                    "label": "Không có cách khác",
+                    "color": "#ffb4ab"
+                },
+                {
+                    "id": "n7",
+                    "label": "Chưa nghĩ ra",
+                    "color": "#e9c400"
+                },
+                {
+                    "id": "n8",
+                    "label": "Cách khác tốn năng lượng",
+                    "color": "#e9c400"
+                },
+                {
+                    "id": "n9",
+                    "label": "Có cách thư giãn + phát triển?",
+                    "color": "#e9c400"
+                }
+            ],
+            "edges": [
+                {
+                    "source": "n3",
+                    "target": "n1",
+                    "label": "Hậu quả",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n4",
+                    "target": "n3",
+                    "label": "Nhưng",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n5",
+                    "target": "n3",
+                    "label": "Lý do",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n5",
+                    "target": "n4",
+                    "label": "Mâu thuẫn",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n6",
+                    "target": "n4",
+                    "label": "Ngăn cản",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n6",
+                    "target": "n3",
+                    "label": "Biện hộ",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n6",
+                    "target": "n7",
+                    "label": "Mâu thuẫn",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n8",
+                    "target": "n6",
+                    "label": "Lý do",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n8",
+                    "target": "n4",
+                    "label": "Mâu thuẫn",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n9",
+                    "target": "n4",
+                    "label": "Hướng tới",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n9",
+                    "target": "n5",
+                    "label": "Cũng muốn thư giãn",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n9",
+                    "target": "n6",
+                    "label": "Mâu thuẫn với không có cách khác",
+                    "is_contradiction": true
+                }
+            ]
+        },
+        "timestamp": "2026-06-03T04:21:35.985Z",
+        "likes": 0,
+        "shares": 6,
+        "post_status": "active",
+        "post_privacy": "public",
+        "liked_by": [],
+        "comments": []
+    },
+    "368492357746688": {
+        "id": "367914749657088",
+        "author_name": "trieu",
+        "author_avatar": "https://lh3.googleusercontent.com/a/default-user",
+        "content": "Test post from local script",
+        "graph_data": {
+            "nodes": [],
+            "edges": []
+        },
+        "timestamp": "2026-06-03T11:03:41.262Z",
+        "likes": 1,
+        "shares": 1,
+        "post_status": "active",
+        "post_privacy": "public",
+        "liked_by": [],
+        "comments": []
+    },
+    "368492496158720": {
+        "id": "367914749657088",
+        "author_name": "trieu",
+        "author_avatar": "https://lh3.googleusercontent.com/a/default-user",
+        "content": "Test post from local script",
+        "graph_data": {
+            "nodes": [],
+            "edges": []
+        },
+        "timestamp": "2026-06-03T11:03:41.262Z",
+        "likes": 1,
+        "shares": 2,
+        "post_status": "active",
+        "post_privacy": "public",
+        "liked_by": [],
+        "comments": []
+    },
+    "368492919783424": {
+        "id": "367914862903296",
+        "author_name": "trieuan3499@gmail.com",
+        "author_avatar": "",
+        "content": "Test post for real user from local script",
+        "graph_data": {
+            "nodes": [],
+            "edges": []
+        },
+        "timestamp": "2026-06-03T11:04:35.720Z",
+        "likes": 0,
+        "shares": 0,
+        "post_status": "active",
+        "post_privacy": "public",
+        "liked_by": [],
+        "comments": []
+    },
+    "368493196607488": {
+        "id": "367916999901184",
+        "author_name": "trieuan3499@gmail.com",
+        "author_avatar": "https://thapsang.digiforce.vn/storage/uploads/upload_075ae41b37b04953b5801e93f007d0fe-9k9son.jpeg",
+        "content": "123456",
+        "graph_data": {
+            "nodes": [
+                {
+                    "id": "n1",
+                    "label": "Thiếu mục tiêu",
+                    "color": "#e9c400"
+                },
+                {
+                    "id": "n3",
+                    "label": "Lướt điện thoại",
+                    "color": "#e9c400"
+                },
+                {
+                    "id": "n4",
+                    "label": "Muốn phát triển",
+                    "color": "#ffb4ab"
+                },
+                {
+                    "id": "n5",
+                    "label": "Giải trí sau mệt",
+                    "color": "#ffb4ab"
+                },
+                {
+                    "id": "n6",
+                    "label": "Không có cách khác",
+                    "color": "#ffb4ab"
+                },
+                {
+                    "id": "n7",
+                    "label": "Chưa nghĩ ra",
+                    "color": "#e9c400"
+                },
+                {
+                    "id": "n8",
+                    "label": "Cách khác tốn năng lượng",
+                    "color": "#e9c400"
+                },
+                {
+                    "id": "n9",
+                    "label": "Có cách thư giãn + phát triển?",
+                    "color": "#e9c400"
+                }
+            ],
+            "edges": [
+                {
+                    "source": "n3",
+                    "target": "n1",
+                    "label": "Hậu quả",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n4",
+                    "target": "n3",
+                    "label": "Nhưng",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n5",
+                    "target": "n3",
+                    "label": "Lý do",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n5",
+                    "target": "n4",
+                    "label": "Mâu thuẫn",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n6",
+                    "target": "n4",
+                    "label": "Ngăn cản",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n6",
+                    "target": "n3",
+                    "label": "Biện hộ",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n6",
+                    "target": "n7",
+                    "label": "Mâu thuẫn",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n8",
+                    "target": "n6",
+                    "label": "Lý do",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n8",
+                    "target": "n4",
+                    "label": "Mâu thuẫn",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n9",
+                    "target": "n4",
+                    "label": "Hướng tới",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n9",
+                    "target": "n5",
+                    "label": "Cũng muốn thư giãn",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n9",
+                    "target": "n6",
+                    "label": "Mâu thuẫn với không có cách khác",
+                    "is_contradiction": true
+                }
+            ]
+        },
+        "timestamp": "2026-06-03T04:21:35.985Z",
+        "likes": 0,
+        "shares": 7,
+        "post_status": "active",
+        "post_privacy": "public",
+        "liked_by": [],
+        "comments": []
+    }
+}

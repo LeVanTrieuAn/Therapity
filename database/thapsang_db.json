@@ -1,0 +1,528 @@
+{
+    "_folders": {
+        "user": []
+    },
+    "_diaries": {
+        "user": [
+            {
+                "id": "diary_1779439561",
+                "title": "Page Title",
+                "content": "# Page Title",
+                "mood": "Calm",
+                "folder": "abc",
+                "date": "2026-05-22 08:46:01",
+                "ai_insight": ""
+            },
+            {
+                "id": "diary_1779427447",
+                "title": "Iloveyou",
+                "content": "# Iloveyou",
+                "mood": "Calm",
+                "folder": "abc",
+                "date": "2026-05-22 05:24:07",
+                "ai_insight": ""
+            },
+            {
+                "id": "diary_1779426838",
+                "title": "aaaaaaaaaaaaaa",
+                "content": "# aaaaaaaaaaaaaa [[Iloveyou]]",
+                "mood": "Calm",
+                "folder": "abc",
+                "date": "2026-05-22 05:13:58",
+                "ai_insight": ""
+            },
+            {
+                "id": "diary_1779426600",
+                "title": "aaaaa",
+                "content": "# aaaaa",
+                "mood": "Calm",
+                "folder": "abc",
+                "date": "2026-05-22 05:10:00",
+                "ai_insight": ""
+            },
+            {
+                "id": "diary_1779426395",
+                "title": "dddd",
+                "content": "# dddd [[aaaaa]]",
+                "mood": "Calm",
+                "folder": "abc",
+                "date": "2026-05-22 05:06:35",
+                "ai_insight": ""
+            },
+            {
+                "id": "diary_1779426342",
+                "title": "aaa",
+                "content": "# aaa [[dddd]]",
+                "mood": "Calm",
+                "folder": "abc",
+                "date": "2026-05-22 05:05:42",
+                "ai_insight": ""
+            },
+            {
+                "id": "diary_1779426325",
+                "title": "abccc",
+                "content": "",
+                "mood": "Calm",
+                "folder": "abc",
+                "date": "2026-05-22 05:05:25",
+                "ai_insight": "AI Socratic Coach đang chờ suy ngẫm từ bài viết của bạn. Hãy viết nội dung và nhấn 'Lưu & Khám phá AI' để soi chiếu bản thân."
+            },
+            {
+                "id": "diary_1779423892",
+                "title": "abc",
+                "content": "",
+                "mood": "Calm",
+                "folder": "",
+                "date": "2026-05-22 04:24:52",
+                "ai_insight": "AI Socratic Coach đang chờ suy ngẫm từ bài viết của bạn. Hãy viết nội dung và nhấn 'Lưu & Khám phá AI' để soi chiếu bản thân."
+            },
+            {
+                "id": "diary_1779423892",
+                "title": "abc",
+                "content": "",
+                "mood": "Calm",
+                "folder": "",
+                "date": "2026-05-22 04:24:52",
+                "ai_insight": "AI Socratic Coach đang chờ suy ngẫm từ bài viết của bạn. Hãy viết nội dung và nhấn 'Lưu & Khám phá AI' để soi chiếu bản thân."
+            },
+            {
+                "id": "diary_1779423438",
+                "title": "aad",
+                "content": "[[aaa]] [[abc]]",
+                "mood": "Calm",
+                "folder": "",
+                "date": "2026-05-22 04:17:18",
+                "ai_insight": ""
+            }
+        ]
+    },
+    "_analytics_assessments": {
+        "user": [
+            {
+                "label": "Mốc 1",
+                "decisionQualityScore": 52,
+                "mindsetRetentionScore": 96,
+                "ratings": {
+                    "q1": 3,
+                    "q2": 2,
+                    "q3": 3,
+                    "q4": 5,
+                    "q5": 5,
+                    "q6": 4
+                }
+            },
+            {
+                "label": "Mốc 2",
+                "decisionQualityScore": 60,
+                "mindsetRetentionScore": 92,
+                "ratings": {
+                    "q1": 3,
+                    "q2": 3,
+                    "q3": 3,
+                    "q4": 5,
+                    "q5": 4,
+                    "q6": 5
+                }
+            },
+            {
+                "label": "Mốc 3",
+                "decisionQualityScore": 72,
+                "mindsetRetentionScore": 88,
+                "ratings": {
+                    "q1": 4,
+                    "q2": 3,
+                    "q3": 4,
+                    "q4": 4,
+                    "q5": 5,
+                    "q6": 4
+                }
+            },
+            {
+                "label": "Mốc 4",
+                "decisionQualityScore": 80,
+                "mindsetRetentionScore": 84,
+                "ratings": {
+                    "q1": 4,
+                    "q2": 4,
+                    "q3": 4,
+                    "q4": 4,
+                    "q5": 4,
+                    "q6": 4
+                }
+            }
+        ]
+    },
+    "_profiles": {
+        "user": {
+            "displayName": "user",
+            "bio": "Học hỏi, chia sẻ và cùng nhau phát triển tại cộng đồng Thapsang. ",
+            "following_list": [],
+            "onboarding": {
+                "day_of_birth": "16",
+                "month_of_birth": "11",
+                "year_of_birth": "2011",
+                "gender": "Nam",
+                "interests": [
+                    "Thiền & Yoga"
+                ],
+                "problems": [
+                    "Căng thẳng / Stress"
+                ],
+                "goals": [
+                    "Kết nối cộng đồng"
+                ],
+                "source": "Trường học / Công ty"
+            }
+        }
+    },
+    "1779442860429": {
+        "username": "user",
+        "chat_history": [
+            {
+                "role": "model",
+                "content": "Welcome user. What is on your mind?",
+                "isTyped": true,
+                "isWelcome": true
+            },
+            {
+                "role": "user",
+                "content": "i am tired ",
+                "isTyped": true
+            },
+            {
+                "role": "model",
+                "content": "When you say 'tired', are you describing a physical depletion of energy, or an exhaustion of will to continue?",
+                "reasoning": "User states exhaustion without context. This is a surface symptom, not the root cause. I need to force them to examine what 'tired' actually means in their specific context before any solution can exist.",
+                "title": "Tiredness as signal",
+                "isTyped": true
+            },
+            {
+                "role": "user",
+                "content": "tôi chỉ cảm thấy mệt do áp lực công việc ",
+                "isTyped": true
+            },
+            {
+                "role": "model",
+                "content": "Nếu áp lực thực sự là nguyên nhân, tại sao bạn không thể đơn giản từ chối hoặc nghỉ ngơi mà vẫn cảm thấy tội lỗi?",
+                "reasoning": "Người dùng gán nguyên nhân cho mệt mỏi mà không phân tích bản chất. Có thể đây là cơ chế phòng vệ để tránh đối mặt với công việc khó khăn.",
+                "title": "Áp lực hay trốn tránh?",
+                "isTyped": true
+            },
+            {
+                "role": "user",
+                "content": "because i have many work to handle and i afraid my bos will complain ",
+                "isTyped": true
+            },
+            {
+                "role": "model",
+                "content": "Nếu nỗi sợ là động lực chính, tại sao bạn không thể làm việc với mức năng lượng thấp hơn mà vẫn hoàn thành?",
+                "reasoning": "Người dùng tuyên bố mệt mỏi nhưng vẫn tiếp tục làm việc vì sợ hãi. Điều này bộc lộ mâu thuẫn giữa nhu cầu sinh học và sự cưỡng ép tâm lý.",
+                "title": "Sợ hãi vượt qua giới hạn thể chất",
+                "isTyped": true
+            },
+            {
+                "role": "user",
+                "content": "i don't know ",
+                "isTyped": true
+            },
+            {
+                "role": "model",
+                "content": "Nếu bạn thực sự không biết cách làm việc với năng lượng thấp, thì nỗi sợ sếp phàn nàn đang bảo vệ điều gì cho bạn?",
+                "reasoning": "Người dùng thừa nhận sự không chắc chắn - điều này cho thấy nỗi sợ đang hoạt động dựa trên giả định chứ không phải thực tế. Đây là điểm bẫy để phơi bày mâu thuẫn.",
+                "title": "Không biết / Sợ hãi",
+                "isTyped": true
+            },
+            {
+                "role": "user",
+                "content": "im afraid out of work ",
+                "isTyped": true
+            },
+            {
+                "role": "model",
+                "content": "Nếu kiệt sức đang làm bạn dễ mắc lỗi hơn, tại sao bạn lại coi việc 'làm thêm giờ' là cách an toàn nhất để tránh mất việc?",
+                "reasoning": "User đang mắc bẫy 'làm nhiều = an toàn'. Họ nghĩ rằng kiệt sức là do áp lực, nhưng thực ra kiệt sức chính là mối đe dọa lớn nhất đến việc giữ công việc - vì nó làm giảm hiệu suất và tăng lỗi sai.",
+                "title": "Sợ mất việc nhưng kiệt sức",
+                "isTyped": true
+            },
+            {
+                "role": "user",
+                "content": "im afraid out of work",
+                "isTyped": true
+            },
+            {
+                "role": "model",
+                "content": "If your strategy is to avoid losing work, why does working while exhausted increase the probability of exactly that outcome?",
+                "reasoning": "User's fear-based logic creates a self-defeating cycle where their 'safety' behavior increases risk",
+                "title": "Fear Paradox",
+                "isTyped": true
+            },
+            {
+                "role": "user",
+                "content": "tôi không biết ",
+                "isTyped": true
+            },
+            {
+                "role": "model",
+                "content": "Nếu kiệt sức làm tăng tỷ lệ sai sót, và sai sót là nguyên nhân chính khiến sếp phàn nàn, thì tại sao bạn lại coi việc 'làm thêm giờ khi mệt' là cách an toàn nhất để tránh mất việc?",
+                "reasoning": "User đang lặp lại nỗi sợ 'mất việc' cho thấy họ mắc kẹt trong vòng lặp: sợ hãi → làm việc quá sức → kiệt sức → dễ sai sót → tăng nguy cơ mất việc. Đây là mâu thuẫn tự hủy hoại.",
+                "title": "Sợ mất việc nhưng tự hủy",
+                "isTyped": true
+            },
+            {
+                "role": "user",
+                "content": "i have to make money ",
+                "isTyped": true
+            },
+            {
+                "role": "model",
+                "content": "Nếu kiếm tiền là ưu tiên, tại sao việc làm khi kiệt sức lại tăng nguy cơ mất đi chính thứ bạn đang cố gắng bảo vệ?",
+                "reasoning": "User justifies exhaustion with financial necessity, creating a paradox: the method to earn money (exhausted work) increases risk of losing the job they're trying to protect.",
+                "title": "Tiền bạc vs Mất việc",
+                "isTyped": true
+            },
+            {
+                "role": "user",
+                "content": "피곤해요",
+                "isTyped": true
+            },
+            {
+                "role": "model",
+                "content": "Nếu tiền là mục tiêu, tại sao việc làm khi kiệt sức lại tăng nguy cơ mất đi chính thứ bạn đang cố gắng bảo vệ?",
+                "reasoning": "User is caught in contradiction between needing money and working while exhausted increases risk of losing job. The paradox needs exposure.",
+                "title": "Tiền hay việc an toàn?",
+                "isTyped": true
+            },
+            {
+                "role": "user",
+                "content": "피곤해요",
+                "isTyped": true
+            },
+            {
+                "role": "model",
+                "content": "\"피곤함\"을 반복하는 것이 두려움의 대면 대신 무엇을 대체하고 있는가?",
+                "reasoning": "User is using 'tired' as a shield to avoid answering why their fear-based behavior contradicts their goal. They're deflecting with repetition instead of confronting the contradiction.",
+                "title": "회피적 반복",
+                "isTyped": true
+            },
+            {
+                "role": "user",
+                "content": "i am tired ",
+                "isTyped": true
+            },
+            {
+                "role": "model",
+                "content": "If 'tired' is your shield against examining the contradiction, what are you protecting yourself from seeing?",
+                "reasoning": "사용자가 'tired'를 반복하며 논리적 모순을 회피하고 있다. 목표(안정)와 행동(과로)의 괴리를 직면하지 않고 감정적 상태에 머물러 있다.",
+                "title": "피곤함은 방패인가?",
+                "isTyped": true
+            },
+            {
+                "role": "user",
+                "content": "tôi nghĩ bản thân mệt mỏi và muốn thoát ly"
+            },
+            {
+                "role": "model",
+                "content": "Nếu 'thoát ly' là mục tiêu, tại sao nỗi sợ mất việc vẫn giữ bạn ở đây?",
+                "reasoning": "Người dùng thừa nhận muốn 'thoát ly' - không chỉ nghỉ ngơi mà là rút lui hoàn toàn khỏi tình huống. Điều này mâu thuẫn trực tiếp với nỗi sợ mất việc: họ muốn bỏ chạy khỏi thứ đang đe dọa an toàn tài chính của mình.",
+                "title": "Muốn thoát ly hoàn toàn",
+                "isTyped": true
+            },
+            {
+                "role": "user",
+                "content": "Tôi không có lựa chọn nào khác"
+            },
+            {
+                "role": "model",
+                "content": "Nếu thực sự không có lựa chọn nào khác, tại sao bạn vẫn đang làm việc - một hành động đòi hỏi sự lựa chọn?",
+                "reasoning": "Người dùng đang mắc kẹt trong ảo tưởng 'không có lựa chọn' - đây là mâu thuẫn cốt lõi: nếu thực sự không có lựa chọn, tại sao họ vẫn đang làm việc (một hành động lựa chọn)? Câu hỏi này sẽ buộc họ đối mặt với thực tế rằng 'không có lựa chọn' là một câu chuyện họ tự kể để biện minh cho sự kiệt sức.",
+                "title": "Bẫy 'không có lựa chọn'",
+                "isTyped": false
+            }
+        ],
+        "graph_data": {
+            "nodes": [
+                {
+                    "id": "n1",
+                    "label": "Áp lực công việc",
+                    "color": "#e9c400"
+                },
+                {
+                    "id": "n2",
+                    "label": "Nỗi sợ mất việc",
+                    "color": "#ffb4ab"
+                },
+                {
+                    "id": "n3",
+                    "label": "Cần kiếm tiền",
+                    "color": "#e9c400"
+                },
+                {
+                    "id": "n4",
+                    "label": "Muốn thoát ly",
+                    "color": "#ffb4ab"
+                },
+                {
+                    "id": "n5",
+                    "label": "Không có lựa chọn nào khác",
+                    "color": "#ffb4ab"
+                },
+                {
+                    "id": "n6",
+                    "label": "Avoidance: No insight",
+                    "color": "#ffb4ab"
+                },
+                {
+                    "id": "n10",
+                    "label": "회피적 반복",
+                    "color": "#ffb4ab"
+                },
+                {
+                    "id": "n15",
+                    "label": "Muốn thoát ly",
+                    "color": "#ffb4ab"
+                },
+                {
+                    "id": "n16",
+                    "label": "Sợ mất việc",
+                    "color": "#e9c400"
+                }
+            ],
+            "edges": [
+                {
+                    "source": "n1",
+                    "target": "n2",
+                    "label": "Dẫn đến",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n1",
+                    "target": "n3",
+                    "label": "Do",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n2",
+                    "target": "n3",
+                    "label": "Biến thành động lực",
+                    "is_contradiction": false
+                },
+                {
+                    "source": "n3",
+                    "target": "n1",
+                    "label": "Creates more tiredness",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n3",
+                    "target": "n4",
+                    "label": "Nhưng mâu thuẫn với",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n4",
+                    "target": "n2",
+                    "label": "Tăng nguy cơ / Nhưng",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n4",
+                    "target": "n5",
+                    "label": "Biến thành lý do",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n5",
+                    "target": "n4",
+                    "label": "Mâu thuẫn với",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n5",
+                    "target": "n6",
+                    "label": "Leads to",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n9",
+                    "target": "n10",
+                    "label": "대신",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n6",
+                    "target": "n2",
+                    "label": "Repeats cycle",
+                    "is_contradiction": true
+                },
+                {
+                    "source": "n15",
+                    "target": "n16",
+                    "label": "Nhưng",
+                    "is_contradiction": true
+                }
+            ]
+        },
+        "tasks": [],
+        "has_new_task": false
+    },
+    "1779522917018": {
+        "username": "user",
+        "chat_history": [
+            {
+                "role": "model",
+                "content": "Chào mừng user. Hãy chia sẻ điều gì đang khiến bạn bận tâm?",
+                "isTyped": false,
+                "isWelcome": true
+            },
+            {
+                "role": "user",
+                "content": "Tôi muốn nghỉ việc do áp lực"
+            },
+            {
+                "role": "model",
+                "content": "Nếu nghỉ việc hôm nay, áp lực tài chính bạn nói đến sẽ biến mất hay chỉ chuyển sang dạng khác?",
+                "reasoning": "Người dùng đang bộc lộ mâu thuẫn cốt lõi: muốn thoát khỏi áp lực nhưng hồ sơ cho thấy họ bị chi phối bởi nỗi sợ mất việc và nhu cầu sinh tồn. Câu hỏi sẽ buộc họ đối mặt với sự vô lý của việc 'chạy trốn' thay vì giải quyết gốc rễ.",
+                "title": "Muốn thoát nhưng kẹt",
+                "isTyped": true
+            },
+            {
+                "role": "user",
+                "content": "Nhưng tôi đã làm đủ rồi"
+            },
+            {
+                "role": "model",
+                "content": "Nếu bạn đã làm đủ, thì việc nghỉ việc hôm nay có phải là sự thừa thãi hay chỉ là sự công nhận?",
+                "reasoning": "Người dùng đang dùng 'đã làm đủ' như một tấm khiên để tránh đối mặt với nỗi sợ thay đổi. Mâu thuẫn: nếu thực sự 'đủ', tại sao áp lực vẫn tồn tại?",
+                "title": "Nghĩ là đủ nhưng vẫn còn áp lực",
+                "isTyped": false
+            }
+        ],
+        "graph_data": {
+            "nodes": [
+                {
+                    "id": "n1",
+                    "label": "Áp lực tài chính",
+                    "color": "#e9c400"
+                },
+                {
+                    "id": "n2",
+                    "label": "Đã làm đủ rồi",
+                    "color": "#ffb4ab"
+                }
+            ],
+            "edges": [
+                {
+                    "source": "n1",
+                    "target": "n2",
+                    "label": "Nhưng vẫn còn",
+                    "is_contradiction": true
+                }
+            ]
+        },
+        "tasks": [],
+        "has_new_task": false
+    },
+    "_contexts": {
+        "user": ""
+    }
+}

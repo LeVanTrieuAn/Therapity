@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+
+<html lang="vi" class="dark">
+
+<head>
+    <script src="/nocobase-adapter.js"></script>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Thapsang - Đăng nhập</title>
+    <!-- Force dark mode on initial load -->
+    <script>
+        // Set dark mode immediately before page renders
+        const savedTheme = localStorage.getItem('thapsang_theme') || localStorage.getItem('theme') || 'dark';
+        if (savedTheme === 'dark') {
+            document.documentElement.classList.add('dark');
+            document.documentElement.classList.remove('light');
+            localStorage.setItem('thapsang_theme', 'dark');
+            localStorage.setItem('theme', 'dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+            document.documentElement.classList.add('light');
+            localStorage.setItem('thapsang_theme', 'light');
+            localStorage.setItem('theme', 'light');
+        }
+    </script>
+    <script src="/i18n.js?v=12"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries&v=3.4.1"></script>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=Montserrat:wght@600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed": "#2563eb", /* Blue 600 */
+                        "primary-fixed-dim": "#1d4ed8", /* Blue 700 */
+                        "on-primary-fixed": "#ffffff", /* White text */
+                        "primary-container": "#1e40af", /* Blue 800 */
+                        "primary": "#eff6ff", /* Blue 50 */
+                        "background": "#ffffff",
+                        "on-background": "#0f172a", /* Slate 900 */
+                        "surface": "#ffffff",
+                        "on-surface": "#0f172a",
+                        "on-surface-variant": "#3b82f6", /* Blue 500 for labels/hints */
+                        "outline-variant": "#bfdbfe", /* Blue 200 for borders */
+                        "error": "#ef4444",
+
+                        /* Dark mode colors - Elegant Gold/Slate theme */
+                        "dark-primary-fixed": "#eab308", /* Yellow 500 (Gold) */
+                        "dark-primary-fixed-dim": "#ca8a04", /* Yellow 600 */
+                        "dark-on-primary-fixed": "#000000", /* Black text on button */
+                        "dark-primary-container": "#854d0e", /* Yellow 800 */
+                        "dark-primary": "#fef08a", /* Yellow 200 */
+                        "dark-background": "#0f172a", /* Slate 900 */
+                        "dark-on-background": "#f8fafc", /* Slate 50 (White/Gray) */
+                        "dark-surface": "#1e293b", /* Slate 800 */
+                        "dark-on-surface": "#f1f5f9", /* Slate 100 */
+                        "dark-on-surface-variant": "#94a3b8", /* Slate 400 for labels/hints */
+                        "dark-outline-variant": "#334155", /* Slate 700 for borders */
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "unit": "8px",
+                        "container-max": "800px",
+                        "focus-padding": "4rem",
+                        "gutter": "2rem",
+                        "section-gap": "8rem"
+                    },
+                    "fontFamily": {
+                        "display-lg-mobile": ["Montserrat"],
+                        "label-sm": ["Inter"],
+                        "headline-md": ["Montserrat"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "display-lg": ["Montserrat"]
+                    },
+                    "fontSize": {
+                        "display-lg-mobile": ["33px", { "lineHeight": "40px", "fontWeight": "700" }],
+                        "label-sm": ["14px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-md": ["25px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-lg": ["19px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "body-md": ["17px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "display-lg": ["49px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        @keyframes pageFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-page-fade {
+            animation: pageFadeIn 0.8s ease-out forwards;
+        }
+
+        [x-cloak] {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body
+    class="min-h-screen flex items-center justify-center relative overflow-y-auto font-body-md py-10 bg-background text-on-background dark:bg-dark-background dark:text-dark-on-background"
+    x-data="authApp()" @ts-lang-changed.window="lang = $event.detail.lang" x-cloak>
+    <div
+        class="absolute inset-0 z-0 overflow-hidden bg-gradient-to-br from-[#e0f2fe] to-[#ffffff] dark:from-[#1a1a1a] dark:to-[#0a0a0a]">
+        <div class="absolute inset-0 bg-white/20 dark:bg-black/20 "></div>
+    </div>
+
+    <!-- Top Right Controls: Language & Theme -->
+    <div class="fixed top-6 right-6 z-50 flex items-center gap-3 scale-125 md:scale-150 origin-top-right transition-transform">
+        <!-- Language Switcher -->
+        <div class="relative ts-lang-dropdown" x-data="{ openLang: false }" @click.away="openLang = false">
+            <button @click="openLang = !openLang" type="button" class="ts-lang-dropdown-btn flex items-center gap-1.5 h-[37px] px-3 rounded-[12px] bg-white/80 dark:bg-black/60  border border-blue-200 dark:border-yellow-600/30 shadow-sm hover:scale-105 transition-all duration-300">
+                <template x-if="lang === 'vi'">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 20" class="w-5 h-3.5 rounded-[2px] shadow-sm">
+                        <rect width="30" height="20" fill="#da251d" />
+                        <polygon fill="#ffff00" points="15,4 16.18,8.27 20.76,8.27 17.06,10.91 18.47,15.18 15,12.54 11.53,15.18 12.94,10.91 9.24,8.27 13.82,8.27" />
+                    </svg>
+                </template>
+                <template x-if="lang === 'en'">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" class="w-5 h-3.5 rounded-[2px] shadow-sm">
+                        <rect width="60" height="30" fill="#012169" />
+                        <path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6" />
+                        <path d="M0,0 L30,15 M60,30 L30,15 M60,0 L30,15 M0,30 L30,15" stroke="#c8102e" stroke-width="2" />
+                        <path d="M30,0 L30,30 M0,15 L60,15" stroke="#fff" stroke-width="10" />
+                        <path d="M30,0 L30,30 M0,15 L60,15" stroke="#c8102e" stroke-width="6" />
+                    </svg>
+                </template>
+                <span class="font-label-sm text-[11px] font-bold uppercase" x-text="lang"></span>
+                <span class="material-symbols-outlined text-[14px] transition-transform" :class="openLang ? 'rotate-180' : ''">expand_more</span>
+            </button>
+            <div x-show="openLang" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" class="ts-lang-dropdown-menu absolute right-0 mt-2 w-32 z-[60]" x-cloak>
+                <div class="flex flex-col gap-0.5">
+                    <button @click="typeof setLang === 'function' ? setLang('vi') : (lang='vi', window.dispatchEvent(new CustomEvent('ts-lang-changed', {detail: {lang: 'vi'}}))); openLang = false" type="button" class="ts-lang-dropdown-item w-full text-left px-3 py-2 flex items-center gap-3 cursor-pointer" :class="lang === 'vi' ? 'ts-lang-active' : ''">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 20" class="w-5 h-3.5 rounded-[2px] shrink-0 shadow-sm">
+                            <rect width="30" height="20" fill="#da251d" />
+                            <polygon fill="#ffff00" points="15,4 16.18,8.27 20.76,8.27 17.06,10.91 18.47,15.18 15,12.54 11.53,15.18 12.94,10.91 9.24,8.27 13.82,8.27" />
+                        </svg>
+                        <span class="text-[12px] font-bold">Tiếng Việt</span>
+                    </button>
+                    <button @click="typeof setLang === 'function' ? setLang('en') : (lang='en', window.dispatchEvent(new CustomEvent('ts-lang-changed', {detail: {lang: 'en'}}))); openLang = false" type="button" class="ts-lang-dropdown-item w-full text-left px-3 py-2 flex items-center gap-3 cursor-pointer" :class="lang === 'en' ? 'ts-lang-active' : ''">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" class="w-5 h-3.5 rounded-[2px] shrink-0 shadow-sm">
+                            <rect width="60" height="30" fill="#012169" />
+                            <path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6" />
+                            <path d="M0,0 L30,15 M60,30 L30,15 M60,0 L30,15 M0,30 L30,15" stroke="#c8102e" stroke-width="2" />
+                            <path d="M30,0 L30,30 M0,15 L60,15" stroke="#fff" stroke-width="10" />
+                            <path d="M30,0 L30,30 M0,15 L60,15" stroke="#c8102e" stroke-width="6" />
+                        </svg>
+                        <span class="text-[12px] font-bold">English</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Theme Toggle Button -->
+        <button @click="toggleTheme()"
+            class="w-[37px] h-[37px] flex items-center justify-center rounded-[12px] bg-white/80 dark:bg-black/60  border border-blue-200 dark:border-yellow-600/30 shadow-lg hover:scale-110 transition-all duration-300"
+            data-i18n-title="common.switch_theme" title="Chuyển giao diện">
+            <span class="material-symbols-outlined text-[20px] text-primary-fixed dark:text-dark-primary-fixed"
+                x-text="darkMode ? 'light_mode' : 'dark_mode'"></span>
+        </button>
+    </div>
+
+    <main class="w-full max-w-[540px] px-gutter z-10 relative animate-page-fade">
+        <div class="text-center mb-10">
+            <h1
+                class="font-display-lg-mobile text-display-lg-mobile md:font-display-lg md:text-display-lg text-primary-fixed dark:text-dark-primary-fixed mb-2 tracking-tight">
+                Thapsang</h1>
+            <p class="font-body-lg text-body-lg text-on-surface-variant dark:text-dark-on-surface-variant">Mindset OS
+            </p>
+        </div>
+        <div
+            class="bg-white/80 dark:bg-black/60  border border-blue-100 dark:border-yellow-600/30 rounded-2xl p-10 relative overflow-hidden shadow-2xl dark:shadow-yellow-500/20">
+            <div
+                class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-primary-fixed dark:via-dark-primary-fixed to-transparent opacity-50">
+            </div>
+
+            <!-- Tabs -->
+            <div x-show="mode === 'login' || mode === 'register'"
+                class="flex gap-8 mb-8 border-b border-outline-variant/30 dark:border-dark-outline-variant/30">
+                <button @click="mode = 'login'"
+                    :class="mode === 'login' ? 'text-primary-fixed dark:text-dark-primary-fixed border-primary-fixed-dim dark:border-dark-primary-fixed-dim' : 'text-on-surface-variant dark:text-dark-on-surface-variant opacity-60 border-transparent'"
+                    class="pb-4 font-label-sm text-label-sm border-b-2 flex-1 text-center transition-all" data-i18n="login.tab_login">Đăng nhập</button>
+                <button @click="mode = 'register'"
+                    :class="mode === 'register' ? 'text-primary-fixed dark:text-dark-primary-fixed border-primary-fixed-dim dark:border-dark-primary-fixed-dim' : 'text-on-surface-variant dark:text-dark-on-surface-variant opacity-60 border-transparent'"
+                    class="pb-4 font-label-sm text-label-sm border-b-2 flex-1 text-center transition-all" data-i18n="login.tab_register">Đăng ký</button>
+            </div>
+
+            <!-- Alert Message -->
+            <div x-show="message.text || message.key" x-transition class="mb-6 p-4 rounded-lg text-sm font-label-sm"
+                :class="message.type === 'error' ? 'bg-error/20 text-error border border-error/30' : 'bg-primary/20 dark:bg-dark-primary/20 text-primary-fixed dark:text-dark-primary-fixed border border-primary-fixed/30 dark:border-dark-primary-fixed/30'"
+                x-text="(lang && message.key) ? window.t(message.key) : message.text"></div>
+
+            <form @submit.prevent="submit()" class="space-y-5">
+                <!-- Form Đăng nhập -->
+                <div x-show="mode === 'login'" x-transition:enter="transition ease-out duration-500"
+                    x-transition:enter-start="opacity-0 -translate-y-4"
+                    x-transition:enter-end="opacity-100 translate-y-0" class="space-y-5">
+                    <div x-transition:enter="transition ease-out duration-500 delay-75"
+                        x-transition:enter-start="opacity-0 -translate-y-2"
+                        x-transition:enter-end="opacity-100 translate-y-0">
+                        <label
+                            class="block font-label-sm text-label-sm text-on-surface-variant dark:text-dark-on-surface-variant mb-1" data-i18n="login.email">Email</label>
+                        <input x-model="formData.username"
+                            class="w-full bg-transparent border-0 focus:ring-0 shadow-none text-on-surface dark:text-dark-on-surface font-body-md text-body-md pb-2 px-2 transition-colors"
+                            placeholder="Nhập email..." type="email" :required="mode === 'login'" data-i18n-ph="login.email_ph" />
+                    </div>
+
+                    <div x-transition:enter="transition ease-out duration-500 delay-150"
+                        x-transition:enter-start="opacity-0 -translate-y-2"
+                        x-transition:enter-end="opacity-100 translate-y-0">
+                        <label
+                            class="block font-label-sm text-label-sm text-on-surface-variant dark:text-dark-on-surface-variant mb-1" data-i18n="login.password">Mật khẩu</label>
+                        <div class="relative">
+                            <input x-model="formData.password" :type="showPassword ? 'text' : 'password'"
+                                class="w-full bg-transparent border-0 focus:ring-0 shadow-none text-on-surface dark:text-dark-on-surface font-body-md text-body-md pb-2 pl-2 pr-10 transition-colors"
+                                placeholder="••••••••" :required="mode === 'login'" />
+                            <button type="button" @click="showPassword = !showPassword"
+                                class="absolute right-2 bottom-2 text-on-surface-variant dark:text-dark-on-surface-variant hover:text-primary-fixed dark:hover:text-dark-primary-fixed transition-colors">
+                                <span class="material-symbols-outlined text-[21px]"
+                                    x-text="showPassword ? 'visibility' : 'visibility_off'"></span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between mt-2"
+                        x-transition:enter="transition ease-out duration-500 delay-200"
+                        x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
+                        <label class="flex items-center gap-2 cursor-pointer select-none">
+                            <input x-model="formData.rememberMe"
+                                class="rounded bg-white dark:bg-[#0f172a] border-[#162061]/30 dark:border-dark-outline-variant text-[#162061] dark:text-dark-primary-fixed checked:bg-[#162061] checked:border-[#162061] dark:checked:bg-dark-primary-fixed dark:checked:border-dark-primary-fixed focus:ring-[#162061] dark:focus:ring-dark-primary-fixed focus:ring-offset-white dark:focus:ring-offset-dark-background h-4 w-4 cursor-pointer"
+                                type="checkbox" />
+                            <span
+                                class="font-label-sm text-label-sm text-on-surface-variant dark:text-dark-on-surface-variant" data-i18n="login.remember">Ghi nhớ</span>
+                        </label>
+                        <a class="font-label-sm text-label-sm text-primary-fixed dark:text-dark-primary-fixed hover:text-primary dark:hover:text-dark-primary transition-colors cursor-pointer"
+                            @click.prevent="mode = 'forgot_password_email'; showMessage('', ''); formData.email = '';" data-i18n="login.forgot_pwd">Quên mật khẩu?</a>
+                    </div>
+
+                    <button :disabled="loading"
+                        class="w-full bg-primary-fixed dark:bg-dark-primary-fixed hover:bg-primary-fixed-dim dark:hover:bg-dark-primary-fixed-dim text-on-primary-fixed dark:text-dark-on-primary-fixed font-headline-md text-headline-md py-4 rounded-lg mt-6 transition-all duration-300 shadow-lg shadow-blue-500/30 dark:shadow-yellow-500/30 hover:shadow-blue-500/50 dark:hover:shadow-yellow-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
+                        type="submit">
+                        <span x-show="!loading" data-i18n="login.btn_login">Đăng nhập</span>
+                        <span x-show="loading" class="flex items-center justify-center gap-2">
+                            <div class="w-2 h-2 bg-on-primary-fixed rounded-full animate-pulse"></div>
+                            <div class="w-2 h-2 bg-on-primary-fixed rounded-full animate-pulse"
+                                style="animation-delay: 0.2s"></div>
+                            <div class="w-2 h-2 bg-on-primary-fixed rounded-full animate-pulse"
+                                style="animation-delay: 0.4s"></div>
+                        </span>
+                    </button>
+                </div>
+
+                <!-- Form Đăng ký -->
+                <div x-show="mode === 'register'" x-transition:enter="transition ease-out duration-500"
+                    x-transition:enter-start="opacity-0 -translate-y-4"
+                    x-transition:enter-end="opacity-100 translate-y-0" class="space-y-5">
+                    <div x-transition:enter="transition ease-out duration-500 delay-75"
+                        x-transition:enter-start="opacity-0 -translate-y-2"
+                        x-transition:enter-end="opacity-100 translate-y-0">
+                        <label
+                            class="block font-label-sm text-label-sm text-on-surface-variant dark:text-dark-on-surface-variant mb-1" data-i18n="login.fullname">Họ và tên</label>
+                        <input x-model="formData.full_name"
+                            class="w-full bg-transparent border-0 focus:ring-0 shadow-none text-on-surface dark:text-dark-on-surface font-body-md text-body-md pb-2 px-2 transition-colors"
+                            placeholder="Nhập họ và tên..." type="text" :required="mode === 'register'" data-i18n-ph="login.fullname_ph" />
+                    </div>
+
+                    <div x-transition:enter="transition ease-out duration-500 delay-150"
+                        x-transition:enter-start="opacity-0 -translate-y-2"
+                        x-transition:enter-end="opacity-100 translate-y-0">
+                        <label
+                            class="block font-label-sm text-label-sm text-on-surface-variant dark:text-dark-on-surface-variant mb-1" data-i18n="login.email">Email</label>
+                        <input x-model="formData.email"
+                            class="w-full bg-transparent border-0 focus:ring-0 shadow-none text-on-surface dark:text-dark-on-surface font-body-md text-body-md pb-2 px-2 transition-colors"
+                            placeholder="example@email.com" type="email" :required="mode === 'register'" data-i18n-ph="login.email_example" />
+                    </div>
+
+                    <div x-transition:enter="transition ease-out duration-500 delay-300"
+                        x-transition:enter-start="opacity-0 -translate-y-2"
+                        x-transition:enter-end="opacity-100 translate-y-0">
+                        <label
+                            class="block font-label-sm text-label-sm text-on-surface-variant dark:text-dark-on-surface-variant mb-1" data-i18n="login.password">Mật khẩu</label>
+                        <div class="relative">
+                            <input x-model="formData.password" :type="showPassword ? 'text' : 'password'"
+                                class="w-full bg-transparent border-0 focus:ring-0 shadow-none text-on-surface dark:text-dark-on-surface font-body-md text-body-md pb-2 pl-2 pr-10 transition-colors"
+                                placeholder="••••••••" :required="mode === 'register'" />
+                            <button type="button" @click="showPassword = !showPassword"
+                                class="absolute right-2 bottom-2 text-on-surface-variant dark:text-dark-on-surface-variant hover:text-primary-fixed dark:hover:text-dark-primary-fixed transition-colors">
+                                <span class="material-symbols-outlined text-[21px]"
+                                    x-text="showPassword ? 'visibility' : 'visibility_off'"></span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div x-transition:enter="transition ease-out duration-500 delay-[400ms]"
+                        x-transition:enter-start="opacity-0 -translate-y-2"
+                        x-transition:enter-end="opacity-100 translate-y-0">
+                        <label
+                            class="block font-label-sm text-label-sm text-on-surface-variant dark:text-dark-on-surface-variant mb-1" data-i18n="login.confirm_password">Xác nhận mật khẩu</label>
+                        <div class="relative">
+                            <input x-model="formData.confirmPassword" :type="showConfirmPassword ? 'text' : 'password'"
+                                class="w-full bg-transparent border-0 focus:ring-0 shadow-none text-on-surface dark:text-dark-on-surface font-body-md text-body-md pb-2 pl-2 pr-10 transition-colors"
+                                placeholder="••••••••" :required="mode === 'register'" />
+                            <button type="button" @click="showConfirmPassword = !showConfirmPassword"
+                                class="absolute right-2 bottom-2 text-on-surface-variant dark:text-dark-on-surface-variant hover:text-primary-fixed dark:hover:text-dark-primary-fixed transition-colors">
+                                <span class="material-symbols-outlined text-[21px]"
+                                    x-text="showConfirmPassword ? 'visibility' : 'visibility_off'"></span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button :disabled="loading"
+                        class="w-full bg-primary-fixed dark:bg-dark-primary-fixed hover:bg-primary-fixed-dim dark:hover:bg-dark-primary-fixed-dim text-on-primary-fixed dark:text-dark-on-primary-fixed font-headline-md text-headline-md py-4 rounded-lg mt-6 transition-all duration-300 shadow-lg shadow-blue-500/30 dark:shadow-yellow-500/30 hover:shadow-blue-500/50 dark:hover:shadow-yellow-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
+                        type="submit">
+                        <span x-show="!loading" data-i18n="login.btn_register">Tạo tài khoản</span>
+                        <span x-show="loading" class="flex items-center justify-center gap-2">
+                            <div class="w-2 h-2 bg-on-primary-fixed rounded-full animate-pulse"></div>
+                            <div class="w-2 h-2 bg-on-primary-fixed rounded-full animate-pulse"
+                                style="animation-delay: 0.2s"></div>
+                            <div class="w-2 h-2 bg-on-primary-fixed rounded-full animate-pulse"
+                                style="animation-delay: 0.4s"></div>
+                        </span>
+                    </button>
+                </div>
+
+                <!-- Form OTP -->
+                <div x-show="mode === 'otp'" x-transition:enter="transition ease-out duration-500"
+                    x-transition:enter-start="opacity-0 translate-x-4"
+                    x-transition:enter-end="opacity-100 translate-x-0" class="space-y-5">
+
+                    <div class="flex items-center gap-4 mb-2">
+                        <button type="button" @click="mode = 'register'"
+                            class="text-on-surface-variant dark:text-dark-on-surface-variant hover:text-primary-fixed dark:hover:text-dark-primary-fixed transition-colors">
+                            <span class="material-symbols-outlined">arrow_back</span>
+                        </button>
+                        <h2 class="font-headline-md text-headline-md text-on-surface dark:text-dark-on-surface" data-i18n="login.otp_title">Xác nhận OTP</h2>
+                    </div>
+
+                    <p class="font-body-md text-body-md text-on-surface-variant dark:text-dark-on-surface-variant mb-6">
+                        <span data-i18n="login.otp_desc">Vui lòng nhập mã 6 ký tự đã được gửi đến email</span> <span x-text="formData.email"
+                            class="text-primary-fixed dark:text-dark-primary-fixed font-semibold"></span>.
+                    </p>
+
+                    <div x-transition:enter="transition ease-out duration-500 delay-75"
+                        x-transition:enter-start="opacity-0 -translate-y-2"
+                        x-transition:enter-end="opacity-100 translate-y-0">
+                        <label
+                            class="block font-label-sm text-label-sm text-on-surface-variant dark:text-dark-on-surface-variant mb-1" data-i18n="login.otp_label">Mã OTP</label>
+                        <input x-model="formData.otp"
+                            class="w-full bg-transparent border-0 focus:ring-0 shadow-none text-on-surface dark:text-dark-on-surface font-body-md text-body-md pb-2 px-2 transition-colors uppercase tracking-[0.5em] text-center"
+                            placeholder="XXXXXX" type="text" maxlength="6" :required="mode === 'otp'" />
+                    </div>
+
+                    <button :disabled="loading"
+                        class="w-full bg-primary-fixed dark:bg-dark-primary-fixed hover:bg-primary-fixed-dim dark:hover:bg-dark-primary-fixed-dim text-on-primary-fixed dark:text-dark-on-primary-fixed font-headline-md text-headline-md py-4 rounded-lg mt-6 transition-all duration-300 shadow-lg shadow-blue-500/30 dark:shadow-yellow-500/30 hover:shadow-blue-500/50 dark:hover:shadow-yellow-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
+                        type="submit">
+                        <span x-show="!loading" data-i18n="login.btn_otp">Xác nhận & Đăng nhập</span>
+                        <span x-show="loading" class="flex items-center justify-center gap-2">
+                            <div class="w-2 h-2 bg-on-primary-fixed rounded-full animate-pulse"></div>
+                            <div class="w-2 h-2 bg-on-primary-fixed rounded-full animate-pulse"
+                                style="animation-delay: 0.2s"></div>
+                            <div class="w-2 h-2 bg-on-primary-fixed rounded-full animate-pulse"
+                                style="animation-delay: 0.4s"></div>
+                        </span>
+                    </button>
+                </div>
+
+                <!-- Form Quên Mật Khẩu (1) - Nhập Email -->
+                <div x-show="mode === 'forgot_password_email'" x-transition:enter="transition ease-out duration-500"
+                    x-transition:enter-start="opacity-0 translate-x-4"
+                    x-transition:enter-end="opacity-100 translate-x-0" class="space-y-5">
+
+                    <div class="flex items-center gap-4 mb-2">
+                        <button type="button" @click="mode = 'login'"
+                            class="text-on-surface-variant dark:text-dark-on-surface-variant hover:text-primary-fixed dark:hover:text-dark-primary-fixed transition-colors">
+                            <span class="material-symbols-outlined">arrow_back</span>
+                        </button>
+                        <h2 class="font-headline-md text-headline-md text-on-surface dark:text-dark-on-surface" data-i18n="login.forgot_title">Khôi phục mật khẩu</h2>
+                    </div>
+
+                    <p class="font-body-md text-body-md text-on-surface-variant dark:text-dark-on-surface-variant mb-6" data-i18n="login.forgot_desc">
+                        Nhập email bạn đã đăng ký để nhận mã khôi phục.</p>
+
+                    <div x-transition:enter="transition ease-out duration-500 delay-75"
+                        x-transition:enter-start="opacity-0 -translate-y-2"
+                        x-transition:enter-end="opacity-100 translate-y-0">
+                        <label
+                            class="block font-label-sm text-label-sm text-on-surface-variant dark:text-dark-on-surface-variant mb-1" data-i18n="login.email">Email</label>
+                        <input x-model="formData.email"
+                            class="w-full bg-transparent border-0 focus:ring-0 shadow-none text-on-surface dark:text-dark-on-surface font-body-md text-body-md pb-2 px-2 transition-colors"
+                            placeholder="example@email.com" type="email" :required="mode === 'forgot_password_email'" />
+                    </div>
+
+                    <button :disabled="loading"
+                        class="w-full bg-primary-fixed dark:bg-dark-primary-fixed hover:bg-primary-fixed-dim dark:hover:bg-dark-primary-fixed-dim text-on-primary-fixed dark:text-dark-on-primary-fixed font-headline-md text-headline-md py-4 rounded-lg mt-6 transition-all duration-300 shadow-lg shadow-blue-500/30 dark:shadow-yellow-500/30 hover:shadow-blue-500/50 dark:hover:shadow-yellow-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
+                        type="submit">
+                        <span x-show="!loading" data-i18n="login.btn_send_otp">Gửi mã xác nhận</span>
+                        <span x-show="loading" class="flex items-center justify-center gap-2">
+                            <div class="w-2 h-2 bg-on-primary-fixed rounded-full animate-pulse"></div>
+                            <div class="w-2 h-2 bg-on-primary-fixed rounded-full animate-pulse"
+                                style="animation-delay: 0.2s"></div>
+                            <div class="w-2 h-2 bg-on-primary-fixed rounded-full animate-pulse"
+                                style="animation-delay: 0.4s"></div>
+                        </span>
+                    </button>
+                </div>
+
+                <!-- Form Quên Mật Khẩu (2) - OTP -->
+                <div x-show="mode === 'forgot_password_otp'" x-transition:enter="transition ease-out duration-500"
+                    x-transition:enter-start="opacity-0 translate-x-4"
+                    x-transition:enter-end="opacity-100 translate-x-0" class="space-y-5">
+
+                    <div class="flex items-center gap-4 mb-2">
+                        <button type="button" @click="mode = 'forgot_password_email'"
+                            class="text-on-surface-variant dark:text-dark-on-surface-variant hover:text-primary-fixed dark:hover:text-dark-primary-fixed transition-colors">
+                            <span class="material-symbols-outlined">arrow_back</span>
+                        </button>
+                        <h2 class="font-headline-md text-headline-md text-on-surface dark:text-dark-on-surface" data-i18n="login.confirm_otp_title">Xác nhận mã</h2>
+                    </div>
+
+                    <p class="font-body-md text-body-md text-on-surface-variant dark:text-dark-on-surface-variant mb-6">
+                        <span data-i18n="login.confirm_otp_desc">Vui lòng nhập mã 6 ký tự đã gửi đến</span> <span x-text="formData.email"
+                            class="text-primary-fixed dark:text-dark-primary-fixed font-semibold"></span>.</p>
+
+                    <div x-transition:enter="transition ease-out duration-500 delay-75"
+                        x-transition:enter-start="opacity-0 -translate-y-2"
+                        x-transition:enter-end="opacity-100 translate-y-0">
+                        <label
+                            class="block font-label-sm text-label-sm text-on-surface-variant dark:text-dark-on-surface-variant mb-1" data-i18n="login.otp_label">Mã OTP</label>
+                        <input x-model="formData.otp"
+                            class="w-full bg-transparent border-0 focus:ring-0 shadow-none text-on-surface dark:text-dark-on-surface font-body-md text-body-md pb-2 px-2 transition-colors uppercase tracking-[0.5em] text-center"
+                            placeholder="XXXXXX" type="text" maxlength="6" :required="mode === 'forgot_password_otp'" />
+                    </div>
+
+                    <button :disabled="loading"
+                        class="w-full bg-primary-fixed dark:bg-dark-primary-fixed hover:bg-primary-fixed-dim dark:hover:bg-dark-primary-fixed-dim text-on-primary-fixed dark:text-dark-on-primary-fixed font-headline-md text-headline-md py-4 rounded-lg mt-6 transition-all duration-300 shadow-lg shadow-blue-500/30 dark:shadow-yellow-500/30 hover:shadow-blue-500/50 dark:hover:shadow-yellow-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
+                        type="submit">
+                        <span x-show="!loading" data-i18n="login.btn_continue">Tiếp tục</span>
+                        <span x-show="loading" class="flex items-center justify-center gap-2">
+                            <div class="w-2 h-2 bg-on-primary-fixed rounded-full animate-pulse"></div>
+                            <div class="w-2 h-2 bg-on-primary-fixed rounded-full animate-pulse"
+                                style="animation-delay: 0.2s"></div>
+                            <div class="w-2 h-2 bg-on-primary-fixed rounded-full animate-pulse"
+                                style="animation-delay: 0.4s"></div>
+                        </span>
+                    </button>
+                </div>
+
+                <!-- Form Quên Mật Khẩu (3) - Đổi mật khẩu mới -->
+                <div x-show="mode === 'forgot_password_new'" x-transition:enter="transition ease-out duration-500"
+                    x-transition:enter-start="opacity-0 translate-x-4"
+                    x-transition:enter-end="opacity-100 translate-x-0" class="space-y-5">
+
+                    <div class="flex items-center gap-4 mb-2">
+                        <button type="button" @click="mode = 'forgot_password_otp'"
+                            class="text-on-surface-variant dark:text-dark-on-surface-variant hover:text-primary-fixed dark:hover:text-dark-primary-fixed transition-colors">
+                            <span class="material-symbols-outlined">arrow_back</span>
+                        </button>
+                        <h2 class="font-headline-md text-headline-md text-on-surface dark:text-dark-on-surface" data-i18n="login.new_pwd_title">Tạo mật khẩu mới</h2>
+                    </div>
+
+                    <div x-transition:enter="transition ease-out duration-500 delay-75"
+                        x-transition:enter-start="opacity-0 -translate-y-2"
+                        x-transition:enter-end="opacity-100 translate-y-0">
+                        <label
+                            class="block font-label-sm text-label-sm text-on-surface-variant dark:text-dark-on-surface-variant mb-1" data-i18n="login.new_pwd_label">Mật khẩu mới</label>
+                        <div class="relative">
+                            <input x-model="formData.password" :type="showPassword ? 'text' : 'password'"
+                                class="w-full bg-transparent border-0 focus:ring-0 shadow-none text-on-surface dark:text-dark-on-surface font-body-md text-body-md pb-2 pl-2 pr-10 transition-colors"
+                                placeholder="••••••••" :required="mode === 'forgot_password_new'" />
+                            <button type="button" @click="showPassword = !showPassword"
+                                class="absolute right-2 bottom-2 text-on-surface-variant dark:text-dark-on-surface-variant hover:text-primary-fixed dark:hover:text-dark-primary-fixed transition-colors">
+                                <span class="material-symbols-outlined text-[21px]"
+                                    x-text="showPassword ? 'visibility' : 'visibility_off'"></span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div x-transition:enter="transition ease-out duration-500 delay-[200ms]"
+                        x-transition:enter-start="opacity-0 -translate-y-2"
+                        x-transition:enter-end="opacity-100 translate-y-0">
+                        <label
+                            class="block font-label-sm text-label-sm text-on-surface-variant dark:text-dark-on-surface-variant mb-1" data-i18n="login.confirm_password">Xác nhận mật khẩu</label>
+                        <div class="relative">
+                            <input x-model="formData.confirmPassword" :type="showConfirmPassword ? 'text' : 'password'"
+                                class="w-full bg-transparent border-0 focus:ring-0 shadow-none text-on-surface dark:text-dark-on-surface font-body-md text-body-md pb-2 pl-2 pr-10 transition-colors"
+                                placeholder="••••••••" :required="mode === 'forgot_password_new'" />
+                            <button type="button" @click="showConfirmPassword = !showConfirmPassword"
+                                class="absolute right-2 bottom-2 text-on-surface-variant dark:text-dark-on-surface-variant hover:text-primary-fixed dark:hover:text-dark-primary-fixed transition-colors">
+                                <span class="material-symbols-outlined text-[21px]"
+                                    x-text="showConfirmPassword ? 'visibility' : 'visibility_off'"></span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button :disabled="loading"
+                        class="w-full bg-primary-fixed dark:bg-dark-primary-fixed hover:bg-primary-fixed-dim dark:hover:bg-dark-primary-fixed-dim text-on-primary-fixed dark:text-dark-on-primary-fixed font-headline-md text-headline-md py-4 rounded-lg mt-6 transition-all duration-300 shadow-lg shadow-blue-500/30 dark:shadow-yellow-500/30 hover:shadow-blue-500/50 dark:hover:shadow-yellow-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
+                        type="submit">
+                        <span x-show="!loading" data-i18n="login.btn_reset_pwd">Đổi mật khẩu</span>
+                        <span x-show="loading" class="flex items-center justify-center gap-2">
+                            <div class="w-2 h-2 bg-on-primary-fixed rounded-full animate-pulse"></div>
+                            <div class="w-2 h-2 bg-on-primary-fixed rounded-full animate-pulse"
+                                style="animation-delay: 0.2s"></div>
+                            <div class="w-2 h-2 bg-on-primary-fixed rounded-full animate-pulse"
+                                style="animation-delay: 0.4s"></div>
+                        </span>
+                    </button>
+                </div>
+            </form>
+
+
+        </div>
+    </main>
+
+    <!-- App Version Footer -->
+    <div
+        class="fixed bottom-4 left-6 text-xs text-on-surface-variant/50 dark:text-dark-on-surface-variant/40 z-50 font-mono">
+        Thapsang <span class="app-version-badge">v...</span>
+    </div>
+
+    <script>
+        function authApp() {
+            return {
+                mode: 'login',
+                lang: window.currentLang || 'vi',
+                darkMode: true, // Default to dark mode
+                formData: {
+                    username: '',
+                    password: '',
+                    confirmPassword: '',
+                    full_name: '',
+                    email: '',
+                    otp: '',
+                    rememberMe: false
+                },
+                loading: false,
+                showPassword: false,
+                showConfirmPassword: false,
+                message: { type: '', text: '', key: '' },
+                messageTimeout: null,
+
+                toggleTheme() {
+                    this.darkMode = !this.darkMode;
+                    if (this.darkMode) {
+                        document.documentElement.classList.add('dark');
+                        document.documentElement.classList.remove('light');
+                        localStorage.setItem('theme', 'dark');
+                        localStorage.setItem('thapsang_theme', 'dark');
+                    } else {
+                        document.documentElement.classList.remove('dark');
+                        document.documentElement.classList.add('light');
+                        localStorage.setItem('theme', 'light');
+                        localStorage.setItem('thapsang_theme', 'light');
+                    }
+                },
+
+                showMessage(type, text, key = '') {
+                    if (this.messageTimeout) {
+                        clearTimeout(this.messageTimeout);
+                    }
+                    this.message = { type, text, key };
+                    if (text || key) {
+                        this.messageTimeout = setTimeout(() => {
+                            this.message = { type: '', text: '', key: '' };
+                        }, 3000);
+                    }
+                },
+
+                init() {
+                    // Load theme preference - Default to dark mode (yellow-black)
+                    const savedTheme = localStorage.getItem('thapsang_theme') || localStorage.getItem('theme') || 'dark';
+
+                    if (savedTheme === 'light') {
+                        this.darkMode = false;
+                        document.documentElement.classList.remove('dark');
+                        document.documentElement.classList.add('light');
+                        localStorage.setItem('theme', 'light');
+                        localStorage.setItem('thapsang_theme', 'light');
+                    } else {
+                        // Default to dark mode or if saved theme is 'dark'
+                        this.darkMode = true;
+                        document.documentElement.classList.add('dark');
+                        document.documentElement.classList.remove('light');
+                        localStorage.setItem('theme', 'dark');
+                        localStorage.setItem('thapsang_theme', 'dark');
+                    }
+
+                    const userData = localStorage.getItem('thapsang_user');
+                    if (userData) {
+                        const user = JSON.parse(userData);
+                        const hasSessionCookie = document.cookie.includes("thapsang_session=active");
+
+                        if (!user.rememberMe && !hasSessionCookie) {
+                            Object.keys(localStorage).forEach(k => {
+                                if (k.startsWith('thapsang_cohort_') || k.startsWith('optimistic_aoa_posts') || k === 'thapsang_user') {
+                                    localStorage.removeItem(k);
+                                }
+                            });
+                        } else {
+                            document.cookie = "thapsang_session=active; path=/";
+                            window.location.href = user.onboarded ? '/coach' : '/onboarding';
+                        }
+                    }
+
+                    // Pre-fill remembered email if saved
+                    const rememberedEmail = localStorage.getItem('thapsang_remembered_email');
+                    if (rememberedEmail) {
+                        this.formData.username = rememberedEmail;
+                        this.formData.rememberMe = true;
+                    }
+
+                    // Fetch version dynamically
+                    fetch('/version.txt').then(r => r.text()).then(v => {
+                        document.querySelectorAll('.app-version-badge').forEach(el => {
+                            el.textContent = 'v' + v.trim();
+                        });
+                    }).catch(() => { });
+                },
+
+                async submit() {
+                    // Logic gửi email yêu cầu khôi phục mật khẩu
+                    if (this.mode === 'forgot_password_email') {
+                        this.loading = true;
+                        this.showMessage('', '');
+                        try {
+                            const response = await fetch('/api/v1/auth/forgot-password/request-otp', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ email: this.formData.email, username: '' })
+                            });
+                            const result = await response.json();
+                            if (response.ok) {
+                                this.showMessage('success', '', 'login.msg_recovery_sent');
+                                this.mode = 'forgot_password_otp';
+                                this.formData.otp = '';
+                            } else {
+                                this.showMessage('error', result.detail, result.detail ? result.detail : 'login.msg_sys_error');
+                            }
+                        } catch (error) {
+                            this.showMessage('error', '', 'login.msg_conn_error');
+                        } finally {
+                            this.loading = false;
+                        }
+                        return;
+                    }
+
+                    // Logic bước xác thực OTP khôi phục
+                    if (this.mode === 'forgot_password_otp') {
+                        // Chúng ta không gọi API kiểm tra mã riêng, mà tiến thẳng tới bước đặt pass mới
+                        // Mã OTP sẽ được xác thực khi đổi pass.
+                        this.mode = 'forgot_password_new';
+                        this.formData.password = '';
+                        this.formData.confirmPassword = '';
+                        this.showMessage('success', '', 'login.msg_otp_valid');
+                        return;
+                    }
+
+                    // Logic đổi mật khẩu
+                    if (this.mode === 'forgot_password_new') {
+                        if (this.formData.password !== this.formData.confirmPassword) {
+                            this.showMessage('error', '', 'login.msg_pwd_mismatch');
+                            return;
+                        }
+                        this.loading = true;
+                        this.showMessage('', '');
+                        try {
+                            const response = await fetch('/api/v1/auth/forgot-password/reset', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    email: this.formData.email,
+                                    otp: this.formData.otp,
+                                    new_password: this.formData.password
+                                })
+                            });
+                            const result = await response.json();
+                            if (response.ok) {
+                                this.showMessage('success', '', 'login.msg_pwd_changed');
+                                this.mode = 'login';
+                            } else {
+                                this.showMessage('error', result.detail, result.detail ? result.detail : 'login.msg_sys_error');
+                            }
+                        } catch (error) {
+                            this.showMessage('error', '', 'login.msg_conn_error');
+                        } finally {
+                            this.loading = false;
+                        }
+                        return;
+                    }
+
+                    // Logic đăng ký
+                    if (this.mode === 'register') {
+                        if (this.formData.password !== this.formData.confirmPassword) {
+                            this.showMessage('error', '', 'login.msg_pwd_mismatch');
+                            return;
+                        }
+
+                        this.loading = true;
+                        this.showMessage('', '');
+
+                        try {
+                            this.formData.username = this.formData.email;
+                            const response = await fetch('/api/v1/auth/request-otp', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ username: this.formData.username, email: this.formData.email })
+                            });
+                            const result = await response.json();
+                            if (response.ok) {
+                                this.showMessage('success', '', 'login.msg_otp_sent');
+                                this.mode = 'otp';
+                                setTimeout(() => {
+                                    this.message = '';
+                                }, 3000);
+                            } else {
+                                this.showMessage('error', result.detail, result.detail ? result.detail : 'login.msg_sys_error');
+                            }
+                        } catch (error) {
+                            this.showMessage('error', '', 'login.msg_conn_error');
+                        } finally {
+                            this.loading = false;
+                        }
+                        return;
+                    }
+
+                    // Logic đăng nhập và xác nhận OTP đăng ký
+                    this.loading = true;
+                    this.showMessage('', '');
+
+                    const endpoint = this.mode === 'login' ? '/api/v1/auth/login' : '/api/v1/auth/register';
+
+                    try {
+                        if (this.mode === 'otp') {
+                            this.formData.username = this.formData.email;
+                        }
+                        const response = await fetch(endpoint, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(this.formData)
+                        });
+
+                        const result = await response.json();
+
+                        if (response.ok) {
+                            // Save or clear remembered email based on user's preference
+                            if (this.formData.rememberMe) {
+                                localStorage.setItem('thapsang_remembered_email', this.formData.username);
+                            } else {
+                                localStorage.removeItem('thapsang_remembered_email');
+                            }
+
+                            // Auto login for both 'login' and 'otp' modes
+                            localStorage.setItem('thapsang_user', JSON.stringify({
+                                username: result.username,
+                                avatar: result.avatar || "",
+                                banner: result.banner || "",
+                                displayName: result.displayName || result.username,
+                                bio: result.bio || "",
+                                following_list: result.following_list || [],
+                                rememberMe: this.formData.rememberMe,
+                                onboarded: result.onboarded || false
+                            }));
+                            document.cookie = "thapsang_session=active; path=/";
+                            window.location.href = result.onboarded ? '/coach' : '/onboarding';
+                        } else {
+                            this.showMessage('error', result.detail, result.detail ? result.detail : 'login.msg_sys_error');
+                        }
+                    } catch (error) {
+                        this.showMessage('error', '', 'login.msg_conn_error');
+                    } finally {
+                        this.loading = false;
+                    }
+                }
+            };
+        }
+    </script>
+</body>
+
+</html>

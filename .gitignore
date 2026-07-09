@@ -1,0 +1,13 @@
+.env
+__pycache__/
+venv/
+.streamlit/
+.vscode/
+.idea/
+*.log
+*.pem
+*.key
+check.txt
+temp.txt
+database/debug_login.txt
+brain/

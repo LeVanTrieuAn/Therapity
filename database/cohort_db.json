@@ -1,0 +1,213 @@
+{
+    "cohort_info": {
+        "id": "cohort_04",
+        "title": "Cohort 04",
+        "program": "The Great Rebuild",
+        "current_week": 2,
+        "total_weeks": 12,
+        "current_phase": "relearn",
+        "start_date": "2026-05-04",
+        "description": "Chương trình tái tạo tư duy 12 tuần: Phá bỏ định kiến cũ, Xây dựng hệ thống mới, Vận hành thực chiến."
+    },
+    "syllabus": [
+        {
+            "week": 1,
+            "phase": "unlearn",
+            "title": "Unlearn: Phá vỡ định kiến",
+            "description": "Nhận diện và tháo gỡ các rào cản tâm lý cũ đang kìm hãm bạn.",
+            "status": "done",
+            "tasks": [
+                {
+                    "id": "w1t1",
+                    "title": "Viết nhật ký 'Tôi không thể...' trong 7 ngày",
+                    "type": "core"
+                },
+                {
+                    "id": "w1t2",
+                    "title": "Thực hành phiên Soi chiếu Socratic với AI Coach",
+                    "type": "core"
+                },
+                {
+                    "id": "w1t3",
+                    "title": "Mapping Baseline Mind Map (Bản đồ tư duy hiện tại)",
+                    "type": "core"
+                },
+                {
+                    "id": "w1t4",
+                    "title": "Đọc: Chương 1 - Mindset (Carol Dweck)",
+                    "type": "supplementary"
+                }
+            ]
+        },
+        {
+            "week": 2,
+            "phase": "relearn",
+            "title": "Relearn: Thiết lập hệ thống Habit",
+            "description": "Xây dựng framework tư duy mới và thử nghiệm các khuôn mẫu hành vi tích cực.",
+            "status": "active",
+            "tasks": [
+                {
+                    "id": "w2t1",
+                    "title": "Xây dựng Routine buổi sáng (Morning Protocol)",
+                    "type": "core"
+                },
+                {
+                    "id": "w2t2",
+                    "title": "Định nghĩa lại khái niệm 'Nghỉ ngơi' cho bản thân",
+                    "type": "core"
+                },
+                {
+                    "id": "w2t3",
+                    "title": "Cài đặt 1 Implementation Intention mới",
+                    "type": "core"
+                },
+                {
+                    "id": "w2t4",
+                    "title": "Nghe Podcast: Quản trị Năng lượng - Andrew Huberman",
+                    "type": "supplementary"
+                }
+            ]
+        },
+        {
+            "week": 3,
+            "phase": "relearn",
+            "title": "Relearn: Deep Work & Quản lý Sự chú ý",
+            "description": "Học cách bảo vệ sự tập trung và thiết kế môi trường làm việc tối ưu.",
+            "status": "upcoming",
+            "tasks": [
+                {
+                    "id": "w3t1",
+                    "title": "Thiết kế 2 khung giờ Deep Work mỗi ngày",
+                    "type": "core"
+                },
+                {
+                    "id": "w3t2",
+                    "title": "Audit và loại bỏ 3 tác nhân phân tâm lớn nhất",
+                    "type": "core"
+                },
+                {
+                    "id": "w3t3",
+                    "title": "Thực hành Time Blocking trong 5 ngày",
+                    "type": "core"
+                },
+                {
+                    "id": "w3t4",
+                    "title": "Đọc: Deep Work - Cal Newport (Phần 1)",
+                    "type": "supplementary"
+                }
+            ]
+        }
+    ],
+    "members": [
+        {
+            "username": "user",
+            "display_name": "Bạn",
+            "week_progress": 0,
+            "buddy": "",
+            "joined": "2026-05-04",
+            "is_self": true
+        },
+        {
+            "username": "user_1",
+            "display_name": "Học Viên 1",
+            "week_progress": 33,
+            "buddy": "user_9",
+            "joined": "2026-05-04",
+            "is_self": false
+        },
+        {
+            "username": "user_2",
+            "display_name": "Học Viên 2",
+            "week_progress": 38,
+            "buddy": "user_6",
+            "joined": "2026-05-04",
+            "is_self": false
+        },
+        {
+            "username": "user_3",
+            "display_name": "Học Viên 3",
+            "week_progress": 53,
+            "buddy": "user_8",
+            "joined": "2026-05-04",
+            "is_self": false
+        },
+        {
+            "username": "user_4",
+            "display_name": "Học Viên 4",
+            "week_progress": 15,
+            "buddy": "user_3",
+            "joined": "2026-05-04",
+            "is_self": false
+        },
+        {
+            "username": "user_5",
+            "display_name": "Học Viên 5",
+            "week_progress": 94,
+            "buddy": "user_10",
+            "joined": "2026-05-04",
+            "is_self": false
+        },
+        {
+            "username": "user_6",
+            "display_name": "Học Viên 6",
+            "week_progress": 92,
+            "buddy": "user_1",
+            "joined": "2026-05-04",
+            "is_self": false
+        },
+        {
+            "username": "user_7",
+            "display_name": "Học Viên 7",
+            "week_progress": 39,
+            "buddy": "user_7",
+            "joined": "2026-05-04",
+            "is_self": false
+        },
+        {
+            "username": "user_8",
+            "display_name": "Học Viên 8",
+            "week_progress": 55,
+            "buddy": "user_6",
+            "joined": "2026-05-04",
+            "is_self": false
+        },
+        {
+            "username": "user_9",
+            "display_name": "Học Viên 9",
+            "week_progress": 87,
+            "buddy": "user_4",
+            "joined": "2026-05-04",
+            "is_self": false
+        },
+        {
+            "username": "user_10",
+            "display_name": "Học Viên 10",
+            "week_progress": 43,
+            "buddy": "user_8",
+            "joined": "2026-05-04",
+            "is_self": false
+        }
+    ],
+    "bottleneck_analysis": {
+        "week": 2,
+        "generated_at": "2026-05-18T09:00:00Z",
+        "total_members": 1,
+        "late_count": 0,
+        "late_percentage": 0,
+        "bottlenecks": [],
+        "ai_insight": "Hệ thống ghi nhận tiến độ học tập độc lập của bạn trong Cohort 04. Hãy tiếp tục duy trì kỷ luật và hoàn thành các mục tiêu đề ra!"
+    },
+    "activity_feed": [],
+    "dynamic_pivot": {
+        "triggered": false,
+        "reason": "Tiến độ học tập ổn định",
+        "pivot_task": {
+            "id": "pivot_w3_1",
+            "title": "Podcast: Quản trị Năng lượng & Tập trung",
+            "description": "Andrew Huberman - Giao thức tối ưu hóa năng lượng tinh thần",
+            "type": "supplementary",
+            "auto_added": true
+        }
+    },
+    "member_tasks": {}
+}

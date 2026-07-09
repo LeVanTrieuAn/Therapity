@@ -1,0 +1,2672 @@
+<!DOCTYPE html>
+<html class="dark" lang="vi">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Cohort - The Great Rebuild</title>
+    <link rel="icon" href="data:,">
+    <script src="i18n.js?v=11"></script>
+    <script src="cache-manager.js?v=1"></script>
+    <script src="/nocobase-adapter.js"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary-fixed-variant": "#544600",
+                        "secondary-container": "#494c4d",
+                        "primary-fixed-dim": "#f59e0b",
+                        "surface-variant": "#525252",
+                        "surface-container-lowest": "#000000",
+                        "outline-variant": "#4d4732",
+                        "surface": "#0a0a0a",
+                        "surface-container-high": "#404040",
+                        "primary-fixed": "#fbbf24",
+                        "secondary": "#c5c7c8",
+                        "on-background": "#dfe2eb",
+                        "inverse-surface": "#dfe2eb",
+                        "surface-container": "#262626",
+                        "on-surface": "#dfe2eb",
+                        "on-primary": "#3a3000",
+                        "outline": "#999077",
+                        "on-surface-variant": "#d0c6ab",
+                        "background": "#0a0a0a",
+                        "surface-tint": "#f59e0b",
+                        "inverse-primary": "#705d00",
+                        "primary-container": "#fbbf24",
+                        "primary": "#fff6df",
+                        "error-container": "#93000a",
+                        "error": "#ffb4ab",
+                        "surface-container-lowest": "#000000",
+                        "surface-container-low": "#171717",
+                        "surface-bright": "#737373"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Montserrat"],
+                        "body-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-md": ["Montserrat"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["49px", { "lineHeight": "56px", "fontWeight": "700" }],
+                        "body-md": ["17px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-sm": ["14px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-md": ["25px", { "lineHeight": "32px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0a0a0a;
+            color: #dfe2eb;
+            font-family: 'Inter', sans-serif;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #000000;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #525252;
+            border-radius: 999px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #999077;
+        }
+
+        .hide-scroll {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .hide-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        @keyframes pageFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-page-fade {
+            animation: pageFadeIn 0.5s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        [x-cloak] {
+            display: none !important;
+        }
+
+        .glass-panel {
+            background: rgba(22, 27, 34, 0.95);
+            border: 1px solid rgba(255, 225, 109, 0.15);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        .tab-active {
+            background: #fbbf24;
+            color: #0a0a0a;
+            box-shadow: 0 0 15px rgba(255, 225, 109, 0.3);
+        }
+
+        .heatmap-cell-0 {
+            background: rgba(49, 53, 60, 0.5);
+        }
+
+        .heatmap-cell-low {
+            background: rgba(74, 222, 128, 0.25);
+        }
+
+        .heatmap-cell-mid {
+            background: rgba(74, 222, 128, 0.55);
+        }
+
+        .heatmap-cell-high {
+            background: rgba(74, 222, 128, 0.9);
+        }
+
+        .heatmap-cell-self {
+            background: #fbbf24;
+            box-shadow: 0 0 12px rgba(255, 225, 109, 0.5);
+        }
+
+        @keyframes pulse-gold {
+
+            0%,
+            100% {
+                box-shadow: 0 0 8px rgba(255, 225, 109, 0.4);
+            }
+
+            50% {
+                box-shadow: 0 0 18px rgba(255, 225, 109, 0.8);
+            }
+        }
+
+        .pulse-gold {
+            animation: pulse-gold 2s ease-in-out infinite;
+        }
+
+        .task-card-core {
+            border-left: 3px solid #fbbf24;
+        }
+
+        .task-card-supp {
+            border-left: 3px solid rgba(153, 144, 119, 0.4);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(-10px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .slide-in {
+            animation: slideIn 0.3s ease-out forwards;
+        }
+
+        @keyframes dash {
+            to {
+                stroke-dashoffset: -20;
+            }
+        }
+
+        .animate-dash {
+            animation: dash 1.2s linear infinite;
+        }
+
+        @keyframes pulse-emerald {
+
+            0%,
+            100% {
+                box-shadow: 0 0 10px rgba(52, 211, 153, 0.2);
+            }
+
+            50% {
+                box-shadow: 0 0 25px rgba(52, 211, 153, 0.5);
+            }
+        }
+
+        .pulse-emerald {
+            animation: pulse-emerald 2.5s ease-in-out infinite;
+        }
+
+        .ts-flag-stack {
+            position: relative;
+            width: 48px;
+            height: 32px;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .ts-flag-btn {
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 5px 7px;
+            border-radius: 8px;
+            background: rgba(49, 53, 60, 0.15);
+            border: 1px solid rgba(77, 71, 50, 0.3);
+            cursor: pointer;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), background 0.25s, border-color 0.25s, box-shadow 0.25s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ts-flag-btn.ts-lang-active {
+            z-index: 10;
+            opacity: 1;
+            transform: translate(0, 0) scale(1);
+            background: rgba(255, 225, 109, 0.15);
+            border-color: rgba(255, 225, 109, 0.6);
+            box-shadow: 0 4px 12px rgba(255, 225, 109, 0.3);
+        }
+
+        .ts-flag-btn.ts-lang-inactive {
+            z-index: 5;
+            opacity: 0.25;
+            transform: translate(6px, 4px) scale(0.92);
+            background: rgba(49, 53, 60, 0.1);
+            border-color: rgba(77, 71, 50, 0.2);
+            box-shadow: none;
+        }
+
+        .ts-flag-stack:hover .ts-flag-btn.ts-lang-active {
+            transform: translate(-2px, -2px) scale(1.02);
+            border-color: rgba(255, 225, 109, 0.8);
+            box-shadow: 0 6px 16px rgba(255, 225, 109, 0.4);
+        }
+
+        .ts-flag-stack:hover .ts-flag-btn.ts-lang-inactive {
+            transform: translate(8px, 6px) scale(0.95);
+            opacity: 0.75;
+        }
+
+        html.light body {
+            background-color: #f7fafc !important;
+            color: #162061;
+        }
+
+        html.light .glass-panel {
+            background: #ffffff !important;
+            border-color: rgba(22, 32, 97, 0.15) !important;
+            box-shadow: 0 4px 20px rgba(22, 32, 97, 0.05) !important;
+        }
+
+        html.light .text-white {
+            color: #162061 !important;
+        }
+
+        html.light .text-\[\#d0c6ab\] {
+            color: #4a5568 !important;
+        }
+
+        html.light #global-toast-msg,
+        html.light #global-toast-icon {
+            color: #ffffff !important;
+        }
+    </style>
+</head>
+
+<body class="antialiased min-h-screen flex flex-col items-center bg-surface-container-lowest text-on-surface"
+    x-data="{ isSidebarCollapsed: localStorage.getItem('thapsang_sidebar_collapsed') === 'true', toggleSidebar() { this.isSidebarCollapsed = !this.isSidebarCollapsed; localStorage.setItem('thapsang_sidebar_collapsed', this.isSidebarCollapsed); }, lang: localStorage.getItem('thapsang_lang') || 'vi', user: JSON.parse(localStorage.getItem('thapsang_user') || '{}'), logout() { Object.keys(localStorage).forEach(k => { if (k.startsWith('thapsang_cohort_') || k.startsWith('optimistic_aoa_posts') || k === 'thapsang_user' || k === 'thapsang_remembered_email') localStorage.removeItem(k); }); window.location.href='/'; }, async refreshProfile() { if (!this.user.username) return; try { const res = await fetch('/api/v1/auth/profile/' + this.user.username + '?_t=' + Date.now()); if (res.ok) { const p = await res.json(); this.user = { ...this.user, displayName: p.displayName || this.user.displayName, bio: p.bio || this.user.bio, avatar: p.avatar || this.user.avatar, banner: p.banner || this.user.banner, following_list: p.following_list || this.user.following_list || [] }; localStorage.setItem('thapsang_user', JSON.stringify(this.user)); } } catch(e) { console.error('Profile refresh error', e); } } }"
+    x-init="refreshProfile()" @ts-lang-changed.window="lang = $event.detail.lang"
+    @user-updated.window="user = $event.detail"
+    @storage.window="if ($event.key === 'thapsang_user') user = JSON.parse($event.newValue || '{}')">
+
+    <aside :class="isSidebarCollapsed ? 'sidebar-collapsed !w-20 px-2' : 'px-4'"
+        class="hidden md:flex bg-surface-container-low/20  h-screen w-64 fixed left-0 top-0 border-r border-outline-variant/30 flex-col py-8 z-50 animate-sidebar-fade transition-all duration-300">
+        <div class="mb-12 px-2 relative min-h-[40px] z-[60]">
+            <div class="flex flex-col items-start gap-4 relative w-full">
+                <!-- Collapse button absolute top right -->
+                <div class="absolute top-0 transition-all duration-300 z-10"
+                    :class="isSidebarCollapsed ? 'left-1/2 -translate-x-1/2' : 'right-0 -translate-x-2'">
+                    <span @click="toggleSidebar()"
+                        class="cursor-pointer text-on-surface-variant/50 hover:text-primary-fixed font-mono text-[16px] font-bold leading-none select-none transition-all duration-300 hidden md:block"
+                        title="" x-text="isSidebarCollapsed ? '>' : '<'">&lt;</span>
+                </div>
+
+                <div class="transition-all duration-300 origin-left w-full"
+                    :class="isSidebarCollapsed ? 'opacity-0 scale-50 w-0 h-0 overflow-hidden m-0' : 'opacity-100 scale-100 pt-1'">
+                    <h1 class="font-display-lg text-headline-md text-primary-fixed tracking-tight">Thapsang</h1>
+                    <div class="flex items-center justify-between gap-3 w-full mt-1 pr-1">
+                        <p class="font-label-sm text-label-sm text-on-surface-variant shrink-0"
+                            data-i18n="sidebar.tagline">
+                            Mindset OS</p>
+                        <div class="flex items-center gap-2">
+                            <button id="ts-theme-btn" onclick="toggleTheme()"
+                                class="w-[37px] h-[37px] p-0 shrink-0 text-on-surface-variant hover:text-white transition-colors flex items-center justify-center"
+                                data-i18n-title="common.switch_theme" title="Chuyển giao diện">
+                                <span id="ts-theme-icon" class="material-symbols-outlined text-[21px]">light_mode</span>
+                            </button>
+                            <div class="relative ts-lang-dropdown" x-data="{ openLang: false }"
+                                @click.away="openLang = false">
+                                <button @click="openLang = !openLang" type="button"
+                                    class="ts-lang-dropdown-btn flex items-center gap-1.5">
+                                    <template x-if="lang === 'vi'">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 20"
+                                            class="w-5 h-3.5 rounded-[2px] shadow-sm">
+                                            <rect width="30" height="20" fill="#da251d" />
+                                            <polygon fill="#ffff00"
+                                                points="15,4 16.18,8.27 20.76,8.27 17.06,10.91 18.47,15.18 15,12.54 11.53,15.18 12.94,10.91 9.24,8.27 13.82,8.27" />
+                                        </svg>
+                                    </template>
+                                    <template x-if="lang === 'en'">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30"
+                                            class="w-5 h-3.5 rounded-[2px] shadow-sm">
+                                            <rect width="60" height="30" fill="#012169" />
+                                            <path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6" />
+                                            <path d="M0,0 L30,15 M60,30 L30,15 M60,0 L30,15 M0,30 L30,15"
+                                                stroke="#c8102e" stroke-width="2" />
+                                            <path d="M30,0 L30,30 M0,15 L60,15" stroke="#fff" stroke-width="10" />
+                                            <path d="M30,0 L30,30 M0,15 L60,15" stroke="#c8102e" stroke-width="6" />
+                                        </svg>
+                                    </template>
+                                    <span class="font-label-sm text-[11px] font-bold uppercase" x-text="lang"></span>
+                                    <span class="material-symbols-outlined text-[14px] transition-transform"
+                                        :class="openLang ? 'rotate-180' : ''">expand_more</span>
+                                </button>
+                                <div x-show="openLang" x-transition:enter="transition ease-out duration-100"
+                                    x-transition:enter-start="opacity-0 scale-95"
+                                    x-transition:enter-end="opacity-100 scale-100"
+                                    class="ts-lang-dropdown-menu absolute right-0 mt-2 w-32 z-[60]" x-cloak>
+                                    <div class="flex flex-col gap-0.5">
+                                        <button
+                                            @click="typeof setLang === 'function' ? setLang('vi') : (lang='vi', window.dispatchEvent(new CustomEvent('ts-lang-changed', {detail: {lang: 'vi'}}))); openLang = false"
+                                            type="button"
+                                            class="ts-lang-dropdown-item w-full text-left px-3 py-2 flex items-center gap-3 cursor-pointer"
+                                            :class="lang === 'vi' ? 'ts-lang-active' : ''">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 20"
+                                                class="w-5 h-3.5 rounded-[2px] shrink-0 shadow-sm">
+                                                <rect width="30" height="20" fill="#da251d" />
+                                                <polygon fill="#ffff00"
+                                                    points="15,4 16.18,8.27 20.76,8.27 17.06,10.91 18.47,15.18 15,12.54 11.53,15.18 12.94,10.91 9.24,8.27 13.82,8.27" />
+                                            </svg>
+                                            <span class="text-[12px] font-bold">Tiếng Việt</span>
+                                        </button>
+                                        <button
+                                            @click="typeof setLang === 'function' ? setLang('en') : (lang='en', window.dispatchEvent(new CustomEvent('ts-lang-changed', {detail: {lang: 'en'}}))); openLang = false"
+                                            type="button"
+                                            class="ts-lang-dropdown-item w-full text-left px-3 py-2 flex items-center gap-3 cursor-pointer"
+                                            :class="lang === 'en' ? 'ts-lang-active' : ''">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30"
+                                                class="w-5 h-3.5 rounded-[2px] shrink-0 shadow-sm">
+                                                <rect width="60" height="30" fill="#012169" />
+                                                <path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6" />
+                                                <path d="M0,0 L30,15 M60,30 L30,15 M60,0 L30,15 M0,30 L30,15"
+                                                    stroke="#c8102e" stroke-width="2" />
+                                                <path d="M30,0 L30,30 M0,15 L60,15" stroke="#fff" stroke-width="10" />
+                                                <path d="M30,0 L30,30 M0,15 L60,15" stroke="#c8102e" stroke-width="6" />
+                                            </svg>
+                                            <span class="text-[12px] font-bold">English</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        <div class="flex flex-col gap-2 flex-grow mt-2">
+            <a class="flex items-center gap-3 [.sidebar-collapsed_&]:gap-0 [.sidebar-collapsed_&]:justify-center px-4 py-3 text-on-surface-variant font-medium opacity-60 hover:bg-surface-variant/40 hover:opacity-100 transition-all duration-300 rounded-lg group border-l-4 border-transparent"
+                href="/coach">
+                <span class="material-symbols-outlined shrink-0">chat_bubble</span>
+                <span
+                    class="font-body-md text-[17px] transition-all duration-300 [.sidebar-collapsed_&]:opacity-0 [.sidebar-collapsed_&]:w-0 [.sidebar-collapsed_&]:overflow-hidden whitespace-nowrap"
+                    data-i18n="nav.coach">&nbsp;</span>
+            </a>
+            <a class="flex items-center gap-3 [.sidebar-collapsed_&]:gap-0 [.sidebar-collapsed_&]:justify-center px-4 py-3 text-on-surface-variant font-medium opacity-60 hover:bg-surface-variant/40 hover:opacity-100 transition-all duration-300 rounded-lg group border-l-4 border-transparent"
+                href="/diary">
+                <span class="material-symbols-outlined shrink-0">book</span>
+                <span
+                    class="font-body-md text-[17px] transition-all duration-300 [.sidebar-collapsed_&]:opacity-0 [.sidebar-collapsed_&]:w-0 [.sidebar-collapsed_&]:overflow-hidden whitespace-nowrap"
+                    data-i18n="nav.diary">&nbsp;</span>
+            </a>
+            <a class="flex items-center gap-3 [.sidebar-collapsed_&]:gap-0 [.sidebar-collapsed_&]:justify-center px-4 py-3 text-on-surface-variant font-medium opacity-60 hover:bg-surface-variant/40 hover:opacity-100 transition-all duration-300 rounded-lg group border-l-4 border-transparent"
+                href="/aoa">
+                <span class="material-symbols-outlined shrink-0">hub</span>
+                <span
+                    class="font-body-md text-[17px] transition-all duration-300 [.sidebar-collapsed_&]:opacity-0 [.sidebar-collapsed_&]:w-0 [.sidebar-collapsed_&]:overflow-hidden whitespace-nowrap"
+                    data-i18n="nav.aoa">&nbsp;</span>
+            </a>
+            <a class="flex items-center gap-3 [.sidebar-collapsed_&]:gap-0 [.sidebar-collapsed_&]:justify-center px-4 py-3 text-on-surface-variant font-medium opacity-60 hover:bg-surface-variant/40 hover:opacity-100 transition-all duration-300 rounded-lg group border-l-4 border-transparent"
+                href="/tasks">
+                <span class="material-symbols-outlined shrink-0">checklist</span>
+                <span
+                    class="font-body-md text-[17px] transition-all duration-300 [.sidebar-collapsed_&]:opacity-0 [.sidebar-collapsed_&]:w-0 [.sidebar-collapsed_&]:overflow-hidden whitespace-nowrap"
+                    data-i18n="nav.tasks">&nbsp;</span>
+            </a>
+
+            <a class="flex items-center gap-3 [.sidebar-collapsed_&]:gap-0 [.sidebar-collapsed_&]:justify-center px-4 py-3 text-primary-fixed font-bold border-l-4 border-primary-fixed-dim bg-gradient-to-r from-primary-fixed/10 to-transparent rounded-r-lg group"
+                href="/cohort">
+                <span class="material-symbols-outlined shrink-0"
+                    style="font-variation-settings: 'FILL' 1;">groups</span>
+                <span
+                    class="font-body-md text-[17px] transition-all duration-300 [.sidebar-collapsed_&]:opacity-0 [.sidebar-collapsed_&]:w-0 [.sidebar-collapsed_&]:overflow-hidden whitespace-nowrap"
+                    data-i18n="nav.personal_roadmap">&nbsp;</span>
+            </a>
+        </div>
+        <div class="mt-auto p-2 mx-3 bg-surface/20 border border-outline-variant/30 rounded-xl mb-4 flex items-center box-border">
+            <div class="w-[38.4px] h-[38.4px] rounded-[12px] bg-[#fbbf24]/10 border border-[#fbbf24]/80 flex items-center justify-center shrink-0 overflow-hidden transition-colors hover:bg-[#fbbf24]/20 cursor-pointer"
+                @click="window.location.href='/aoa?tab=mine'">
+                <template x-if="user.avatar">
+                    <img :src="user.avatar" referrerpolicy="no-referrer" class="w-full h-full object-cover">
+                </template>
+                <template x-if="!user.avatar">
+                    <span class="material-symbols-outlined text-[#fbbf24] text-[29px]"
+                        style="font-variation-settings: 'wght' 300;">person</span>
+                </template>
+            </div>
+            
+            <div class="flex flex-col justify-center min-w-0 transition-all duration-300 [.sidebar-collapsed_&]:opacity-0 [.sidebar-collapsed_&]:w-0 cursor-pointer ml-3 mr-auto group"
+                @click="window.location.href='/aoa?tab=mine'">
+                <p class="font-label-sm text-[15px] font-bold text-on-surface truncate w-full group-hover:text-[#fbbf24] transition-colors"
+                    x-text="user.displayName || user.username || 'user'"></p>
+            </div>
+            
+            <button @click="logout()" title="Đăng xuất"
+                class="w-[38.4px] h-[38.4px] rounded-[12px] bg-error/10 border border-error/50 flex items-center justify-center shrink-0 hover:bg-error/20 transition-colors text-error [.sidebar-collapsed_&]:hidden ml-2">
+                <span class="material-symbols-outlined text-[20px]">logout</span>
+            </button>
+        </div>
+        <!-- App Version -->
+        <div class="flex justify-center pb-2 pt-1">
+            <span
+                class="app-version-badge text-[10px] font-mono tracking-widest text-on-surface-variant/30 hover:text-on-surface-variant/60 transition-all duration-300 cursor-default select-none [.sidebar-collapsed_&]:opacity-0 [.sidebar-collapsed_&]:pointer-events-none"
+                title="Thapsang version">v0.1</span>
+        </div>
+        <script>fetch('/version.txt').then(r => r.text()).then(v => { document.querySelector('.app-version-badge').textContent = 'v' + v.trim(); }).catch(() => { });</script>
+    </aside>
+
+    <!-- Main Content Wrapper -->
+    <div :class="isSidebarCollapsed ? 'md:ml-20' : 'md:ml-64'"
+        class="flex-grow ml-0 flex flex-col min-h-screen relative transition-all duration-300">
+
+        <!-- Top Nav Bar (fixed, transparent) -->
+        <header :class="isSidebarCollapsed ? 'w-[calc(100%-5rem)]' : 'w-[calc(100%-16rem)]'"
+            class="bg-transparent fixed top-0 right-0 bg-surface/10  flex justify-end items-center h-16 px-8 z-10 pointer-events-none transition-all duration-300">
+        </header>
+
+        <!-- Global Toast Notification -->
+        <div id="global-toast"
+            style="display:none;position:fixed;bottom:24px;right:24px;z-index:9999;padding:12px 20px;border-radius:12px;border:1px solid;box-shadow:0 8px 30px rgba(0,0,0,0.4);display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;transition:opacity 0.3s;opacity:0;pointer-events:none;"
+            class="flex items-center gap-3">
+            <span id="global-toast-icon"
+                style="font-family:'Material Symbols Outlined';font-size:19px;">check_circle</span>
+            <span id="global-toast-msg"></span>
+        </div>
+
+        <script>
+            function showGlobalToast(msg, type) {
+                const el = document.getElementById('global-toast');
+                const icon = document.getElementById('global-toast-icon');
+                const msgEl = document.getElementById('global-toast-msg');
+                if (!el) return;
+                msgEl.textContent = msg;
+                if (type === 'success') {
+                    el.style.background = 'rgba(6,78,59,0.95)'; el.style.borderColor = 'rgba(74,222,128,0.5)'; el.style.color = '#86efac'; icon.textContent = 'check_circle';
+                } else if (type === 'error') {
+                    el.style.background = 'rgba(69,10,10,0.95)'; el.style.borderColor = 'rgba(255,180,171,0.5)'; el.style.color = '#ffb4ab'; icon.textContent = 'error';
+                } else {
+                    el.style.background = 'rgba(22,27,34,0.97)'; el.style.borderColor = 'rgba(255,225,109,0.4)'; el.style.color = '#fbbf24'; icon.textContent = 'info';
+                }
+                el.style.display = 'flex'; setTimeout(() => el.style.opacity = '1', 10);
+                clearTimeout(el._hideTimer);
+                el._hideTimer = setTimeout(() => { el.style.opacity = '0'; setTimeout(() => el.style.display = 'none', 300); }, 3500);
+            }
+            function showGlobalToastWithAction(msg, actionLabel, actionFn) {
+                const el = document.getElementById('global-toast');
+                const icon = document.getElementById('global-toast-icon');
+                const msgEl = document.getElementById('global-toast-msg');
+                if (!el) return;
+                const oldBtn = document.getElementById('global-toast-action');
+                if (oldBtn) oldBtn.remove();
+                msgEl.textContent = msg;
+                el.style.background = 'rgba(22,27,34,0.97)'; el.style.borderColor = 'rgba(255,225,109,0.5)'; el.style.color = '#fbbf24'; icon.textContent = 'info';
+                const btn = document.createElement('button');
+                btn.id = 'global-toast-action'; btn.textContent = actionLabel;
+                btn.style.cssText = 'margin-left:10px;padding:5px 14px;background:#fbbf24;color:#0a0a0a;border:none;border-radius:8px;font-weight:700;font-size:12px;cursor:pointer;white-space:nowrap;flex-shrink:0;';
+                btn.onclick = () => { el.style.opacity = '0'; setTimeout(() => { el.style.display = 'none'; if (btn.parentNode) btn.remove(); el.style.pointerEvents = 'none'; }, 200); actionFn(); };
+                el.appendChild(btn);
+                el.style.display = 'flex'; el.style.pointerEvents = 'auto'; setTimeout(() => el.style.opacity = '1', 10);
+                clearTimeout(el._hideTimer);
+                el._hideTimer = setTimeout(() => { el.style.opacity = '0'; setTimeout(() => { el.style.display = 'none'; if (btn.parentNode) btn.remove(); el.style.pointerEvents = 'none'; }, 300); }, 6000);
+            }
+        </script>
+
+        <!-- ======================================================================= -->
+        <!-- MAIN APP                                                                 -->
+        <!-- ======================================================================= -->
+        <main class="flex-grow flex flex-col p-6 mt-16 w-full max-w-[1200px] mx-auto min-h-[calc(100vh-64px)] relative"
+            x-data="roadmapApp()">
+
+            <!-- Premium Glassmorphism Page Loading Screen -->
+            <div x-show="pageLoading" x-transition.opacity x-cloak
+                :class="isSidebarCollapsed ? 'md:left-20' : 'md:left-64'"
+                class="fixed top-0 bottom-0 left-0 right-0 bg-[#000000]/60  z-[100] flex flex-col items-center justify-center transition-all duration-300">
+                <div
+                    class="glass-panel p-8 rounded-3xl border border-[#fbbf24]/20 shadow-[0_8px_32px_rgba(0,0,0,0.35)] flex flex-col items-center gap-4 bg-[#0a0a0a]/80 max-w-xs text-center animate-modal-in">
+                    <div class="relative w-12 h-12 flex items-center justify-center shrink-0">
+                        <div class="absolute inset-0 rounded-full border border-[#fbbf24]/20 animate-ping"></div>
+                        <div
+                            class="absolute w-10 h-10 rounded-full border-2 border-t-[#fbbf24] border-r-transparent border-l-transparent border-b-transparent animate-spin">
+                        </div>
+                        <span class="material-symbols-outlined text-[#fbbf24] text-xl">groups</span>
+                    </div>
+                    <p class="text-xs font-bold uppercase tracking-[0.15em] text-[#fbbf24] font-mono mt-2"
+                        x-text="lang === 'vi' ? 'ĐỒNG BỘ LỘ TRÌNH...' : 'SYNCING ROADMAP...'"></p>
+                    <p class="text-[12px] text-on-surface-variant/80 font-medium leading-relaxed"
+                        x-text="lang === 'vi' ? 'Hệ thống đang đồng bộ hóa lộ trình cá nhân của bạn...' : 'Syncing your personalized growth roadmap...'">
+                    </p>
+                </div>
+            </div>
+
+            <!-- UNENROLLED VIEW -->
+            <div x-show="!isEnrolled" class="w-full flex flex-col text-left animate-page-fade">
+                <!-- UNENROLLED PAGE HEADER -->
+                <header
+                    class="flex flex-col justify-start border-b border-gray-200 dark:border-[#525252] pb-6 mb-8 w-full text-left">
+                    <h2 class="text-[33px] font-bold text-[#162061] dark:text-white tracking-tight"
+                        x-text="lang === 'en' ? 'AI Personal Roadmap Allocation' : 'AI Phân Bổ Lộ Trình Cá Nhân'"></h2>
+                </header>
+
+                <div x-show="insufficientInfo" x-transition.opacity.duration.300ms
+                    class="glass-panel p-6 rounded-2xl border-l-4 border-yellow-500/80 bg-gradient-to-r from-yellow-500/5 to-transparent flex items-start gap-4 mb-6">
+                    <span
+                        class="material-symbols-outlined text-yellow-500 text-3xl shrink-0 mt-0.5 animate-pulse">warning</span>
+                    <div>
+                        <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-1"
+                            x-text="lang === 'en' ? 'Insufficient Dialogue Context' : 'Chưa đủ thông tin đối thoại'">
+                        </h4>
+                        <p class="text-xs text-[#d0c6ab] leading-relaxed"
+                            x-text="insufficientMessage || (lang === 'en' ? 'We do not have enough conversation history about you to synthesize a high-fidelity personalized roadmap. To guarantee the highest quality syllabus tailoring, please interact more with your Coach.' : 'Chúng tôi chưa có đủ dữ liệu lịch sử đối thoại về bạn để tạo một lộ trình cá nhân hóa đạt chất lượng cao nhất. Để AI thấu hiểu rõ nhất, bạn nên trò chuyện nhiều hơn với AI Coach.')">
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Interactive Context Verification Card -->
+                <div
+                    class="glass-panel w-full p-10 rounded-[24px] flex flex-col items-center relative overflow-hidden bg-white dark:bg-[#161b22]/75 border border-gray-200 dark:border-gray-700/50 shadow-sm max-w-[800px] mx-auto text-center">
+                    <!-- decorative background -->
+                    <div
+                        class="absolute bottom-[-100px] right-[-50px] w-96 h-96 bg-purple-400 opacity-[0.08] ] rounded-full pointer-events-none z-0">
+                    </div>
+                    <div
+                        class="absolute top-[-50px] left-[-50px] w-64 h-64 bg-[#fbbf24] opacity-[0.05] ] rounded-full pointer-events-none z-0">
+                    </div>
+
+                    <!-- Header Icon -->
+                    <div
+                        class="w-16 h-16 rounded-full bg-white dark:bg-[#fbbf24]/10 border border-[#fbbf24]/40 shadow-sm flex items-center justify-center mb-3 z-10">
+                        <span class="material-symbols-outlined text-[#fbbf24] text-[33px]"
+                            :style="contextCheck.isSufficient ? 'font-variation-settings: \'FILL\' 1;' : 'font-variation-settings: \'FILL\' 0;'">psychology</span>
+                    </div>
+
+                    <h3 class="text-[29px] font-bold text-[#162061] dark:text-white mb-1.5 z-10"
+                        x-text="lang === 'en' ? 'Verify Socratic Dialogue Context' : 'Xác thực Bối cảnh Đối thoại Socratic'">
+                    </h3>
+                    <p class="text-[15px] text-[#4a5568] dark:text-[#d0c6ab] max-w-2xl mb-4 leading-relaxed z-10"
+                        x-text="lang === 'en' ? 'Before building your personal transformation roadmap, the AI wants to understand you better. Please complete 10 conversational turns so we can discover the cognitive barriers holding you back.' : 'Trước khi xây dựng lộ trình thay đổi bản thân, AI muốn được hiểu bạn nhiều hơn. Hãy hoàn thành 10 lượt trò chuyện để chúng ta cùng khám phá những rào cản nhận thức đang giữ chân bạn nhé.'">
+                    </p>
+
+                    <!-- Verification Progress Widget -->
+                    <div
+                        class="w-full max-w-[500px] bg-black/5 dark:bg-black/30 border border-black/10 dark:border-white/5 rounded-2xl p-5 mb-5 text-left z-10">
+                        <!-- Loading skeleton -->
+                        <template x-if="!contextCheck.loaded">
+                            <div class="animate-pulse flex flex-col gap-3">
+                                <div class="h-4 bg-white/10 rounded w-2/3"></div>
+                                <div class="h-2.5 bg-white/10 rounded w-full"></div>
+                            </div>
+                        </template>
+
+                        <!-- Loaded content -->
+                        <template x-if="contextCheck.loaded">
+                            <div class="flex flex-col gap-3">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs font-bold uppercase tracking-wider text-on-surface-variant/80"
+                                        x-text="lang === 'en' ? 'DIALOGUE ELIGIBILITY STATUS' : 'TRẠNG THÁI BỐI CẢNH ĐỐI THOẠI'"></span>
+                                    <span class="text-xs font-black px-2 py-0.5 rounded-md"
+                                        :class="contextCheck.isSufficient ? 'bg-emerald-500/20 text-emerald-400' : 'bg-amber-500/20 text-amber-400'"
+                                        x-text="contextCheck.isSufficient ? (lang === 'en' ? 'READY' : 'ĐỦ ĐIỀU KIỆN') : (lang === 'en' ? 'PENDING' : 'CHƯA ĐỦ ĐIỀU KIỆN')"></span>
+                                </div>
+
+                                <div class="flex items-center gap-3">
+                                    <span class="material-symbols-outlined text-[21px]"
+                                        :class="contextCheck.isSufficient ? 'text-emerald-400' : 'text-amber-400'"
+                                        x-text="contextCheck.isSufficient ? 'check_circle' : 'pending'"></span>
+                                    <p class="text-xs text-white/90 leading-relaxed font-body-md"
+                                        x-text="contextCheck.isSufficient 
+                                            ? (lang === 'en' ? 'Perfect! Dialogue context is sufficient. Socratic AI Engine is ready to allocate your roadmap.' : 'Tuyệt vời! Bối cảnh đối thoại đã đầy đủ. Socratic AI đã sẵn sàng phân bổ lộ trình cho bạn.') 
+                                            : (lang === 'en' ? `You have completed ${contextCheck.count}/10 exchanges. Please chat more with Socratic Coach to unlock.` : `Bạn mới chiêm nghiệm được ${contextCheck.count}/10 lần. Vui lòng trò chuyện thêm với AI tham vấn để mở khóa.`)">
+                                    </p>
+                                </div>
+
+                                <!-- Progress bar -->
+                                <div class="w-full bg-white/10 dark:bg-white/5 h-2 rounded-full overflow-hidden">
+                                    <div class="h-full transition-all duration-700 rounded-full"
+                                        :class="contextCheck.isSufficient ? 'bg-emerald-400 shadow-[0_0_15px_rgba(52,211,153,0.5)]' : 'bg-amber-400'"
+                                        :style="'width: ' + Math.min((contextCheck.count / 10) * 100, 100) + '%'"></div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+
+                    <!-- Sneak Peek / What to expect section -->
+                    <div class="mt-2 mb-4 w-full max-w-[640px] mx-auto text-left relative z-10" x-show="!joiningLoading" x-transition.opacity>
+                        <div class="flex items-center justify-center gap-4 mb-3">
+                            <span class="h-[1px] flex-1 bg-gradient-to-r from-transparent to-outline-variant/50"></span>
+                            <h4 class="text-[11px] font-bold text-on-surface-variant uppercase tracking-widest text-center" x-text="lang === 'vi' ? 'LỘ TRÌNH CỦA BẠN SẼ BAO GỒM' : 'WHAT YOUR ROADMAP INCLUDES'">
+                            </h4>
+                            <span class="h-[1px] flex-1 bg-gradient-to-l from-transparent to-outline-variant/50"></span>
+                        </div>
+                        
+                        <div class="flex flex-col gap-2">
+                            <!-- Item 1 -->
+                            <div class="glass-panel p-3 rounded-xl border border-outline-variant/30 hover:border-primary-fixed/40 transition-all duration-300 bg-surface-container-low/40 hover:bg-surface-container-low/80 flex items-start gap-3 group">
+                                <div class="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center shrink-0 border border-blue-500/20 group-hover:scale-110 transition-transform mt-0.5">
+                                    <span class="material-symbols-outlined text-blue-500 text-[18px]">explore</span>
+                                </div>
+                                <div>
+                                    <h5 class="text-[15px] font-bold text-on-surface mb-0.5" x-text="lang === 'vi' ? 'Lộ trình 12 tuần cá nhân hóa' : 'Personalized 12-Week Roadmap'"></h5>
+                                    <p class="text-[14px] text-on-surface-variant leading-relaxed" x-text="lang === 'vi' ? 'Được AI thiết kế riêng dựa trên những gì chúng tôi hiểu về bạn' : 'Tailored by AI based on our understanding of you.'"></p>
+                                </div>
+                            </div>
+                            <!-- Item 2 -->
+                            <div class="glass-panel p-3 rounded-xl border border-outline-variant/30 hover:border-primary-fixed/40 transition-all duration-300 bg-surface-container-low/40 hover:bg-surface-container-low/80 flex items-start gap-3 group">
+                                <div class="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center shrink-0 border border-amber-500/20 group-hover:scale-110 transition-transform mt-0.5">
+                                    <span class="material-symbols-outlined text-amber-500 text-[18px]">task_alt</span>
+                                </div>
+                                <div>
+                                    <h5 class="text-[15px] font-bold text-on-surface mb-0.5" x-text="lang === 'vi' ? 'Nhiệm vụ hàng tuần' : 'Weekly Tasks'"></h5>
+                                    <p class="text-[14px] text-on-surface-variant leading-relaxed" x-text="lang === 'vi' ? 'Các bài tập nhỏ gọn, thiết thực giúp bạn từng bước hiểu hơn về bản thân' : 'Bite-sized, practical exercises to help you gradually understand yourself better.'"></p>
+                                </div>
+                            </div>
+                            <!-- Item 3 -->
+                            <div class="glass-panel p-3 rounded-xl border border-outline-variant/30 hover:border-primary-fixed/40 transition-all duration-300 bg-surface-container-low/40 hover:bg-surface-container-low/80 flex items-start gap-3 group">
+                                <div class="w-8 h-8 rounded-lg bg-purple-500/10 flex items-center justify-center shrink-0 border border-purple-500/20 group-hover:scale-110 transition-transform mt-0.5">
+                                    <span class="material-symbols-outlined text-purple-500 text-[18px]">quiz</span>
+                                </div>
+                                <div>
+                                    <h5 class="text-[15px] font-bold text-on-surface mb-0.5" x-text="lang === 'vi' ? 'Trắc nghiệm trực quan' : 'Visual Quizzes'"></h5>
+                                    <p class="text-[14px] text-on-surface-variant leading-relaxed" x-text="lang === 'vi' ? 'Kiểm tra mức độ thấu hiểu bản thân thông qua các bài trắc nghiệm.' : 'Test your self-understanding through interactive quizzes.'"></p>
+                                </div>
+                            </div>
+                            <!-- Item 4 -->
+                            <div class="glass-panel p-3 rounded-xl border border-outline-variant/30 hover:border-primary-fixed/40 transition-all duration-300 bg-surface-container-low/40 hover:bg-surface-container-low/80 flex items-start gap-3 group">
+                                <div class="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center shrink-0 border border-emerald-500/20 group-hover:scale-110 transition-transform mt-0.5">
+                                    <span class="material-symbols-outlined text-emerald-500 text-[18px]">monitoring</span>
+                                </div>
+                                <div>
+                                    <h5 class="text-[15px] font-bold text-on-surface mb-0.5" x-text="lang === 'vi' ? 'Tiến độ học tập' : 'Learning Progress'"></h5>
+                                    <p class="text-[14px] text-on-surface-variant leading-relaxed" x-text="lang === 'vi' ? 'Theo dõi sự phát triển của bản thân qua các chỉ số đo lường và hoàn thành mục tiêu.' : 'Track your personal growth through key metrics and goal completion.'"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Loading / Allocation matching status overlay -->
+                    <div x-show="joiningLoading" x-transition.opacity
+                        class="bg-black/30 border border-white/5 rounded-xl p-6 mb-8 text-left w-full max-w-[500px] mx-auto z-10">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div
+                                class="w-4 h-4 rounded-full border-2 border-[#fbbf24] border-t-transparent animate-spin">
+                            </div>
+                            <span class="text-xs font-bold text-white" x-text="matchingStatusText"></span>
+                        </div>
+                        <div class="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
+                            <div class="bg-[#fbbf24] h-full transition-all duration-500 rounded-full"
+                                :style="'width: ' + matchingProgress + '%'"></div>
+                        </div>
+                    </div>
+
+                    <!-- Action buttons -->
+                    <div x-show="!joiningLoading"
+                        class="flex flex-col sm:flex-row items-center justify-center gap-6 w-full sm:w-auto z-10">
+
+                        <!-- Đến Socratic Coach button -->
+                        <a href="/coach"
+                            class="w-full sm:w-auto px-6 py-3.5 rounded-xl border font-bold text-sm flex items-center justify-center gap-2 shadow-sm transition-all duration-300"
+                            :class="!contextCheck.isSufficient && contextCheck.loaded
+                                ? 'bg-[#fbbf24]/10 border-[#fbbf24] text-white hover:bg-[#fbbf24]/20 animate-pulse shadow-[0_0_15px_rgba(251,191,36,0.25)] hover:scale-105' 
+                                : 'border-[#fbbf24]/50 bg-[#fbbf24]/10 text-[#162061] dark:text-white hover:bg-[#fbbf24]/20'">
+                            <span class="material-symbols-outlined text-[21px] text-[#fbbf24]">forum</span>
+                            <span x-text="lang === 'en' ? 'Go to Socratic Coach' : 'Đến Socratic Coach'"></span>
+                        </a>
+
+                        <!-- Kích hoạt AI phân bổ cá nhân button -->
+                        <button
+                            @click="contextCheck.isSufficient ? startAICohortAllocation() : showGlobalToast(lang === 'en' ? 'Please complete 10 reflections to unlock!' : 'Vui lòng hoàn thành đủ 10 cuộc hội thoại để mở khóa!', 'warning')"
+                            class="w-full sm:w-auto px-6 py-3.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all duration-300 shadow-sm"
+                            :class="contextCheck.isSufficient 
+                                ? 'bg-[#fbbf24] text-black hover:shadow-[0_0_25px_rgba(255,225,109,0.5)] hover:scale-105' 
+                                : 'bg-gray-500/20 text-gray-500 border border-gray-600/30 cursor-not-allowed opacity-60'"
+                            :disabled="!contextCheck.isSufficient">
+                            <span class="material-symbols-outlined text-[21px]"
+                                :class="contextCheck.isSufficient ? 'text-black' : 'text-gray-500'"
+                                :style="contextCheck.isSufficient ? 'font-variation-settings: \'FILL\' 1;' : 'font-variation-settings: \'FILL\' 0;'">bolt</span>
+                            <span
+                                x-text="lang === 'en' ? 'Trigger AI Personal Allocator' : 'Kích hoạt AI phân bổ cá nhân'"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ENROLLED VIEW -->
+            <div x-show="isEnrolled" x-cloak class="flex flex-col gap-8 w-full text-left animate-page-fade">
+
+                <!-- ENROLLED PAGE HEADER -->
+                <header
+                    class="flex flex-col justify-start border-b border-gray-200 dark:border-[#525252]/30 pb-6 mb-2 w-full text-left">
+                    <h2 class="text-[33px] font-bold text-[#162061] dark:text-white tracking-tight"
+                        x-text="lang === 'en' ? 'Personal Roadmap' : 'Lộ trình cá nhân'"></h2>
+                </header>
+
+                <!-- Tabs Selector -->
+                <div class="flex gap-4 border-b border-white/10 pb-3">
+                    <button @click="activeTab = 'overview'"
+                        class="px-6 py-2.5 rounded-xl font-bold text-sm tracking-wide transition-all flex items-center gap-2"
+                        :class="activeTab === 'overview' ? 'bg-[#fbbf24]/10 text-[#fbbf24] border border-[#fbbf24]/30 shadow-[0_0_15px_rgba(255,215,0,0.15)]' : 'text-white/60 hover:text-white hover:bg-white/5 border border-transparent'">
+                        <span class="material-symbols-outlined text-base">analytics</span>
+                        <span x-text="lang === 'en' ? 'Overview & Progress' : 'Tổng quan & Tiến độ'"></span>
+                    </button>
+                    <button @click="activeTab = 'roadmap'"
+                        class="px-6 py-2.5 rounded-xl font-bold text-sm tracking-wide transition-all flex items-center gap-2"
+                        :class="activeTab === 'roadmap' ? 'bg-[#fbbf24]/10 text-[#fbbf24] border border-[#fbbf24]/30 shadow-[0_0_15px_rgba(255,215,0,0.15)]' : 'text-white/60 hover:text-white hover:bg-white/5 border border-transparent'">
+                        <span class="material-symbols-outlined text-base">route</span>
+                        <span x-text="lang === 'en' ? 'Roadmap & Tasks' : 'Lộ trình & Nhiệm vụ'"></span>
+                    </button>
+                </div>
+
+                <!-- TAB 1: OVERVIEW & PROGRESS -->
+                <div x-show="activeTab === 'overview'" x-transition class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Left Column: Biểu đồ Lộ trình Học tập (2/3 width) -->
+                    <div class="lg:col-span-2 flex flex-col gap-8">
+                        <div
+                            class="glass-panel p-6 rounded-[24px] relative overflow-hidden bg-white dark:bg-[#161b22]/75 shadow-sm">
+                            <div class="flex justify-between items-center mb-6">
+                                <div>
+                                    <h3 class="text-lg font-bold text-[#162061] dark:text-white"
+                                        x-text="lang === 'en' ? 'Learning Roadmap Chart' : 'Biểu đồ lộ trình học tập'">
+                                    </h3>
+                                    <p class="text-xs text-[#4a5568] dark:text-[#d0c6ab]"
+                                        x-text="lang === 'en' ? 'Track your weekly cognitive growth progression' : 'Theo dõi tiến trình tăng trưởng nhận thức qua các tuần'">
+                                    </p>
+                                </div>
+                                <div class="flex items-center gap-2 text-xs">
+                                    <span class="w-3 h-3 rounded-full bg-[#fbbf24] pulse-gold"></span>
+                                    <span class="text-[#162061] dark:text-[#d0c6ab]"
+                                        x-text="lang === 'en' ? 'Current Week' : 'Tuần hiện tại'"></span>
+                                </div>
+                            </div>
+
+                            <!-- SVG Line Chart container -->
+                            <div class="w-full relative h-[200px] mt-2 flex items-center justify-center">
+                                <svg viewBox="0 0 500 180" class="w-full h-full overflow-visible">
+                                    <defs>
+                                        <linearGradient id="chart-area-grad" x1="0" y1="0" x2="0" y2="1">
+                                            <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.25" />
+                                            <stop offset="100%" stop-color="#fbbf24" stop-opacity="0.0" />
+                                        </linearGradient>
+                                    </defs>
+
+                                    <!-- Grid Lines (horizontal) -->
+                                    <g stroke="rgba(153, 144, 119, 0.15)" stroke-width="1" stroke-dasharray="3,3">
+                                        <line x1="40" y1="20" x2="460" y2="20" />
+                                        <line x1="40" y1="55" x2="460" y2="55" />
+                                        <line x1="40" y1="90" x2="460" y2="90" />
+                                        <line x1="40" y1="125" x2="460" y2="125" />
+                                        <line x1="40" y1="160" x2="460" y2="160" stroke-dasharray="0"
+                                            stroke="rgba(153, 144, 119, 0.3)" />
+                                    </g>
+
+                                    <!-- Y-Axis Labels -->
+                                    <g font-size="8" text-anchor="end" font-family="Inter"
+                                        class="fill-[#4a5568] dark:fill-[#d0c6ab]/70 font-semibold">
+                                        <text x="32" y="23">100%</text>
+                                        <text x="32" y="58">75%</text>
+                                        <text x="32" y="93">50%</text>
+                                        <text x="32" y="128">25%</text>
+                                        <text x="32" y="163">0%</text>
+                                    </g>
+
+                                    <!-- X-Axis Labels (Tuần 1 to Tuần 12 / W1 to W12) -->
+                                    <g font-size="7" text-anchor="middle" font-family="Inter"
+                                        class="fill-[#4a5568] dark:fill-[#d0c6ab]/70 font-semibold">
+                                        <text x="40" y="176" x-text="lang === 'en' ? 'W1' : 'Tuần 1'"></text>
+                                        <text x="78.18" y="176" x-text="lang === 'en' ? 'W2' : 'Tuần 2'"></text>
+                                        <text x="116.36" y="176" x-text="lang === 'en' ? 'W3' : 'Tuần 3'"></text>
+                                        <text x="154.54" y="176" x-text="lang === 'en' ? 'W4' : 'Tuần 4'"></text>
+                                        <text x="192.72" y="176" x-text="lang === 'en' ? 'W5' : 'Tuần 5'"></text>
+                                        <text x="230.9" y="176" x-text="lang === 'en' ? 'W6' : 'Tuần 6'"></text>
+                                        <text x="269.08" y="176" x-text="lang === 'en' ? 'W7' : 'Tuần 7'"></text>
+                                        <text x="307.26" y="176" x-text="lang === 'en' ? 'W8' : 'Tuần 8'"></text>
+                                        <text x="345.44" y="176" x-text="lang === 'en' ? 'W9' : 'Tuần 9'"></text>
+                                        <text x="383.62" y="176" x-text="lang === 'en' ? 'W10' : 'Tuần 10'"></text>
+                                        <text x="421.8" y="176" x-text="lang === 'en' ? 'W11' : 'Tuần 11'"></text>
+                                        <text x="460" y="176" x-text="lang === 'en' ? 'W12' : 'Tuần 12'"></text>
+                                    </g>
+
+                                    <!-- Fill Area Under Line -->
+                                    <polygon :points="getChartAreaPoints()" fill="url(#chart-area-grad)" />
+
+                                    <!-- Chart Line -->
+                                    <polyline :points="getChartPoints()" fill="none" stroke="#fbbf24" stroke-width="2.5"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+
+                                    <!-- Chart Dots / Circles -->
+                                    <g>
+                                        <!-- Week 1 (idx = 0) -->
+                                        <g>
+                                            <circle cx="40" :cy="160 - (getWeeklyProgressList()[0] / 100) * 140"
+                                                :r="getCurrentCohortWeek() === 1 ? 8 : 0" fill="#fbbf24"
+                                                :opacity="getCurrentCohortWeek() === 1 ? 0.3 : 0"
+                                                class="animate-pulse" />
+                                            <circle cx="40" :cy="160 - (getWeeklyProgressList()[0] / 100) * 140" r="4.5"
+                                                :fill="getCurrentCohortWeek() === 1 ? '#fbbf24' : (getCurrentCohortWeek() > 1 ? '#86efac' : '#525252')"
+                                                :stroke="getCurrentCohortWeek() === 1 ? '#0a0a0a' : 'transparent'"
+                                                stroke-width="1.5" />
+                                        </g>
+                                        <!-- Week 2 (idx = 1) -->
+                                        <g>
+                                            <circle cx="78.18" :cy="160 - (getWeeklyProgressList()[1] / 100) * 140"
+                                                :r="getCurrentCohortWeek() === 2 ? 8 : 0" fill="#fbbf24"
+                                                :opacity="getCurrentCohortWeek() === 2 ? 0.3 : 0"
+                                                class="animate-pulse" />
+                                            <circle cx="78.18" :cy="160 - (getWeeklyProgressList()[1] / 100) * 140"
+                                                r="4.5"
+                                                :fill="getCurrentCohortWeek() === 2 ? '#fbbf24' : (getCurrentCohortWeek() > 2 ? '#86efac' : '#525252')"
+                                                :stroke="getCurrentCohortWeek() === 2 ? '#0a0a0a' : 'transparent'"
+                                                stroke-width="1.5" />
+                                        </g>
+                                        <!-- Week 3 (idx = 2) -->
+                                        <g>
+                                            <circle cx="116.36" :cy="160 - (getWeeklyProgressList()[2] / 100) * 140"
+                                                :r="getCurrentCohortWeek() === 3 ? 8 : 0" fill="#fbbf24"
+                                                :opacity="getCurrentCohortWeek() === 3 ? 0.3 : 0"
+                                                class="animate-pulse" />
+                                            <circle cx="116.36" :cy="160 - (getWeeklyProgressList()[2] / 100) * 140"
+                                                r="4.5"
+                                                :fill="getCurrentCohortWeek() === 3 ? '#fbbf24' : (getCurrentCohortWeek() > 3 ? '#86efac' : '#525252')"
+                                                :stroke="getCurrentCohortWeek() === 3 ? '#0a0a0a' : 'transparent'"
+                                                stroke-width="1.5" />
+                                        </g>
+                                        <!-- Week 4 (idx = 3) -->
+                                        <g>
+                                            <circle cx="154.54" :cy="160 - (getWeeklyProgressList()[3] / 100) * 140"
+                                                :r="getCurrentCohortWeek() === 4 ? 8 : 0" fill="#fbbf24"
+                                                :opacity="getCurrentCohortWeek() === 4 ? 0.3 : 0"
+                                                class="animate-pulse" />
+                                            <circle cx="154.54" :cy="160 - (getWeeklyProgressList()[3] / 100) * 140"
+                                                r="4.5"
+                                                :fill="getCurrentCohortWeek() === 4 ? '#fbbf24' : (getCurrentCohortWeek() > 4 ? '#86efac' : '#525252')"
+                                                :stroke="getCurrentCohortWeek() === 4 ? '#0a0a0a' : 'transparent'"
+                                                stroke-width="1.5" />
+                                        </g>
+                                        <!-- Week 5 (idx = 4) -->
+                                        <g>
+                                            <circle cx="192.72" :cy="160 - (getWeeklyProgressList()[4] / 100) * 140"
+                                                :r="getCurrentCohortWeek() === 5 ? 8 : 0" fill="#fbbf24"
+                                                :opacity="getCurrentCohortWeek() === 5 ? 0.3 : 0"
+                                                class="animate-pulse" />
+                                            <circle cx="192.72" :cy="160 - (getWeeklyProgressList()[4] / 100) * 140"
+                                                r="4.5"
+                                                :fill="getCurrentCohortWeek() === 5 ? '#fbbf24' : (getCurrentCohortWeek() > 5 ? '#86efac' : '#525252')"
+                                                :stroke="getCurrentCohortWeek() === 5 ? '#0a0a0a' : 'transparent'"
+                                                stroke-width="1.5" />
+                                        </g>
+                                        <!-- Week 6 (idx = 5) -->
+                                        <g>
+                                            <circle cx="230.9" :cy="160 - (getWeeklyProgressList()[5] / 100) * 140"
+                                                :r="getCurrentCohortWeek() === 6 ? 8 : 0" fill="#fbbf24"
+                                                :opacity="getCurrentCohortWeek() === 6 ? 0.3 : 0"
+                                                class="animate-pulse" />
+                                            <circle cx="230.9" :cy="160 - (getWeeklyProgressList()[5] / 100) * 140"
+                                                r="4.5"
+                                                :fill="getCurrentCohortWeek() === 6 ? '#fbbf24' : (getCurrentCohortWeek() > 6 ? '#86efac' : '#525252')"
+                                                :stroke="getCurrentCohortWeek() === 6 ? '#0a0a0a' : 'transparent'"
+                                                stroke-width="1.5" />
+                                        </g>
+                                        <!-- Week 7 (idx = 6) -->
+                                        <g>
+                                            <circle cx="269.08" :cy="160 - (getWeeklyProgressList()[6] / 100) * 140"
+                                                :r="getCurrentCohortWeek() === 7 ? 8 : 0" fill="#fbbf24"
+                                                :opacity="getCurrentCohortWeek() === 7 ? 0.3 : 0"
+                                                class="animate-pulse" />
+                                            <circle cx="269.08" :cy="160 - (getWeeklyProgressList()[6] / 100) * 140"
+                                                r="4.5"
+                                                :fill="getCurrentCohortWeek() === 7 ? '#fbbf24' : (getCurrentCohortWeek() > 7 ? '#86efac' : '#525252')"
+                                                :stroke="getCurrentCohortWeek() === 7 ? '#0a0a0a' : 'transparent'"
+                                                stroke-width="1.5" />
+                                        </g>
+                                        <!-- Week 8 (idx = 7) -->
+                                        <g>
+                                            <circle cx="307.26" :cy="160 - (getWeeklyProgressList()[7] / 100) * 140"
+                                                :r="getCurrentCohortWeek() === 8 ? 8 : 0" fill="#fbbf24"
+                                                :opacity="getCurrentCohortWeek() === 8 ? 0.3 : 0"
+                                                class="animate-pulse" />
+                                            <circle cx="307.26" :cy="160 - (getWeeklyProgressList()[7] / 100) * 140"
+                                                r="4.5"
+                                                :fill="getCurrentCohortWeek() === 8 ? '#fbbf24' : (getCurrentCohortWeek() > 8 ? '#86efac' : '#525252')"
+                                                :stroke="getCurrentCohortWeek() === 8 ? '#0a0a0a' : 'transparent'"
+                                                stroke-width="1.5" />
+                                        </g>
+                                        <!-- Week 9 (idx = 8) -->
+                                        <g>
+                                            <circle cx="345.44" :cy="160 - (getWeeklyProgressList()[8] / 100) * 140"
+                                                :r="getCurrentCohortWeek() === 9 ? 8 : 0" fill="#fbbf24"
+                                                :opacity="getCurrentCohortWeek() === 9 ? 0.3 : 0"
+                                                class="animate-pulse" />
+                                            <circle cx="345.44" :cy="160 - (getWeeklyProgressList()[8] / 100) * 140"
+                                                r="4.5"
+                                                :fill="getCurrentCohortWeek() === 9 ? '#fbbf24' : (getCurrentCohortWeek() > 9 ? '#86efac' : '#525252')"
+                                                :stroke="getCurrentCohortWeek() === 9 ? '#0a0a0a' : 'transparent'"
+                                                stroke-width="1.5" />
+                                        </g>
+                                        <!-- Week 10 (idx = 9) -->
+                                        <g>
+                                            <circle cx="383.62" :cy="160 - (getWeeklyProgressList()[9] / 100) * 140"
+                                                :r="getCurrentCohortWeek() === 10 ? 8 : 0" fill="#fbbf24"
+                                                :opacity="getCurrentCohortWeek() === 10 ? 0.3 : 0"
+                                                class="animate-pulse" />
+                                            <circle cx="383.62" :cy="160 - (getWeeklyProgressList()[9] / 100) * 140"
+                                                r="4.5"
+                                                :fill="getCurrentCohortWeek() === 10 ? '#fbbf24' : (getCurrentCohortWeek() > 10 ? '#86efac' : '#525252')"
+                                                :stroke="getCurrentCohortWeek() === 10 ? '#0a0a0a' : 'transparent'"
+                                                stroke-width="1.5" />
+                                        </g>
+                                        <!-- Week 11 (idx = 10) -->
+                                        <g>
+                                            <circle cx="421.8" :cy="160 - (getWeeklyProgressList()[10] / 100) * 140"
+                                                :r="getCurrentCohortWeek() === 11 ? 8 : 0" fill="#fbbf24"
+                                                :opacity="getCurrentCohortWeek() === 11 ? 0.3 : 0"
+                                                class="animate-pulse" />
+                                            <circle cx="421.8" :cy="160 - (getWeeklyProgressList()[10] / 100) * 140"
+                                                r="4.5"
+                                                :fill="getCurrentCohortWeek() === 11 ? '#fbbf24' : (getCurrentCohortWeek() > 11 ? '#86efac' : '#525252')"
+                                                :stroke="getCurrentCohortWeek() === 11 ? '#0a0a0a' : 'transparent'"
+                                                stroke-width="1.5" />
+                                        </g>
+                                        <!-- Week 12 (idx = 11) -->
+                                        <g>
+                                            <circle cx="460" :cy="160 - (getWeeklyProgressList()[11] / 100) * 140"
+                                                :r="getCurrentCohortWeek() === 12 ? 8 : 0" fill="#fbbf24"
+                                                :opacity="getCurrentCohortWeek() === 12 ? 0.3 : 0"
+                                                class="animate-pulse" />
+                                            <circle cx="460" :cy="160 - (getWeeklyProgressList()[11] / 100) * 140"
+                                                r="4.5"
+                                                :fill="getCurrentCohortWeek() === 12 ? '#fbbf24' : (getCurrentCohortWeek() > 12 ? '#86efac' : '#525252')"
+                                                :stroke="getCurrentCohortWeek() === 12 ? '#0a0a0a' : 'transparent'"
+                                                stroke-width="1.5" />
+                                        </g>
+                                    </g>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Progress Card Donut (1/3 width) -->
+                    <div class="flex flex-col gap-8">
+                        <!-- Progress Card Donut Display -->
+                        <div
+                            class="glass-panel p-6 rounded-[24px] relative overflow-hidden bg-white dark:bg-[#161b22]/75 shadow-sm text-center flex flex-col items-center justify-center h-full min-h-[300px]">
+                            <h3 class="text-sm font-bold text-on-surface-variant/80 uppercase tracking-widest mb-6"
+                                x-text="lang === 'en' ? 'Your Progress' : 'Tiến độ của bạn'"></h3>
+
+                            <!-- Circular progress widget -->
+                            <div class="relative w-40 h-40 flex items-center justify-center mb-6">
+                                <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                                    <circle cx="50" cy="50" r="40" stroke="rgba(153, 144, 119, 0.1)" stroke-width="8"
+                                        fill="transparent" />
+                                    <circle cx="50" cy="50" r="40" stroke="#fbbf24" stroke-width="8" fill="transparent"
+                                        :stroke-dasharray="2 * Math.PI * 40"
+                                        :stroke-dashoffset="2 * Math.PI * 40 * (1 - (members.find(m => m.is_self)?.week_progress || 0) / 100)"
+                                        stroke-linecap="round" class="transition-all duration-700 ease-out" />
+                                </svg>
+
+                                <div class="absolute flex flex-col items-center justify-center">
+                                    <span class="text-3xl font-display-lg font-bold text-white"
+                                        x-text="(members.find(m => m.is_self)?.week_progress || 0) + '%'"></span>
+                                    <span class="text-[11px] text-[#fbbf24] font-bold tracking-wider mt-1 uppercase"
+                                        x-text="(lang === 'en' ? 'Week ' : 'Tuần ') + getCurrentCohortWeek()"></span>
+                                </div>
+                            </div>
+
+                            <p class="text-xs text-[#4a5568] dark:text-[#d0c6ab] leading-relaxed px-4 text-center"
+                                x-text="lang === 'en' ? 'Calculated automatically based on the Socratic quiz and reflection score at the end of the week.' : 'Được tính tự động dựa trên kết quả trắc nghiệm và chiêm nghiệm phản chiếu cuối tuần.'">
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 2: ROADMAP & TASKS -->
+                <div x-show="activeTab === 'roadmap'" x-transition class="flex flex-col gap-8 w-full" x-cloak>
+                    <!-- Top Row: Timeline & Personal Tasks (50% - 50%) -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full">
+                        <!-- Left Column: 12-Week Syllabus Timeline Panel -->
+                        <div
+                            class="glass-panel p-6 rounded-[24px] relative overflow-hidden bg-white dark:bg-[#161b22]/75 shadow-sm flex flex-col h-full">
+                            <div class="mb-6">
+                                <h3 class="text-lg font-bold text-[#162061] dark:text-white"
+                                    x-text="lang === 'en' ? '12-Week Roadmap Timeline' : 'Dòng thời gian Lộ trình 12 Tuần'">
+                                </h3>
+                                <p class="text-xs text-[#4a5568] dark:text-[#d0c6ab]"
+                                    x-text="lang === 'en' ? 'Unlock weekly Socratic challenges and progress in sequences' : 'Mở khóa các thử thách Socratic hàng tuần và tiến bước theo lộ trình'">
+                                </p>
+                            </div>
+
+                            <!-- Timeline items scrollable container -->
+                            <div class="flex flex-col gap-4 max-h-[480px] overflow-y-auto pr-2">
+                                <template x-for="weekObj in syllabus" :key="weekObj.week">
+                                    <div class="p-4 rounded-xl border transition-all duration-300 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-left"
+                                        :class="weekObj.week === getCurrentCohortWeek() 
+                                                 ? 'border-[#fbbf24] bg-[#fbbf24]/5 shadow-[0_0_15px_rgba(255,225,109,0.05)]' 
+                                                 : (weekObj.week < getCurrentCohortWeek() 
+                                                    ? 'border-emerald-500/30 bg-emerald-500/[0.02] opacity-80' 
+                                                    : 'border-outline-variant/20 bg-surface-container-low/10 opacity-50')">
+
+                                        <div class="flex items-start gap-4">
+                                            <!-- Status Badge/Icon -->
+                                            <div class="w-10 h-10 rounded-full shrink-0 flex items-center justify-center"
+                                                :class="weekObj.week === getCurrentCohortWeek() 
+                                                         ? 'bg-[#fbbf24]/20 text-[#fbbf24]' 
+                                                         : (weekObj.week < getCurrentCohortWeek() 
+                                                            ? 'bg-emerald-500/20 text-emerald-400' 
+                                                            : 'bg-outline-variant/10 text-on-surface-variant')">
+                                                <template x-if="weekObj.week < getCurrentCohortWeek()">
+                                                    <span
+                                                        class="material-symbols-outlined text-[21px]">check_circle</span>
+                                                </template>
+                                                <template x-if="weekObj.week === getCurrentCohortWeek()">
+                                                    <span class="material-symbols-outlined text-[21px] animate-spin"
+                                                        style="animation-duration: 4s;">track_changes</span>
+                                                </template>
+                                                <template x-if="weekObj.week > getCurrentCohortWeek()">
+                                                    <span class="material-symbols-outlined text-[21px]">lock</span>
+                                                </template>
+                                            </div>
+
+                                            <div class="text-left">
+                                                <div class="flex items-center gap-2">
+                                                    <span
+                                                        class="text-xs font-bold uppercase tracking-wider text-[#fbbf24]"
+                                                        x-text="(lang === 'en' ? 'Week ' : 'Tuần ') + weekObj.week"></span>
+                                                    <template x-if="weekObj.week === getCurrentCohortWeek()">
+                                                        <span
+                                                            class="px-2 py-0.5 rounded text-[10px] font-bold bg-[#fbbf24] text-black"
+                                                            x-text="lang === 'en' ? 'ACTIVE' : 'ĐANG DIỄN RA'"></span>
+                                                    </template>
+                                                    <template x-if="weekObj.week < getCurrentCohortWeek()">
+                                                        <span class="text-[11px] text-emerald-400 font-medium"
+                                                            x-text="lang === 'en' ? 'Completed' : 'Đã học'"></span>
+                                                    </template>
+                                                </div>
+                                                <h4 class="font-bold text-base text-white mt-1"
+                                                    x-text="cleanText(weekObj.title)">
+                                                </h4>
+                                                <p class="text-sm text-on-surface-variant/80 mt-1 max-w-lg leading-relaxed"
+                                                    x-text="cleanText(weekObj.description)"></p>
+                                            </div>
+                                        </div>
+
+                                        <!-- Action Button for Timeline row -->
+                                        <div class="shrink-0 flex items-center justify-end sm:justify-start">
+                                            <!-- Current week learning button -->
+                                            <template x-if="weekObj.week === getCurrentCohortWeek()">
+                                                <button @click="startLearningWeek(weekObj)"
+                                                    :disabled="personalizingLoading"
+                                                    :class="personalizingLoading ? 'opacity-50 cursor-not-allowed' : 'hover:scale-[1.02] hover:shadow-[0_0_15px_rgba(255,225,109,0.3)]'"
+                                                    class="px-5 py-2 rounded-xl bg-[#fbbf24] text-[#0a0a0a] font-bold text-xs transition-all duration-300 flex items-center gap-1.5">
+                                                    <span class="material-symbols-outlined text-[17px]"
+                                                        x-text="(cohortTasks || []).some(t => t.week === weekObj.week) ? 'arrow_forward' : 'play_arrow'"></span>
+                                                    <span
+                                                        x-text="(cohortTasks || []).some(t => t.week === weekObj.week) 
+                                                                ? (lang === 'en' ? 'Continue Learning' : 'Học tiếp') 
+                                                                : (lang === 'en' ? 'Start Learning' : 'Bắt đầu học')"></span>
+                                                </button>
+                                            </template>
+
+                                            <!-- Future weeks locked icon -->
+                                            <template x-if="weekObj.week > getCurrentCohortWeek()">
+                                                <div
+                                                    class="flex items-center gap-1 text-xs text-on-surface-variant/60 font-semibold px-4 py-2 border border-outline-variant/20 rounded-xl bg-surface/30">
+                                                    <span class="material-symbols-outlined text-[15px]">lock</span>
+                                                    <span x-text="lang === 'en' ? 'Locked' : 'Chưa mở khóa'"></span>
+                                                </div>
+                                            </template>
+
+                                            <!-- Past weeks review button -->
+                                            <template x-if="weekObj.week < getCurrentCohortWeek()">
+                                                <button
+                                                    @click="selectedWeekFilter = weekObj.week; document.getElementById('personal-tasks-section').scrollIntoView({ behavior: 'smooth' })"
+                                                    class="px-4 py-2 rounded-xl border border-outline-variant/30 text-on-surface-variant font-medium text-xs hover:bg-surface-variant/20 hover:text-white transition-colors flex items-center gap-1.5">
+                                                    <span class="material-symbols-outlined text-[15px]">checklist</span>
+                                                    <span
+                                                        x-text="lang === 'en' ? 'Review Tasks' : 'Xem lại nhiệm vụ'"></span>
+                                                </button>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+
+                        <!-- Right Column: Personal Tasks -->
+                        <div id="personal-tasks-section"
+                            class="glass-panel p-6 rounded-[24px] relative overflow-hidden bg-white dark:bg-[#161b22]/75 shadow-sm flex flex-col h-full text-left">
+
+                            <!-- Background accents -->
+                            <div
+                                class="absolute -right-24 -top-24 w-48 h-48 bg-[#fbbf24] opacity-[0.03] ] rounded-full pointer-events-none">
+                            </div>
+
+                            <!-- Header & Filter Row -->
+                            <div class="mb-6">
+                                <h3 class="text-lg font-bold text-white"
+                                    x-text="lang === 'en' ? 'Your Personal Tasks' : 'Nhiệm vụ cá nhân của bạn'"></h3>
+                                <p class="text-xs text-on-surface-variant/80"
+                                    x-text="lang === 'en' ? 'Customized Socratic actions for your personal cycle' : 'Các hành động Socratic được thiết kế riêng cho bạn trong chu kỳ tuần'">
+                                </p>
+                            </div>
+
+                            <!-- Task List -->
+
+                            <!-- Task List Container with height restriction and scrolling -->
+                            <div class="flex flex-col gap-4 overflow-y-auto max-h-[480px] pr-2">
+                                <template x-for="task in getCohortTasks().filter(t => t.week === selectedWeekFilter)"
+                                    :key="task.id">
+                                    <div class="flex flex-col gap-2">
+                                        <div class="glass-panel p-4 rounded-xl border border-outline-variant/30 hover:border-primary-fixed/50 hover:bg-white/5 transition-all duration-300 flex items-center justify-between gap-4 cursor-pointer text-left"
+                                            :class="task.status === 'done' ? 'task-card-supp opacity-70' : 'task-card-core'"
+                                            @click="expandedTaskId = (expandedTaskId === task.id ? null : task.id)">
+
+                                            <div class="flex items-center gap-4 text-left overflow-hidden">
+                                                <!-- Status Checkbox -->
+                                                <button @click.stop="toggleTaskStatus(task)"
+                                                    class="w-6 h-6 rounded-lg border flex items-center justify-center shrink-0 transition-colors"
+                                                    :class="task.status === 'done' 
+                                                            ? 'bg-emerald-500/20 border-emerald-400 text-emerald-400' 
+                                                            : 'border-outline-variant/60 text-transparent hover:border-primary-fixed'">
+                                                    <span
+                                                        class="material-symbols-outlined text-[17px] font-bold">check</span>
+                                                </button>
+
+                                                <div class="overflow-hidden text-left">
+                                                    <div class="flex items-center gap-2">
+                                                        <span
+                                                            class="px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider"
+                                                            :class="task.type === 'core' ? 'bg-[#fbbf24]/10 text-[#fbbf24]' : 'bg-outline-variant/20 text-on-surface-variant'"
+                                                            x-text="task.type === 'core' ? (lang === 'en' ? 'CORE' : 'CỐT LÕI') : (lang === 'en' ? 'SUPPLEMENTARY' : 'BỔ TRỢ')"></span>
+                                                    </div>
+                                                    <h4 class="font-bold text-sm mt-1.5 text-white truncate"
+                                                        :class="task.status === 'done' ? 'line-through text-on-surface-variant' : ''"
+                                                        x-text="cleanText(task.title)"></h4>
+                                                    <p class="text-xs text-on-surface-variant truncate mt-0.5"
+                                                        x-text="cleanText(task.goal)"></p>
+                                                </div>
+                                            </div>
+
+                                            <!-- Open details indicator (arrow toggles based on expanded status) -->
+                                            <span
+                                                class="material-symbols-outlined text-on-surface-variant/60 text-lg shrink-0 transition-transform duration-300"
+                                                :class="expandedTaskId === task.id ? 'rotate-90 text-[#fbbf24]' : ''">chevron_right</span>
+                                        </div>
+
+                                        <!-- Collapsible Accordion Table for Task Details -->
+                                        <div x-show="expandedTaskId === task.id"
+                                            x-transition:enter="transition ease-out duration-300"
+                                            x-transition:enter-start="opacity-0 transform -translate-y-2"
+                                            x-transition:enter-end="opacity-100 transform translate-y-0"
+                                            class="glass-panel p-4 rounded-xl border border-[#fbbf24]/30 bg-surface-container-low/30 overflow-hidden text-left"
+                                            x-cloak>
+                                            <div class="overflow-x-auto">
+                                                <table class="w-full text-left border-collapse">
+                                                    <thead>
+                                                        <tr
+                                                            class="border-b border-outline-variant/30 text-[11px] text-on-surface-variant uppercase tracking-wider font-bold">
+                                                            <th class="pb-2 w-1/3"
+                                                                x-text="lang === 'en' ? 'Task Property' : 'Tiêu đề thuộc tính'">
+                                                            </th>
+                                                            <th class="pb-2 w-2/3"
+                                                                x-text="lang === 'en' ? 'Task Details & Action' : 'Chi tiết nhiệm vụ & Hành động'">
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody
+                                                        class="text-sm text-on-surface divide-y divide-outline-variant/10">
+                                                        <tr>
+                                                            <td class="py-3 font-semibold text-white">
+                                                                <div class="flex flex-col gap-1">
+                                                                    <span
+                                                                        x-text="lang === 'en' ? 'Task Title' : 'Tên nhiệm vụ'"></span>
+                                                                    <span
+                                                                        class="text-[10px] text-[#fbbf24] font-bold uppercase tracking-widest"
+                                                                        x-text="(lang === 'en' ? 'Week ' : 'Tuần ') + task.week"></span>
+                                                                </div>
+                                                            </td>
+                                                            <td class="py-3 font-medium text-white"
+                                                                x-text="cleanText(task.title)">
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="py-3 font-semibold text-white"
+                                                                x-text="lang === 'en' ? 'Detailed Description' : 'Mô tả chi tiết'">
+                                                            </td>
+                                                            <td class="py-3 text-on-surface-variant whitespace-pre-line leading-relaxed font-body-md"
+                                                                x-text="cleanText(task.goal)"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="py-3 font-semibold text-white"
+                                                                x-text="lang === 'en' ? 'Estimated Effort' : 'Thời gian ước tính'">
+                                                            </td>
+                                                            <td class="py-3 text-on-surface-variant font-body-md"
+                                                                x-text="task.effort + (lang === 'en' ? ' hours' : ' giờ')">
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                            <!-- Socratic Reflection Essay Box -->
+                                            <div
+                                                class="mt-4 pt-4 border-t border-outline-variant/20 flex flex-col gap-3">
+                                                <div class="flex items-center justify-between">
+                                                    <h5
+                                                        class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
+                                                        <span
+                                                            class="material-symbols-outlined text-[17px] text-[#fbbf24]">rate_review</span>
+                                                        <span
+                                                            x-text="lang === 'en' ? 'Socratic Reflection Essay' : 'Bài luận Chiêm nghiệm'"></span>
+                                                    </h5>
+                                                    <span class="text-[11px] text-on-surface-variant"
+                                                        x-text="lang === 'en' ? 'Bonus points: 1% to 20%' : 'Điểm cộng bonus: 1% tới 20%'"></span>
+                                                </div>
+                                                <textarea x-model="task.essay"
+                                                    class="w-full h-24 p-3 rounded-xl bg-surface/40 border border-outline-variant/30 text-white font-body-md text-sm focus:border-[#fbbf24] focus:ring-1 focus:ring-[#fbbf24] resize-none"
+                                                    :placeholder="lang === 'en' ? 'Write down how you completed this task and what Socratic unlearning occurred...' : 'Ghi lại cách bạn đã hoàn thành nhiệm vụ này và những đứt gãy nhận thức bạn tự chiêm nghiệm ra...'"></textarea>
+                                                <div class="flex justify-end">
+                                                    <button @click.stop="saveTaskEssay(task)"
+                                                        class="px-4 py-2 rounded-xl bg-[#fbbf24]/10 border border-[#fbbf24]/30 text-[#fbbf24] font-bold text-xs hover:bg-[#fbbf24]/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center gap-1.5">
+                                                        <span class="material-symbols-outlined text-[15px]">save</span>
+                                                        <span x-text="lang === 'en' ? 'Save' : 'Lưu'"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Row: Weekly Socratic AI Quiz Panel (Full Width) -->
+                    <div x-show="isQuizSectionVisible()" class="text-left" x-cloak>
+                        <div
+                            class="glass-panel p-6 rounded-[24px] bg-white dark:bg-[#161b22]/75 border border-gray-200 dark:border-gray-700/50 shadow-sm relative overflow-hidden">
+
+                            <!-- Background accents -->
+                            <div
+                                class="absolute -right-24 -top-24 w-48 h-48 bg-[#fbbf24] opacity-[0.03] ] rounded-full pointer-events-none">
+                            </div>
+
+                            <!-- Header -->
+                            <div
+                                class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-outline-variant/20 pb-4 mb-6">
+                                <div class="flex items-center gap-3">
+                                    <div
+                                        class="w-10 h-10 rounded-full bg-[#fbbf24]/10 border border-[#fbbf24]/30 flex items-center justify-center text-[#fbbf24] shrink-0">
+                                        <span class="material-symbols-outlined text-[25px]">psychology</span>
+                                    </div>
+                                    <div class="text-left">
+                                        <h4 class="font-bold text-base text-white"
+                                            x-text="lang === 'en' ? 'Weekly Socratic AI Quiz' : 'Bài trắc nghiệm Socratic AI Hàng tuần'">
+                                        </h4>
+                                        <p class="text-xs text-on-surface-variant/80"
+                                            x-text="lang === 'en' ? 'Challenge your assumptions & earn your weekly progression grade' : 'Vượt qua các thử thách nhận thức để nhận đánh giá và mở khóa tuần kế tiếp'">
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- Unlock Status Badge -->
+                                <div class="shrink-0">
+                                    <span
+                                        class="px-3 py-1 rounded-full text-[11px] font-bold tracking-widest uppercase flex items-center gap-1.5"
+                                        :class="isQuizUnlocked() ? 'bg-emerald-500/10 border border-emerald-400/30 text-emerald-400' : 'bg-amber-500/10 border border-amber-400/30 text-[#fbbf24]'">
+                                        <span class="w-1.5 h-1.5 rounded-full"
+                                            :class="isQuizUnlocked() ? 'bg-emerald-400 animate-pulse' : 'bg-[#fbbf24]'"></span>
+                                        <span
+                                            x-text="isQuizUnlocked() ? (lang === 'en' ? 'UNLOCKED' : 'ĐÃ MỞ KHÓA') : (lang === 'en' ? 'LOCKED' : 'ĐANG KHÓA')"></span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Locked State -->
+                            <div x-show="!isQuizUnlocked()" class="py-6 text-center">
+                                <span
+                                    class="material-symbols-outlined text-4xl text-on-surface-variant/40 mb-3">lock</span>
+                                <p class="text-sm font-bold text-white"
+                                    x-text="lang === 'en' ? 'Socratic Quiz is currently locked' : 'Bài trắc nghiệm đang bị khóa'">
+                                </p>
+                                <p class="text-sm text-on-surface-variant/80 mt-2 max-w-md mx-auto leading-relaxed"
+                                    x-text="lang === 'en' ? 'Complete your 2 tasks for this week and submit your reflection essays to unlock the AI Socratic Evaluator.' : 'Hoàn thành đủ 2 Nhiệm vụ của tuần này, đồng thời hoàn tất lưu cả 2 bài luận chiêm nghiệm để mở khóa bài trắc nghiệm.'">
+                                </p>
+                            </div>
+
+                            <!-- Loading State -->
+                            <div x-show="isQuizUnlocked() && !quizData"
+                                class="py-12 text-center flex flex-col items-center justify-center">
+                                <div
+                                    class="w-10 h-10 rounded-full border-4 border-[#fbbf24] border-t-transparent animate-spin mb-4">
+                                </div>
+                                <p class="text-sm text-[#fbbf24] font-bold tracking-wider uppercase animate-pulse"
+                                    x-text="lang === 'en' ? 'AI Socratic Coach is custom-generating your quiz...' : 'AI Socratic Coach đang tạo bộ câu hỏi cá nhân hóa cho bạn...'">
+                                </p>
+                            </div>
+
+                            <!-- Quiz Questions Taking State -->
+                            <div x-show="isQuizUnlocked() && quizData" class="flex flex-col gap-6 text-left">
+                                <template x-for="(q, index) in (quizData ? quizData.questions : [])" :key="q.id">
+                                    <div
+                                        class="p-5 rounded-2xl bg-white dark:bg-surface/30 border border-gray-200/50 dark:border-outline-variant/10 flex flex-col gap-4 text-left shadow-sm">
+                                        <div class="flex items-start gap-3">
+                                            <span
+                                                class="w-6 h-6 rounded-lg bg-[#fbbf24]/10 border border-[#fbbf24]/30 text-[#fbbf24] text-xs font-bold flex items-center justify-center shrink-0 mt-0.5"
+                                                x-text="index + 1"></span>
+                                            <h5 class="font-bold text-sm text-white font-body-md leading-relaxed"
+                                                x-text="lang === 'en' ? (q.question_en || cleanText(q.question)) : (q.question_vi || cleanText(q.question))">
+                                            </h5>
+                                        </div>
+
+                                        <!-- Options (Radio buttons style) -->
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pl-9">
+                                            <template
+                                                x-for="(opt, optIdx) in (lang === 'en' ? (q.options_en || q.options || []).map(o => cleanText(o)) : (q.options_vi || q.options || []).map(o => cleanText(o)))"
+                                                :key="optIdx">
+                                                <label
+                                                    class="flex items-center gap-3 p-3 rounded-xl border border-outline-variant/10 hover:border-[#fbbf24]/50 cursor-pointer transition-colors bg-surface-container-low/20"
+                                                    :class="userAnswers[index] === optIdx ? 'border-[#fbbf24] bg-[#fbbf24]/5 shadow-[0_0_10px_rgba(255,225,109,0.05)]' : ''">
+                                                    <input type="radio" :name="'question_' + q.id" :value="optIdx"
+                                                        x-model="userAnswers[index]"
+                                                        @change="userAnswers = [...userAnswers]"
+                                                        class="text-[#fbbf24] focus:ring-[#fbbf24] bg-transparent border-outline-variant/60 w-4 h-4" />
+                                                    <span class="text-sm text-white/90 leading-relaxed font-body-md"
+                                                        x-text="opt"></span>
+                                                </label>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </template>
+
+                                <!-- Submit button -->
+                                <div class="flex justify-end pt-4 border-t border-outline-variant/20">
+                                    <button @click="submitQuiz()"
+                                        :disabled="userAnswers.includes(null) || quizSubmitting"
+                                        class="px-6 py-3 rounded-xl font-bold text-sm transition-all flex items-center gap-2 shadow-md"
+                                        :class="userAnswers.includes(null) || quizSubmitting
+                                                        ? 'bg-gray-500/20 text-gray-500 border border-gray-600/30 cursor-not-allowed opacity-60' 
+                                                        : 'bg-emerald-400 text-black hover:shadow-[0_0_20px_rgba(52,211,153,0.4)] hover:scale-[1.02]'">
+                                        <template x-if="quizSubmitting">
+                                            <div
+                                                class="w-4 h-4 rounded-full border-2 border-black border-t-transparent animate-spin">
+                                            </div>
+                                        </template>
+                                        <template x-if="!quizSubmitting">
+                                            <span class="material-symbols-outlined text-[21px]">grading</span>
+                                        </template>
+                                        <span
+                                            x-text="quizSubmitting ? (lang === 'en' ? 'AI Socratic Coach is evaluating...' : 'AI Coach đang chấm bài...') : (quizResult ? (lang === 'en' ? 'Resubmit Quiz' : 'Nộp lại bài trắc nghiệm') : (lang === 'en' ? 'Submit Quiz Answers' : 'Nộp bài trắc nghiệm'))"></span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Quiz Result Screen -->
+                            <div x-show="quizResult" class="flex flex-col gap-6 text-left animate-page-fade">
+                                <!-- Summary Banner -->
+                                <div class="p-6 rounded-2xl border text-center flex flex-col items-center bg-gradient-to-b"
+                                    :class="quizResult?.passed 
+                                                 ? 'border-emerald-500/30 bg-emerald-500/[0.03]' 
+                                                 : 'border-rose-500/30 bg-rose-500/[0.03]'">
+                                    <span class="material-symbols-outlined text-5xl mb-3"
+                                        :class="quizResult?.passed ? 'text-emerald-400 animate-bounce' : 'text-rose-400 animate-pulse'"
+                                        x-text="quizResult?.passed ? 'workspace_premium' : 'sentiment_very_dissatisfied'"></span>
+
+                                    <h4 class="text-xl font-bold text-white mb-2" x-text="quizResult?.passed 
+                                                    ? (lang === 'en' ? 'Congratulations! You Passed!' : 'Chúc mừng! Bạn đã Vượt Qua!') 
+                                                    : (lang === 'en' ? 'Attempt Failed' : 'Chưa đạt yêu cầu')"></h4>
+
+                                    <p class="text-sm text-on-surface-variant/80 max-w-md leading-relaxed mb-6"
+                                        x-text="quizResult?.passed
+                                                   ? (lang === 'en' ? 'Excellent progression! You have successfully completed this week\'s roadmap Socratic evaluation and unlocked the next cycle.' : 'Tuyệt vời! Bạn đã hoàn thành xuất sắc thử thách phản chiếu nhận thức của tuần học này và đủ điều kiện để tiến xa hơn.')
+                                                   : (lang === 'en' ? 'Your total score is below 50%. Take a moment to deeply reflect on your core task essays and try again to unlock the next week.' : 'Tổng điểm của bạn dưới 50%. Hãy dành thêm thời gian chiêm nghiệm lại bài học của mình và nhấp Làm bài lại để mở khóa tuần kế tiếp.')">
+                                    </p>
+
+                                    <!-- Scores Breakdown Matrix -->
+                                    <div
+                                        class="grid grid-cols-3 gap-4 w-full max-w-[420px] bg-black/20 p-4 rounded-xl border border-outline-variant/10">
+                                        <div class="flex flex-col items-center">
+                                            <span
+                                                class="text-[11px] text-on-surface-variant font-bold uppercase tracking-wider mb-1"
+                                                x-text="lang === 'en' ? 'Quiz Score' : 'Điểm trắc nghiệm'"></span>
+                                            <span class="text-lg font-black text-white"
+                                                x-text="(quizResult?.quiz_score || 0) + '/80'"></span>
+                                        </div>
+                                        <div class="flex flex-col items-center border-x border-outline-variant/20">
+                                            <span
+                                                class="text-[11px] text-on-surface-variant font-bold uppercase tracking-wider mb-1"
+                                                x-text="lang === 'en' ? 'Essay Bonus' : 'Điểm bài viết'"></span>
+                                            <span class="text-lg font-black text-[#fbbf24]"
+                                                x-text="'+' + (quizResult?.essay_bonus || 0) + '/20'"></span>
+                                        </div>
+                                        <div class="flex flex-col items-center">
+                                            <span
+                                                class="text-[11px] text-on-surface-variant font-bold uppercase tracking-wider mb-1"
+                                                x-text="lang === 'en' ? 'Total Grade' : 'Tổng điểm'"></span>
+                                            <span class="text-lg font-black text-emerald-400"
+                                                x-text="(quizResult?.total_score || 0) + '%'"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Socratic Qualitative Critique Feedback -->
+                                <div x-show="false"
+                                    class="glass-panel p-6 rounded-2xl border-l-4 border-[#fbbf24] bg-surface/30">
+                                    <div class="flex items-center gap-2 mb-3">
+                                        <span
+                                            class="material-symbols-outlined text-[#fbbf24] text-[21px]">smart_toy</span>
+                                        <h5 class="text-xs font-bold text-[#fbbf24] uppercase tracking-wider"
+                                            x-text="lang === 'en' ? 'Socratic Mentor Critique' : 'Nhận xét từ AI Socratic Coach'">
+                                        </h5>
+                                    </div>
+                                    <p class="text-sm text-white/90 leading-relaxed font-body-md whitespace-pre-line"
+                                        x-text="quizResult?.critique || ''"></p>
+                                </div>
+
+                                <!-- Result Actions -->
+                                <div class="flex justify-end gap-4 pt-4 border-t border-outline-variant/20">
+                                    <!-- Làm bài lại (Try Again) button -->
+                                    <button @click="retryQuiz()"
+                                        class="px-5 py-2.5 rounded-xl border border-[#fbbf24]/50 text-[#fbbf24] font-bold text-xs hover:bg-[#fbbf24]/10 transition-colors flex items-center gap-1.5">
+                                        <span class="material-symbols-outlined text-[17px]">refresh</span>
+                                        <span x-text="lang === 'en' ? 'Try Again' : 'Làm bài lại'"></span>
+                                    </button>
+
+                                    <!-- Qua bài học tiếp theo (Next Week) button -->
+                                    <template x-if="quizResult?.passed">
+                                        <button @click="nextCohortWeek()" :disabled="personalizingLoading"
+                                            :class="personalizingLoading ? 'opacity-50 cursor-not-allowed' : 'hover:scale-[1.02] hover:shadow-[0_0_20px_rgba(255,225,109,0.5)]'"
+                                            class="px-5 py-2.5 rounded-xl bg-[#fbbf24] text-black font-bold text-xs transition-all flex items-center gap-1.5">
+                                            <span
+                                                class="material-symbols-outlined text-[17px] font-bold">arrow_forward</span>
+                                            <span x-text="lang === 'en' ? 'Next Week' : 'Qua bài học tiếp theo'"></span>
+                                        </button>
+                                    </template>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Task Details Modal -->
+            <div x-show="taskDetailsModalOpen" x-transition.opacity.duration.300ms
+                class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 " x-cloak>
+                <div @click.away="saveTaskDetails()"
+                    class="glass-panel w-full max-w-lg rounded-3xl p-6 relative flex flex-col gap-6 shadow-2xl bg-white dark:bg-[#161b22] border border-outline-variant/30 text-left animate-page-fade">
+
+                    <!-- Modal Header -->
+                    <div class="flex justify-between items-start gap-4">
+                        <div class="overflow-hidden">
+                            <div class="flex items-center gap-2 mb-1.5">
+                                <span class="px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider"
+                                    :class="currentActiveTask?.type === 'core' ? 'bg-[#fbbf24]/10 text-[#fbbf24]' : 'bg-outline-variant/20 text-on-surface-variant'"
+                                    x-text="currentActiveTask?.type === 'core' ? (lang === 'en' ? 'CORE' : 'CỐT LÕI') : (lang === 'en' ? 'SUPPLEMENTARY' : 'BỔ TRỢ')"></span>
+
+                                <span class="text-[11px] text-on-surface-variant/80"
+                                    x-text="(lang === 'en' ? 'Week ' : 'Tuần ') + currentActiveTask?.week"></span>
+
+                                <span class="text-[11px] text-on-surface-variant/80">•</span>
+
+                                <span class="text-[11px] text-on-surface-variant/80 flex items-center gap-0.5">
+                                    <span class="material-symbols-outlined text-[14px]">schedule</span>
+                                    <span x-text="currentActiveTask?.effort + (lang === 'en' ? ' hrs' : ' giờ')"></span>
+                                </span>
+                            </div>
+                            <h3 class="text-base font-bold text-white leading-tight" x-text="currentActiveTask?.title">
+                            </h3>
+                        </div>
+
+                        <button @click="saveTaskDetails()"
+                            class="w-8 h-8 rounded-full hover:bg-surface-variant/40 flex items-center justify-center text-on-surface-variant hover:text-white transition-colors">
+                            <span class="material-symbols-outlined text-lg">close</span>
+                        </button>
+                    </div>
+
+                    <!-- Modal Description -->
+                    <div
+                        class="text-xs text-on-surface-variant leading-relaxed bg-surface-container-lowest/30 p-3 rounded-xl border border-outline-variant/10">
+                        <h4 class="font-bold text-white mb-1.5"
+                            x-text="lang === 'en' ? 'Task Description' : 'Mô tả nhiệm vụ'">
+                        </h4>
+                        <p class="whitespace-pre-line font-body-md" x-text="cleanText(currentActiveTask?.goal)"></p>
+                    </div>
+
+                    <!-- Modal Footer -->
+                    <div class="flex justify-end pt-2">
+                        <button @click="saveTaskDetails()"
+                            class="px-6 py-2.5 rounded-xl bg-[#fbbf24] text-black font-bold text-xs hover:shadow-[0_0_20px_rgba(255,225,109,0.4)] transition-all hover:scale-[1.02]">
+                            <span x-text="lang === 'en' ? 'Save & Close' : 'Lưu & Đóng'"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Glassmorphic Task Personalization Loading Overlay -->
+            <div x-show="personalizingLoading"
+                class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 "
+                x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0"
+                x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200"
+                x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" x-cloak>
+                <div
+                    class="w-full max-w-sm rounded-[32px] p-8 border border-[#fbbf24]/30 bg-white/95 dark:bg-[#161b22]/95 text-center flex flex-col items-center gap-6 shadow-2xl animate-page-fade">
+                    <div
+                        class="w-16 h-16 rounded-full bg-[#fbbf24]/10 border border-[#fbbf24]/30 flex items-center justify-center text-[#fbbf24]">
+                        <span class="material-symbols-outlined text-3xl animate-spin">cyclone</span>
+                    </div>
+                    <div>
+                        <h4 class="text-base font-bold text-white mb-2"
+                            x-text="lang === 'en' ? 'Synthesizing Socratic Tasks' : 'Đang kiến tạo nhiệm vụ Socratic'">
+                        </h4>
+                        <p class="text-xs text-on-surface-variant leading-relaxed font-medium"
+                            x-text="typeof personalizingStatusText === 'object' ? personalizingStatusText[lang] : personalizingStatusText">
+                        </p>
+                    </div>
+                    <div class="w-full bg-white/[0.05] h-1.5 rounded-full overflow-hidden">
+                        <div class="bg-[#fbbf24] h-full transition-all duration-300 ease-out"
+                            :style="`width: ${personalizingProgress}%`"></div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('roadmapApp', () => ({
+                lang: localStorage.getItem('thapsang_lang') || 'vi',
+                cleanText(text) {
+                    if (!text) return '';
+                    if (typeof text === 'string' && (text.startsWith('{') || text.startsWith('['))) {
+                        return text;
+                    }
+                    if (text.includes(' ||| ')) {
+                        const parts = text.split(' ||| ');
+                        if (parts.length > 1) {
+                            return this.lang === 'en' ? parts[1].trim() : parts[0].trim();
+                        }
+                    }
+                    let separator = null;
+                    if (text.includes(' / ')) separator = ' / ';
+                    else if (text.includes(' | ')) separator = ' | ';
+                    else if (text.includes('/')) separator = '/';
+                    else if (text.includes('|')) separator = '|';
+
+                    if (separator) {
+                        const parts = text.split(separator);
+                        if (parts.length > 1) {
+                            const p0 = parts[0].trim();
+                            const p1 = parts[1].trim();
+
+                            // Regex for detecting Vietnamese accented characters
+                            const viRegex = /[àáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệđìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵ]/i;
+                            const hasViAccents0 = viRegex.test(p0);
+                            const hasViAccents1 = viRegex.test(p1);
+
+                            let vi = p0;
+                            let en = p1;
+
+                            if (hasViAccents1 && !hasViAccents0) {
+                                vi = p1;
+                                en = p0;
+                            } else if (hasViAccents0 && !hasViAccents1) {
+                                vi = p0;
+                                en = p1;
+                            } else {
+                                // Fallback: check common Vietnamese lowercase words/consonants
+                                const commonViWords = /\b(tôi|bạn|học|tuần|nhiệm|vụ|cốt|lõi|bổ|trợ|phụ|bài|nhật|ký|chiêm|nghiệm|định|kiến|thông|tin|mục|tiêu|chặng)\b/i;
+                                if (commonViWords.test(p1) && !commonViWords.test(p0)) {
+                                    vi = p1;
+                                    en = p0;
+                                } else if (commonViWords.test(p0) && !commonViWords.test(p1)) {
+                                    vi = p0;
+                                    en = p1;
+                                } else {
+                                    vi = p0;
+                                    en = p1;
+                                }
+                            }
+
+                            return this.lang === 'en' ? en : vi;
+                        }
+                    }
+                    return text;
+                },
+                async saveTaskEssay(task) {
+                    try {
+                        if (!task.essay) task.essay = '';
+                        task.status = 'done'; // Tick task as completed!
+
+                        // 1. Cập nhật giao diện (UI) và Local Storage ngay lập tức
+                        localStorage.setItem(`thapsang_cohort_tasks_${this.user.username || 'user'}`, JSON.stringify(this.cohortTasks));
+                        showGlobalToast(this.lang === 'en' ? 'Reflection saved and task marked as completed!' : 'Đã lưu bài luận chiêm nghiệm và hoàn thành nhiệm vụ!', 'success');
+                        this.recalculateMyProgress();
+                        this.updatePDCAConnection();
+
+                        // 2. Chạy ngầm cập nhật hệ thống lên Server mà không block UI
+                        fetch('/api/v1/cohort/tasks/' + task.id, {
+                            method: 'PATCH',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                status: 'done',
+                                subtasks: task.subtasks,
+                                essay: task.essay
+                            })
+                        }).then(async res => {
+                            if (res.ok) {
+                                const responseData = await res.json();
+                                if (responseData.status === 'success' && responseData.task) {
+                                    Object.assign(task, responseData.task);
+                                }
+
+                                if (this.isQuizUnlocked() && !this.quizData) {
+                                    if (!this.quizPollingInterval) {
+                                        this.quizPollingInterval = setInterval(async () => {
+                                            try {
+                                                const username = this.user.email || this.user.username || 'user';
+                                                const pollRes = await fetch(`/api/v1/cohort/tasks/${username}`, { cache: 'no-store' });
+                                                if (pollRes.ok) {
+                                                    const data = await pollRes.json();
+                                                    const weekData = data.filter(t => t.week === this.selectedWeekFilter);
+                                                    const coreTask = weekData.find(t => t.type === 'core');
+                                                    if (coreTask && coreTask.quiz && coreTask.quiz.questions) {
+                                                        this.quizData = coreTask.quiz;
+                                                        clearInterval(this.quizPollingInterval);
+                                                        this.quizPollingInterval = null;
+                                                    }
+                                                }
+                                            } catch (e) {
+                                                console.error("Polling error", e);
+                                            }
+                                        }, 5000); // Poll every 5s while background task generates
+                                    }
+                                }
+                            } else {
+                                console.error("Ngầm cập nhật thất bại: Failed to save essay");
+                            }
+                        }).catch(e => {
+                            console.error('Lỗi khi chạy ngầm lưu bài:', e);
+                        });
+                    } catch (e) {
+                        console.error('Lỗi giao diện lưu bài:', e);
+                        showGlobalToast(this.lang === 'en' ? 'Error saving task!' : 'Có lỗi xảy ra khi lưu!', 'error');
+                    }
+                },
+                t(key) { this.lang; return window.t(key); },
+                activeTab: localStorage.getItem('thapsang_cohort_active_tab') || 'overview',
+                user: JSON.parse(localStorage.getItem('thapsang_user') || '{}'),
+                cohortInfo: {},
+                syllabus: [],
+                members: [],
+                activityFeed: [],
+                bottleneck: {},
+                pivot: {},
+                retro: { text: '', loading: false, avg_progress: 0, loaded: false },
+                toast: { show: false, message: '', type: 'success' },
+                addedTasks: new Set(),
+                reviewModal: { open: false, buddy: null, tasks: [], ratings: {}, submitted: false },
+                isEnrolled: (() => {
+                    try {
+                        const user = JSON.parse(localStorage.getItem('thapsang_user') || '{}');
+                        const username = user.username || 'user';
+                        return localStorage.getItem('thapsang_cohort_activated_' + username) === 'true';
+                    } catch (e) {
+                        return false;
+                    }
+                })(),
+                insufficientInfo: false,
+                insufficientMessage: '',
+                contextCheck: { loaded: false, count: 0, isSufficient: false },
+                bottleneckLoading: false,
+                joiningLoading: false,
+                personalizingLoading: false,
+                personalizingProgress: 0,
+                progressInterval: null,
+                personalizingStatusText: '',
+                matchingProgress: 0,
+                matchingStatusText: '',
+                selectedWeekFilter: 1,
+                currentActiveTask: null,
+                taskDetailsModalOpen: false,
+                expandedTaskId: null,
+                cohortTasks: [],
+                quizLoading: false,
+                quizPollingInterval: null,
+                quizSubmitting: false,
+                quizData: null,
+                quizResult: null,
+                userAnswers: Array(8).fill(null),
+                isRetrying: false,
+                justSubmitted: false,
+                pageLoading: true,
+
+                async init() {
+                    this.pageLoading = true;
+                    document.body.classList.add('overflow-hidden');
+                    this.$watch('activeTab', (val) => {
+                        localStorage.setItem('thapsang_cohort_active_tab', val);
+                    });
+                    this.$watch('pageLoading', (val) => {
+                        if (val) {
+                            document.body.classList.add('overflow-hidden');
+                        } else {
+                            document.body.classList.remove('overflow-hidden');
+                        }
+                    });
+                    this.$watch('selectedWeekFilter', async (newVal, oldVal) => {
+                        if (newVal !== oldVal) {
+                            this.isRetrying = false;
+                            this.justSubmitted = false;
+                            this.pageLoading = true;
+                            this.quizData = null;
+                            this.quizResult = null;
+                            this.userAnswers = Array(8).fill(null);
+                            await this.loadAll();
+                            setTimeout(() => { this.pageLoading = false; }, 300);
+                        }
+                    });
+
+                    window.addEventListener('ts-lang-changed', (e) => {
+                        this.lang = e.detail.lang;
+                        this.updatePDCAConnection();
+                    });
+                    window.addEventListener('language-changed', (e) => {
+                        this.lang = e.detail;
+                    });
+                    // Initial load to discover current week
+                    await this.loadAll();
+                    // Set default filter to current cohort week
+                    this.selectedWeekFilter = this.getCurrentCohortWeek();
+                    // Reload specifically for the active week's quiz data
+                    await this.loadAll();
+
+                    // Trì hoãn nhẹ 400ms để hiệu ứng loading chuyển trang mượt mà
+                    setTimeout(() => {
+                        this.pageLoading = false;
+                    }, 400);
+                },
+
+                startSimulatedProgress() {
+                    this.personalizingProgress = 0;
+                    if (this.progressInterval) clearInterval(this.progressInterval);
+                    this.progressInterval = setInterval(() => {
+                        if (this.personalizingProgress < 90) {
+                            this.personalizingProgress += Math.floor(Math.random() * 5) + 2;
+                            if (this.personalizingProgress > 90) this.personalizingProgress = 90;
+                        }
+                    }, 500);
+                },
+
+                completeSimulatedProgress() {
+                    if (this.progressInterval) clearInterval(this.progressInterval);
+                    this.personalizingProgress = 100;
+                },
+
+                async loadAll() {
+                    try {
+                        const username = this.user.email || this.user.username || 'user';
+                        const weekParam = this.selectedWeekFilter || 1;
+                        const [syllRes, actRes] = await Promise.all([
+                            fetch('/api/v1/cohort/syllabus?username=' + encodeURIComponent(username) + '&week=' + weekParam).then(r => r.json()),
+                            fetch('/api/v1/cohort/activity').then(r => r.json())
+                        ]);
+                        this.syllabus = syllRes.syllabus || [];
+                        this.cohortInfo = syllRes.cohort_info || {};
+                        if (this.cohortInfo.weekly_progress_history) {
+                            try {
+                                const historyKey = `thapsang_cohort_weekly_progress_history_${username}`;
+                                const oldHistory = JSON.parse(localStorage.getItem(historyKey) || '{}');
+                                const newHistory = this.cohortInfo.weekly_progress_history;
+                                const mergedHistory = { ...oldHistory };
+                                for (const w in newHistory) {
+                                    const newVal = Number(newHistory[w] || 0);
+                                    const oldVal = Number(oldHistory[w] || 0);
+                                    mergedHistory[w] = Math.max(newVal, oldVal);
+                                }
+                                localStorage.setItem(historyKey, JSON.stringify(mergedHistory));
+                            } catch (he) {
+                                const historyKey = `thapsang_cohort_weekly_progress_history_${username}`;
+                                localStorage.setItem(historyKey, JSON.stringify(this.cohortInfo.weekly_progress_history));
+                            }
+                        }
+
+                        // Quiz extraction is now done below from tasks
+                        this.activityFeed = actRes.feed || [];
+                        this.bottleneck = actRes.bottleneck || {};
+                        this.pivot = actRes.pivot || {};
+
+                        let oldSelfProgress = 0;
+                        if (this.members && this.members.length > 0) {
+                            const oldSelf = this.members.find(m => m.is_self);
+                            if (oldSelf) {
+                                oldSelfProgress = oldSelf.week_progress || 0;
+                            }
+                        }
+
+                        const [membRes, tasksRes] = await Promise.all([
+                            fetch('/api/v1/cohort/members').then(r => r.json()),
+                            fetch('/api/v1/cohort/tasks/' + username, { cache: 'no-store' }).then(r => r.json())
+                        ]);
+                        this.members = membRes.members || [];
+                        this.cohortTasks = tasksRes || [];
+
+                        // Extract active quiz from the core task of the selected week
+                        const weekData = this.cohortTasks.filter(t => t.week === this.selectedWeekFilter);
+                        const coreTask = weekData.find(t => t.type === 'core');
+                        const q = coreTask && coreTask.quiz && coreTask.quiz.questions ? coreTask.quiz : null;
+                        if (q) {
+                            const fetchedAttempt = q.attempts && q.attempts.length > 0 ? q.attempts[q.attempts.length - 1] : null;
+                            if (fetchedAttempt) {
+                                if (this.justSubmitted && this.quizResult) {
+                                    // Verify if the fetched attempt is the one we just submitted (database sync is done)
+                                    const isMatch = fetchedAttempt.timestamp === this.quizResult.timestamp ||
+                                        (fetchedAttempt.total_score === this.quizResult.total_score &&
+                                            JSON.stringify(fetchedAttempt.answers) === JSON.stringify(this.quizResult.answers));
+                                    if (isMatch) {
+                                        this.justSubmitted = false;
+                                        this.quizResult = fetchedAttempt;
+                                        this.userAnswers = this.quizResult.answers ? [...this.quizResult.answers] : Array(8).fill(null);
+                                    } else {
+                                        // Still stale, keep our local correct result
+                                    }
+                                } else {
+                                    const localTimestamp = this.quizResult && this.quizResult.timestamp ? this.quizResult.timestamp : null;
+                                    const fetchedTimestamp = fetchedAttempt.timestamp ? fetchedAttempt.timestamp : null;
+
+                                    // Only overwrite if we don't have a local quizResult or the fetched attempt is newer/equal
+                                    if (!this.quizResult || !localTimestamp || !fetchedTimestamp || new Date(fetchedTimestamp).getTime() >= new Date(localTimestamp).getTime()) {
+                                        // If we are currently retrying, do not overwrite the cleared states with the old fetched attempt
+                                        if (!this.isRetrying) {
+                                            this.quizResult = fetchedAttempt;
+                                            this.userAnswers = this.quizResult.answers ? [...this.quizResult.answers] : Array(8).fill(null);
+                                        }
+                                    }
+                                }
+                            } else {
+                                // If the server returns no attempts (e.g. stale cache on first submission),
+                                // do NOT overwrite the local quizResult we just created.
+                                if (!this.justSubmitted) {
+                                    this.quizResult = null;
+                                    this.userAnswers = Array(8).fill(null);
+                                }
+                            }
+                            this.quizData = q;
+                        } else {
+                            if (!this.justSubmitted) {
+                                this.quizData = null;
+                                this.quizResult = null;
+                                this.userAnswers = Array(8).fill(null);
+                            }
+                        }
+
+                        let hasSelf = false;
+                        let isCompleted = false;
+                        this.members.forEach(m => {
+                            const mUser = (m.username || "").trim().toLowerCase();
+                            const selfUser = (this.user.username || "").trim().toLowerCase();
+                            const selfEmail = (this.user.email || "").trim().toLowerCase();
+                            if (m.is_self || mUser === selfUser || mUser === selfEmail || mUser === 'user' || mUser === 'bạn') {
+                                m.username = this.user.username || 'user';
+                                m.display_name = this.user.displayName || this.user.username || 'Bạn';
+                                m.is_self = true;
+                                hasSelf = true;
+
+                                if (oldSelfProgress > m.week_progress) {
+                                    m.week_progress = oldSelfProgress;
+                                }
+
+                                const currentWeek = this.cohortInfo.current_week || 1;
+                                const totalWeeks = this.cohortInfo.total_weeks || 12;
+                                if (currentWeek >= totalWeeks && m.week_progress >= 100) {
+                                    isCompleted = true;
+                                }
+                            }
+                        });
+
+                        if (isCompleted) {
+                            localStorage.removeItem('thapsang_cohort_activated_' + (this.user.username || 'user'));
+                            hasSelf = false;
+                        } else {
+                            if (localStorage.getItem('thapsang_cohort_activated_' + (this.user.username || 'user')) === 'true') {
+                                hasSelf = true;
+                            }
+                        }
+                        this.isEnrolled = hasSelf;
+
+                        if (!this.isEnrolled) {
+                            try {
+                                const checkRes = await fetch('/api/v1/cohort/check-context?username=' + encodeURIComponent(username)).then(r => r.json());
+                                this.contextCheck.count = checkRes.prompt_count || 0;
+                                this.contextCheck.isSufficient = checkRes.is_sufficient || false;
+                                this.contextCheck.loaded = true;
+                            } catch (ce) {
+                                console.error("Error checking dialogue context:", ce);
+                            }
+                        }
+
+                        localStorage.setItem(`thapsang_cohort_tasks_${this.user.username || 'user'}`, JSON.stringify(this.cohortTasks));
+                        this.addedTasks = new Set();
+                        this.cohortTasks.forEach(t => this.addedTasks.add(t.title));
+
+                        this.updatePDCAConnection();
+                    } catch (e) {
+                        console.error('loadAll error', e);
+                    }
+                },
+
+                async startAICohortAllocation() {
+                    this.joiningLoading = true;
+                    this.matchingProgress = 5;
+
+                    const statuses = this.lang === 'en' ? [
+                        "Ingesting Socratic dialogue history...",
+                        "Mapping cognitive ruptures & logic structures...",
+                        "Analyzing personal goals and growth criteria...",
+                        "Synthesizing custom cognitive development patterns...",
+                        "Populating personalized syllabus tasks...",
+                        "Allocation success! Welcome to your Personal Roadmap."
+                    ] : [
+                        "Đọc hiểu lịch sử hội thoại Socratic...",
+                        "Lập bản đồ đứt gãy nhận thức và cấu trúc logic...",
+                        "Phân tích mục tiêu cá nhân và tiêu chuẩn tăng trưởng...",
+                        "Kiến tạo các mô thức phát triển nhận thức cá nhân...",
+                        "Đồng bộ hóa nhiệm vụ syllabus cá nhân hóa...",
+                        "Gia nhập thành công! Lộ trình cá nhân của bạn đã sẵn sàng."
+                    ];
+
+                    const interval = setInterval(() => {
+                        if (this.matchingProgress < 95) {
+                            this.matchingProgress += Math.floor(Math.random() * 15) + 5;
+                            if (this.matchingProgress > 95) this.matchingProgress = 95;
+
+                            const stepIdx = Math.floor((this.matchingProgress / 100) * statuses.length);
+                            this.matchingStatusText = statuses[stepIdx] || statuses[statuses.length - 1];
+                        }
+                    }, 600);
+
+                    try {
+                        const res = await fetch('/api/v1/cohort/join', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                username: this.user.email || this.user.username || 'user',
+                                display_name: this.user.displayName || this.user.username || 'Bạn',
+                                current_tasks: this.cohortTasks
+                            })
+                        });
+
+                        if (res.ok) {
+                            const data = await res.json();
+                            if (data.status === "insufficient_info") {
+                                clearInterval(interval);
+                                this.joiningLoading = false;
+                                this.insufficientInfo = true;
+                                this.insufficientMessage = data.message;
+                                showGlobalToast('⚠️ ' + data.message, 'error');
+                            } else {
+                                this.insufficientInfo = false; // Reset if successful
+                                localStorage.setItem('thapsang_cohort_activated_' + (this.user.username || 'user'), 'true');
+                                setTimeout(async () => {
+                                    clearInterval(interval);
+                                    this.matchingProgress = 100;
+                                    this.matchingStatusText = statuses[statuses.length - 1];
+
+                                    setTimeout(async () => {
+                                        await this.loadAll();
+                                        this.isEnrolled = true;
+                                        this.joiningLoading = false;
+                                        showGlobalToast((this.lang === 'en' ? 'Roadmap synthesized successfully!' : 'Đã kiến tạo lộ trình cá nhân thành công!'), 'success');
+                                    }, 800);
+                                }, 3500);
+                            }
+                        } else {
+                            throw new Error("Join API failed");
+                        }
+                    } catch (e) {
+                        clearInterval(interval);
+                        this.joiningLoading = false;
+                        alert("AI Personal Roadmap allocation error. Please try again. ");
+                    }
+                },
+
+                isTaskAdded(title) {
+                    return this.addedTasks.has(title);
+                },
+
+                getCohortTasks() {
+                    return this.cohortTasks || [];
+                },
+
+                async toggleTaskStatus(task) {
+                    try {
+                        const newStatus = task.status === 'done' ? 'backlog' : 'done';
+                        task.status = newStatus;
+
+                        this.recalculateMyProgress();
+                        this.updatePDCAConnection();
+
+                        const res = await fetch('/api/v1/cohort/tasks/' + task.id, {
+                            method: 'PATCH',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                status: newStatus,
+                                subtasks: task.subtasks
+                            })
+                        });
+
+                        if (res.ok) {
+                            localStorage.setItem(`thapsang_cohort_tasks_${this.user.username || 'user'}`, JSON.stringify(this.cohortTasks));
+                        } else {
+                            throw new Error("Failed to sync task status to server");
+                        }
+                    } catch (e) {
+                        console.error('Error toggling task status:', e);
+                    }
+                },
+
+                getCurrentCohortWeek() {
+                    return this.cohortInfo.current_week || 1;
+                },
+
+                saveWeeklyProgressHistory(week, progress) {
+                    try {
+                        const username = this.user.email || this.user.username || 'user';
+                        const historyKey = `thapsang_cohort_weekly_progress_history_${username}`;
+                        const history = JSON.parse(localStorage.getItem(historyKey) || '{}');
+                        history[week] = progress;
+                        localStorage.setItem(historyKey, JSON.stringify(history));
+                    } catch (e) { console.error('Save weekly history error', e); }
+                },
+
+                getWeeklyProgressList() {
+                    try {
+                        const username = this.user.email || this.user.username || 'user';
+                        const historyKey = `thapsang_cohort_weekly_progress_history_${username}`;
+                        const history = JSON.parse(historyKey ? (localStorage.getItem(historyKey) || '{}') : '{}');
+                        const currentWeek = this.getCurrentCohortWeek();
+                        let list = [];
+                        for (let w = 1; w <= 12; w++) {
+                            let prog = 0;
+                            const val = history[w] !== undefined ? history[w] : history[w.toString()];
+                            if (w < currentWeek) {
+                                prog = val !== undefined ? Number(val) : 100;
+                            } else if (w === currentWeek) {
+                                if (this.quizResult && this.quizResult.total_score !== undefined) {
+                                    prog = this.quizResult.total_score;
+                                } else {
+                                    prog = val !== undefined ? Number(val) : 0;
+                                }
+                            } else {
+                                prog = 0;
+                            }
+                            list.push(prog);
+                        }
+                        return list;
+                    } catch (e) { return Array(12).fill(0); }
+                },
+
+                getChartPoints() {
+                    const list = this.getWeeklyProgressList();
+                    let points = [];
+                    for (let i = 0; i < 12; i++) {
+                        const x = 40 + i * 38.18;
+                        const y = 160 - (list[i] / 100) * 140;
+                        points.push(`${x},${y}`);
+                    }
+                    return points.join(' ');
+                },
+
+                getChartAreaPoints() {
+                    const list = this.getWeeklyProgressList();
+                    let points = ['40,160'];
+                    for (let i = 0; i < 12; i++) {
+                        const x = 40 + i * 38.18;
+                        const y = 160 - (list[i] / 100) * 140;
+                        points.push(`${x},${y}`);
+                    }
+                    points.push('460,160');
+                    return points.join(' ');
+                },
+
+                recalculateMyProgress() {
+                    try {
+                        const currentWeek = this.selectedWeekFilter;
+                        let progress = 0;
+                        if (this.quizData && this.quizData.total_score !== undefined) {
+                            progress = this.quizData.total_score;
+                        } else if (this.quizResult && this.quizResult.total_score !== undefined) {
+                            progress = this.quizResult.total_score;
+                        } else {
+                            progress = 0;
+                        }
+                        const me = this.members.find(m => m.is_self);
+                        if (me) me.week_progress = progress;
+                        this.members = [...this.members];
+                        this.syncProgressToServer(progress);
+                        this.saveWeeklyProgressHistory(currentWeek, progress);
+
+                        const totalWeeks = this.cohortInfo.total_weeks || 12;
+                        if (currentWeek >= totalWeeks && progress >= 100) {
+                            localStorage.removeItem('thapsang_cohort_activated_' + (this.user.username || 'user'));
+                            this.isEnrolled = false;
+                        }
+                    } catch (e) { console.error('Progress calculation error', e); }
+                },
+
+                syncProgressToServer(progress) {
+                    fetch('/api/v1/cohort/update-progress', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ username: this.user.email || this.user.username || 'user', week_progress: progress })
+                    }).then(res => {
+                        if (res.ok) {
+                            this.activityFeed.unshift({
+                                type: 'success', user: 'Bạn',
+                                action: 'vừa cập nhật tiến độ lên', target: progress + '%!', time: 'Vừa xong'
+                            });
+                        }
+                    }).catch(err => console.error('Failed to sync progress', err));
+                },
+
+                async startLearningWeek(weekObj) {
+                    if (this.personalizingLoading) return;
+                    const isEn = this.lang === 'en';
+                    this.selectedWeekFilter = weekObj.week;
+
+                    // Fallback Protection: Check if tasks for this week are completely empty (null/deleted by admin)
+                    const weekTasks = (this.cohortTasks || []).filter(t => t.week === weekObj.week);
+                    const isNull = weekTasks.length === 0;
+
+                    if (isNull) {
+                        this.personalizingLoading = true;
+                        this.startSimulatedProgress();
+                        this.personalizingStatusText = {
+                            en: `Socratic AI Coach is custom-generating your Week ${weekObj.week} tasks based on your Socratic history...`,
+                            vi: `AI Coach Socratic đang phân tích lịch sử hội thoại để kiến tạo nhiệm vụ Tuần ${weekObj.week} cho bạn...`
+                        };
+
+                        try {
+                            const username = this.user.email || this.user.username || 'user';
+                            const res = await fetch('/api/v1/cohort/personalize-week', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    username: username,
+                                    week: weekObj.week
+                                })
+                            });
+
+                            if (res.ok) {
+                                const resultObj = await res.json();
+                                if (resultObj.status === "error") {
+                                    throw new Error(resultObj.message || "Backend error during personalization");
+                                }
+
+                                // Reload tasks from server
+                                const tasksRes = await fetch('/api/v1/cohort/tasks/' + username).then(r => r.json());
+                                this.cohortTasks = tasksRes || [];
+                                localStorage.setItem(`thapsang_cohort_tasks_${this.user.username || 'user'}`, JSON.stringify(this.cohortTasks));
+                                
+                                // Reload syllabus from server to update timeline titles instantly
+                                const weekParam = this.selectedWeekFilter || 1;
+                                const syllRes = await fetch('/api/v1/cohort/syllabus?username=' + encodeURIComponent(username) + '&week=' + weekParam).then(r => r.json());
+                                this.syllabus = syllRes.syllabus || [];
+
+                                this.recalculateMyProgress();
+                                this.updatePDCAConnection();
+
+                                // Reload syllabus and Socratic quiz for the newly generated week
+                                await this.loadAll();
+                                this.completeSimulatedProgress();
+
+                                this.personalizingStatusText = {
+                                    en: "Customization complete! Loading tasks...",
+                                    vi: "Kiến tạo thành công! Đang đồng bộ hóa nhiệm vụ..."
+                                };
+                                setTimeout(() => {
+                                    this.personalizingLoading = false;
+                                    showGlobalToast(isEn ? `Week ${weekObj.week} Socratic tasks created!` : `Đã khởi tạo nhiệm vụ Socratic Tuần ${weekObj.week}!`, 'success');
+                                    document.getElementById('personal-tasks-section').scrollIntoView({ behavior: 'smooth' });
+                                    localStorage.setItem('thapsang_cohort_active_tab', 'roadmap');
+                                    setTimeout(() => {
+                                        window.location.reload();
+                                    }, 1000);
+                                }, 800);
+                            } else if (res.status === 500) {
+                                const resultObj = await res.json();
+                                this.completeSimulatedProgress();
+                                setTimeout(() => {
+                                    this.personalizingLoading = false;
+                                    showGlobalToast(isEn ? "AI model timed out. Using fallback tasks!" : "Mô hình AI phản hồi chậm. Đã tự động dùng nhiệm vụ dự phòng!", 'warning');
+                                    document.getElementById('personal-tasks-section').scrollIntoView({ behavior: 'smooth' });
+                                    localStorage.setItem('thapsang_cohort_active_tab', 'roadmap');
+                                    setTimeout(() => {
+                                        window.location.reload();
+                                    }, 1000);
+                                }, 400);
+                                
+                                // Make sure to load tasks in background before reload
+                                const tasksRes = await fetch('/api/v1/cohort/tasks/' + username).then(r => r.json());
+                                this.cohortTasks = tasksRes || [];
+                                localStorage.setItem(`thapsang_cohort_tasks_${this.user.username || 'user'}`, JSON.stringify(this.cohortTasks));
+                            } else {
+                                this.completeSimulatedProgress();
+                                setTimeout(() => {
+                                    this.personalizingLoading = false;
+                                }, 400);
+                                const errorData = await res.json();
+                                showGlobalToast(errorData.detail || (isEn ? 'Personalization locked or failed.' : 'Kích hoạt cá nhân hóa bị khóa hoặc thất bại.'), 'error');
+                            }
+                        } catch (err) {
+                            this.completeSimulatedProgress();
+                            setTimeout(() => {
+                                this.personalizingLoading = false;
+                            }, 400);
+                            console.error("Failed to personalize week:", err);
+                            showGlobalToast(isEn ? 'Failed to connect to personalization service.' : 'Không thể kết nối đến dịch vụ cá nhân hóa.', 'error');
+                        }
+                    } else {
+                        // Already exists, NO modal loading. The page watcher handles the data loading overlay.
+                        document.getElementById('personal-tasks-section').scrollIntoView({ behavior: 'smooth' });
+                    }
+                },
+
+
+                openTaskDetails(task) {
+                    this.currentActiveTask = JSON.parse(JSON.stringify(task));
+                    this.taskDetailsModalOpen = true;
+                },
+
+                saveTaskDetails() {
+                    if (!this.currentActiveTask) return;
+                    try {
+                        const idx = this.cohortTasks.findIndex(t => t.id === this.currentActiveTask.id);
+                        if (idx !== -1) {
+                            const allSubDone = this.currentActiveTask.subtasks &&
+                                this.currentActiveTask.subtasks.length > 0 &&
+                                this.currentActiveTask.subtasks.every(s => s.done);
+                            if (allSubDone) {
+                                this.currentActiveTask.status = 'done';
+                            } else if (this.currentActiveTask.subtasks &&
+                                this.currentActiveTask.subtasks.length > 0 &&
+                                this.currentActiveTask.subtasks.some(s => s.done)) {
+                                this.currentActiveTask.status = 'backlog';
+                            }
+
+                            this.cohortTasks[idx] = this.currentActiveTask;
+                            this.recalculateMyProgress();
+                            this.updatePDCAConnection();
+
+                            fetch('/api/v1/cohort/tasks/' + this.currentActiveTask.id, {
+                                method: 'PATCH',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    status: this.currentActiveTask.status,
+                                    subtasks: this.currentActiveTask.subtasks
+                                })
+                            }).then(res => {
+                                if (res.ok) {
+                                    localStorage.setItem(`thapsang_cohort_tasks_${this.user.username || 'user'}`, JSON.stringify(this.cohortTasks));
+                                }
+                            });
+
+                            showGlobalToast(this.lang === 'en' ? 'Task updated!' : 'Đã cập nhật nhiệm vụ!', 'success');
+                        }
+                    } catch (e) { }
+                    this.taskDetailsModalOpen = false;
+                    this.currentActiveTask = null;
+                },
+
+                toggleSubtask(subtask) {
+                    subtask.done = !subtask.done;
+                    const allDone = this.currentActiveTask.subtasks.every(s => s.done);
+                    if (allDone) {
+                        this.currentActiveTask.status = 'done';
+                    } else {
+                        this.currentActiveTask.status = 'backlog';
+                    }
+
+                    this.recalculateMyProgress();
+                    this.updatePDCAConnection();
+
+                    fetch('/api/v1/cohort/tasks/' + this.currentActiveTask.id, {
+                        method: 'PATCH',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            status: this.currentActiveTask.status,
+                            subtasks: this.currentActiveTask.subtasks
+                        })
+                    }).then(res => {
+                        if (res.ok) {
+                            localStorage.setItem(`thapsang_cohort_tasks_${this.user.username || 'user'}`, JSON.stringify(this.cohortTasks));
+                        }
+                    }).catch(e => console.error('Immediate subtask toggle sync error', e));
+                },
+
+                toggleSubtaskInline(task, subtask) {
+                    subtask.done = !subtask.done;
+                    const allDone = task.subtasks.every(s => s.done);
+                    if (allDone) {
+                        task.status = 'done';
+                    } else {
+                        task.status = 'backlog';
+                    }
+
+                    this.recalculateMyProgress();
+                    this.updatePDCAConnection();
+
+                    fetch('/api/v1/cohort/tasks/' + task.id, {
+                        method: 'PATCH',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            status: task.status,
+                            subtasks: task.subtasks
+                        })
+                    }).then(res => {
+                        if (res.ok) {
+                            localStorage.setItem(`thapsang_cohort_tasks_${this.user.username || 'user'}`, JSON.stringify(this.cohortTasks));
+                        }
+                    }).catch(e => console.error('Immediate inline subtask toggle sync error', e));
+                },
+
+                async loadRetro(force = false) {
+                    if (this.retro.loaded && !force) return;
+                    this.retro.loading = true;
+                    try {
+                        const cohortTasks = this.getCohortTasks();
+                        const me = this.members.find(m => m.is_self);
+                        const progress = me ? (me.week_progress || 0) : 0;
+                        const res = await fetch('/api/v1/cohort/ai-retrospective', {
+                            method: 'POST', headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                username: this.user.email || this.user.username || 'user',
+                                display_name: this.user.displayName || this.user.username || 'Bạn',
+                                progress, tasks: cohortTasks, lang: this.lang
+                            })
+                        });
+                        const data = await res.json();
+                        this.retro.text = data.retrospective;
+                        this.retro.avg_progress = data.avg_progress;
+                        this.retro.loaded = true;
+                    } catch (e) {
+                        this.retro.text = this.lang === 'en'
+                            ? 'System error connecting to AI Coach. Please try again.'
+                            : 'Hệ thống gặp lỗi khi kết nối với AI Coach. Vui lòng thử lại sau.';
+                    } finally {
+                        this.retro.loading = false;
+                    }
+                },
+
+                async updatePDCAConnection() {
+                    try {
+                        const cohortTasks = this.getCohortTasks();
+                        const total = cohortTasks.length;
+                        const isEn = this.lang === 'en';
+                        if (total === 0) {
+                            this.bottleneck = { late_percentage: 0, ai_insight: isEn ? "You haven't selected any goals from the PLAN of this week." : "Bạn chưa chọn bất kỳ mục tiêu nào từ PLAN tuần này.", bottlenecks: [{ label: isEn ? "DO process not activated" : "Chưa kích hoạt quy trình DO", percentage: 100, type: "error" }] };
+                            this.pivot = { triggered: false, reason: isEn ? "No action data found. Please switch to the PLAN tab." : "Chưa có dữ liệu. Vui lòng chuyển sang tab PLAN để bắt đầu.", pivot_task: null };
+                            return;
+                        }
+                        if (this.bottleneckLoading) return;
+                        this.bottleneckLoading = true;
+
+                        const me = this.members.find(m => m.is_self);
+                        const progress = me ? (me.week_progress || 0) : 0;
+
+                        const res = await fetch('/api/v1/cohort/ai-bottleneck', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                username: this.user.email || this.user.username || 'user',
+                                progress,
+                                tasks: cohortTasks,
+                                lang: this.lang
+                            })
+                        });
+                        if (res.ok) {
+                            const data = await res.json();
+                            this.bottleneck = data;
+                            this.pivot = data.pivot || {};
+                        }
+                    } catch (e) {
+                        console.error('updatePDCAConnection error', e);
+                    } finally {
+                        this.bottleneckLoading = false;
+                    }
+                },
+
+                shareToAOA() { window.location.href = '/aoa'; },
+
+                getHeatmapClass(member) {
+                    if (member.is_self) return 'heatmap-cell-self pulse-gold';
+                    const p = member.week_progress || 0;
+                    if (p >= 80) return 'heatmap-cell-high';
+                    if (p >= 50) return 'heatmap-cell-mid';
+                    if (p > 0) return 'heatmap-cell-low';
+                    return 'heatmap-cell-0';
+                },
+
+                getAvgProgress() {
+                    if (!this.members.length) return 0;
+                    return Math.round(this.members.reduce((s, m) => s + (m.week_progress || 0), 0) / this.members.length);
+                },
+
+                showToast(msg, type = 'success') { showGlobalToast(msg, type); },
+
+                onTabChange(tab) {
+                    this.activeTab = tab;
+                },
+
+                isQuizUnlocked() {
+                    const currentWeek = this.selectedWeekFilter;
+                    const weekTasks = (this.cohortTasks || []).filter(t => t.week === currentWeek);
+                    if (weekTasks.length === 0) return false;
+
+                    const completedTasks = weekTasks.filter(t =>
+                        t.status === 'done' && !!t.essay && t.essay.trim().length > 0
+                    );
+
+                    const completedCoreTasks = completedTasks.filter(t => t.type === 'core');
+                    const completedSuppTasks = completedTasks.filter(t => t.type === 'supplementary');
+
+                    return (completedCoreTasks.length >= 1 && completedSuppTasks.length >= 1) || (completedCoreTasks.length >= 2);
+                },
+
+                isQuizSectionVisible() {
+                    return this.isEnrolled;
+                },
+
+                async generateQuiz() {
+                    this.quizLoading = true;
+                    this.quizResult = null;
+                    this.userAnswers = Array(8).fill(null);
+                    try {
+                        const username = this.user.email || this.user.username || 'user';
+                        const currentWeek = this.selectedWeekFilter;
+                        const res = await fetch('/api/v1/cohort/generate-quiz', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                username: username,
+                                week: currentWeek,
+                                lang: this.lang
+                            })
+                        });
+                        if (res.ok) {
+                            const data = await res.json();
+                            this.quizData = data;
+                            this.userAnswers = Array(8).fill(null);
+                        } else {
+                            const err = await res.json();
+                            showGlobalToast(err.detail || 'Failed to generate quiz.', 'error');
+                        }
+                    } catch (e) {
+                        console.error("Quiz generate error:", e);
+                        showGlobalToast('Connection failed.', 'error');
+                    } finally {
+                        this.quizLoading = false;
+                    }
+                },
+
+                async submitQuiz() {
+                    if (this.userAnswers.includes(null)) {
+                        showGlobalToast(this.lang === 'en' ? 'Please answer all 8 questions!' : 'Vui lòng hoàn thành tất cả 8 câu hỏi!', 'warning');
+                        return;
+                    }
+                    this.quizSubmitting = true;
+                    try {
+                        const username = this.user.email || this.user.username || 'user';
+                        const currentWeek = this.selectedWeekFilter;
+                        const res = await fetch('/api/v1/cohort/submit-quiz', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                username: username,
+                                week: currentWeek,
+                                answers: this.userAnswers,
+                                lang: this.lang
+                            })
+                        });
+                        if (res.ok) {
+                            const data = await res.json();
+                            this.quizResult = data.attempt || data;
+                            if (this.quizResult && this.quizResult.answers) {
+                                this.userAnswers = [...this.quizResult.answers];
+                            }
+                            this.isRetrying = false;
+                            this.justSubmitted = true;
+
+                            // Update self-progress locally to prevent progress donut from jumping back
+                            if (this.members && this.quizResult) {
+                                const selfMember = this.members.find(m => m.is_self);
+                                if (selfMember) {
+                                    selfMember.week_progress = Math.round(this.quizResult.total_score || 0);
+                                }
+                            }
+
+                            showGlobalToast(this.lang === 'en' ? 'Quiz graded!' : 'Đã nộp và nhận điểm phản chiếu!', 'success');
+                            await this.loadAll();
+                        } else {
+                            const err = await res.json();
+                            showGlobalToast(err.detail || 'Failed to submit quiz.', 'error');
+                        }
+                    } catch (e) {
+                        console.error("Quiz submit error:", e);
+                        showGlobalToast('Submission failed.', 'error');
+                    } finally {
+                        this.quizSubmitting = false;
+                    }
+                },
+
+                retryQuiz() {
+                    this.quizResult = null;
+                    this.userAnswers = Array(8).fill(null);
+                    this.isRetrying = true;
+                },
+
+                async nextCohortWeek() {
+                    if (this.personalizingLoading) return;
+                    const nextWeekNum = this.selectedWeekFilter + 1;
+                    if (nextWeekNum > 12) {
+                        showGlobalToast(this.lang === 'en' ? 'You have completed the entire 12-week roadmap!' : 'Chúc mừng! Bạn đã hoàn thành toàn bộ lộ trình 12 tuần!', 'success');
+                        return;
+                    }
+
+                    const highestUnlockedWeek = this.cohortInfo ? this.cohortInfo.current_week : 1;
+
+                    if (nextWeekNum <= highestUnlockedWeek) {
+                        // Week is already unlocked, just navigate to it
+                        this.selectedWeekFilter = nextWeekNum;
+                        await this.loadAll();
+                        this.retryQuiz();
+                        document.getElementById('personal-tasks-section').scrollIntoView({ behavior: 'smooth' });
+                        return;
+                    }
+
+                    this.personalizingLoading = true;
+                    this.startSimulatedProgress();
+                    this.personalizingStatusText = {
+                        en: `Socratic AI is custom-personalizing your Week ${nextWeekNum} tasks...`,
+                        vi: `AI Socratic đang bắt đầu thiết kế riêng các nhiệm vụ Tuần ${nextWeekNum}...`
+                    };
+
+                    try {
+                        const username = this.user.email || this.user.username || 'user';
+                        const res = await fetch('/api/v1/cohort/personalize-week', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                username: username,
+                                week: nextWeekNum
+                            })
+                        });
+
+                        if (res.ok) {
+                            const responseText = await res.text(); // Wait for the StreamingResponse to finish
+                            try {
+                                const resultObj = JSON.parse(responseText.trim());
+                                if (resultObj.status === "error") {
+                                    throw new Error(resultObj.message || "Backend error during personalization");
+                                }
+                            } catch (e) {
+                                throw e;
+                            }
+
+                            await this.loadAll();
+                            this.selectedWeekFilter = nextWeekNum;
+                            this.retryQuiz();
+                            this.personalizingStatusText = {
+                                en: 'Success! Loading next week tasks...',
+                                vi: 'Hoàn thành! Đang chuyển sang chặng mới...'
+                            };
+
+                            this.completeSimulatedProgress();
+                            setTimeout(() => {
+                                this.personalizingLoading = false;
+                                showGlobalToast(this.lang === 'en' ? `Unlocked Week ${nextWeekNum} successfully!` : `Đã mở khóa Tuần ${nextWeekNum} thành công!`, 'success');
+                                document.getElementById('personal-tasks-section').scrollIntoView({ behavior: 'smooth' });
+                            }, 400);
+                        } else {
+                            this.completeSimulatedProgress();
+                            setTimeout(() => { this.personalizingLoading = false; }, 400);
+                            const errorData = await res.json();
+                            showGlobalToast(errorData.detail || 'Unlock failed.', 'error');
+                        }
+                    } catch (err) {
+                        this.completeSimulatedProgress();
+                        setTimeout(() => { this.personalizingLoading = false; }, 400);
+                        console.error("Unlock error:", err);
+                        showGlobalToast('Failed to connect to unlock service.', 'error');
+                    }
+                }
+            }));
+        });
+    </script>
+</body>
+
+</html>

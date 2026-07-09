@@ -1,0 +1,2038 @@
+<!DOCTYPE html>
+<html class="dark" lang="vi">
+
+<head>
+    <script src="/nocobase-adapter.js"></script>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Thapsang Mindset OS</title>
+    <script src="i18n.js?v=11"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed": "#fbbf24",
+                        "primary-fixed-dim": "#fbbf24",
+                        "on-primary-fixed": "#221b00",
+                        "surface": "#0a0a0a",
+                        "surface-variant": "#525252",
+                        "on-surface": "#dfe2eb",
+                        "on-surface-variant": "#d0c6ab",
+                        "outline-variant": "#4d4732",
+                        "background": "#0a0a0a",
+                        "error": "#ffb4ab"
+                    },
+                    "fontFamily": {
+                        "display-lg-mobile": ["Montserrat"],
+                        "label-sm": ["Inter"],
+                        "headline-md": ["Montserrat"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "display-lg": ["Montserrat"]
+                    },
+                    "fontSize": {
+                        "display-lg-mobile": ["33px", { "lineHeight": "40px", "fontWeight": "700" }],
+                        "label-sm": ["14px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-md": ["25px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-lg": ["19px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "body-md": ["17px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "display-lg": ["49px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .hide-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .hide-scroll {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        [x-cloak] {
+            display: none !important;
+        }
+
+        .glass-panel {
+            background: rgba(24, 28, 34, 0.95);
+            border: 1px solid rgba(255, 225, 109, 0.15);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        .dragging {
+            opacity: 0.5;
+            border: 2px dashed #fbbf24 !important;
+        }
+
+        .draggable-task-card {
+            cursor: grab;
+        }
+
+        .draggable-task-card:active {
+            cursor: grabbing !important;
+        }
+
+        .kanban-col {
+            min-height: 200px;
+        }
+
+        /* Premium Custom Scrollbars for Kanban Columns */
+        .kanban-col::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .kanban-col::-webkit-scrollbar-track {
+            background: rgba(24, 28, 34, 0.2);
+            border-radius: 9999px;
+        }
+
+        .kanban-col::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 9999px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .kanban-col::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 225, 109, 0.4);
+        }
+
+        .drag-over {
+            background: rgba(233, 196, 0, 0.1);
+            border: 1px dashed #f59e0b;
+        }
+
+        @keyframes pageFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-page-fade {
+            animation: pageFadeIn 0.8s ease-out forwards;
+        }
+
+        /* Premium Flag Buttons Style with Layered Stack & Opacity Overlap */
+        .ts-flag-stack {
+            position: relative;
+            width: 48px;
+            height: 32px;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .ts-flag-btn {
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 5px 7px;
+            border-radius: 8px;
+            background: rgba(49, 53, 60, 0.15);
+            border: 1px solid rgba(77, 71, 50, 0.3);
+            cursor: pointer;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                z-index 0.4s ease,
+                background 0.25s,
+                border-color 0.25s,
+                box-shadow 0.25s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .ts-flag-btn.ts-lang-active {
+            z-index: 10;
+            opacity: 1;
+            transform: translate(0, 0) scale(1);
+            background: rgba(255, 225, 109, 0.15);
+            border-color: rgba(255, 225, 109, 0.6);
+            box-shadow: 0 4px 12px rgba(255, 225, 109, 0.3);
+        }
+
+        .ts-flag-btn.ts-lang-inactive {
+            z-index: 5;
+            opacity: 0.25;
+            transform: translate(6px, 4px) scale(0.92);
+            background: rgba(49, 53, 60, 0.1);
+            border-color: rgba(77, 71, 50, 0.2);
+            box-shadow: none;
+        }
+
+        .ts-flag-stack:hover .ts-flag-btn.ts-lang-active {
+            transform: translate(-2px, -2px) scale(1.02);
+            border-color: rgba(255, 225, 109, 0.8);
+            box-shadow: 0 6px 16px rgba(255, 225, 109, 0.4);
+        }
+
+        .ts-flag-stack:hover .ts-flag-btn.ts-lang-inactive {
+            transform: translate(8px, 6px) scale(0.95);
+            opacity: 0.75;
+            background: rgba(49, 53, 60, 0.3);
+            border-color: rgba(255, 225, 109, 0.35);
+        }
+
+        /* Global Toast Styles & Light Mode Overrides */
+        #global-toast span {
+            color: inherit !important;
+        }
+
+        html.light #global-toast {
+            background-color: #ffffff !important;
+            border-color: rgba(22, 32, 97, 0.2) !important;
+            color: #162061 !important;
+            box-shadow: 0 4px 12px rgba(22, 32, 97, 0.1) !important;
+        }
+
+        html.light #global-toast[data-type="success"] {
+            background-color: #e6f4ea !important;
+            border-color: #34a853 !important;
+            color: #137333 !important;
+        }
+
+        html.light #global-toast[data-type="error"] {
+            background-color: #fce8e6 !important;
+            border-color: #ea4335 !important;
+            color: #c5221f !important;
+        }
+
+        html.light #global-toast[data-type="success"] #global-toast-icon {
+            color: #137333 !important;
+        }
+
+        html.light #global-toast[data-type="error"] #global-toast-icon {
+            color: #c5221f !important;
+        }
+
+        html.light #global-toast[data-type="info"] #global-toast-icon {
+            color: #162061 !important;
+        }
+
+        html.light input[type="date"] {
+            background-color: #ffffff !important;
+            color: #0f172a !important;
+            border-color: #cbd5e1 !important;
+            color-scheme: light !important;
+        }
+
+        @keyframes swing {
+
+            0%,
+            100% {
+                transform: rotate(0deg);
+            }
+
+            20% {
+                transform: rotate(15deg);
+            }
+
+            40% {
+                transform: rotate(-10deg);
+            }
+
+            60% {
+                transform: rotate(5deg);
+            }
+
+            80% {
+                transform: rotate(-5deg);
+            }
+        }
+
+        .animate-swing {
+            animation: swing 1s ease-in-out infinite;
+            transform-origin: top center;
+        }
+
+        /* CSS Strikethrough Animation for Subtasks */
+        .subtask-input {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .subtask-input.completed {
+            text-decoration: line-through;
+            text-decoration-color: #fbbf24;
+            color: rgba(255, 255, 255, 0.4) !important;
+            background-color: rgba(24, 28, 34, 0.1) !important;
+            border-color: rgba(153, 144, 119, 0.1) !important;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background text-on-surface font-body-md min-h-screen overflow-hidden selection:bg-primary-fixed/30 selection:text-primary-fixed"
+    x-data="tasksApp()" x-init="init();" @user-updated.window="user = $event.detail"
+    @storage.window="if ($event.key === 'thapsang_user') user = JSON.parse($event.newValue || '{}')"
+    @ts-lang-changed.window="lang = $event.detail.lang" x-cloak>
+
+    <aside :class="isSidebarCollapsed ? 'sidebar-collapsed !w-20 px-2' : 'px-4'"
+        class="hidden md:flex bg-surface-container-low/20  h-screen w-64 fixed left-0 top-0 border-r border-outline-variant/30 flex-col py-8 z-50 animate-sidebar-fade transition-all duration-300">
+        <div class="mb-12 px-2 relative min-h-[40px] z-[60]">
+            <div class="flex flex-col items-start gap-4 relative w-full">
+                <!-- Collapse button absolute top right -->
+                <div class="absolute top-0 transition-all duration-300 z-10"
+                    :class="isSidebarCollapsed ? 'left-1/2 -translate-x-1/2' : 'right-0 -translate-x-2'">
+                    <span @click="toggleSidebar()"
+                        class="cursor-pointer text-on-surface-variant/50 hover:text-primary-fixed font-mono text-[16px] font-bold leading-none select-none transition-all duration-300 hidden md:block"
+                        title="" x-text="isSidebarCollapsed ? '>' : '<'">&lt;</span>
+                </div>
+                
+                <div class="transition-all duration-300 origin-left w-full"
+                    :class="isSidebarCollapsed ? 'opacity-0 scale-50 w-0 h-0 overflow-hidden m-0' : 'opacity-100 scale-100 pt-1'">
+                    <h1 class="font-display-lg text-headline-md text-primary-fixed tracking-tight">Thapsang</h1>
+                    <div class="flex items-center justify-between gap-3 w-full mt-1 pr-1">
+                        <p class="font-label-sm text-label-sm text-on-surface-variant shrink-0" data-i18n="sidebar.tagline">
+                            Mindset OS</p>
+                        <div class="flex items-center gap-2">
+                        <button id="ts-theme-btn" onclick="toggleTheme()"
+                            class="w-[37px] h-[37px] p-0 shrink-0 text-on-surface-variant hover:text-white transition-colors flex items-center justify-center"
+                            data-i18n-title="common.switch_theme" title="Chuyển giao diện">
+                            <span id="ts-theme-icon" class="material-symbols-outlined text-[21px]">light_mode</span>
+                        </button>
+                        <div class="relative ts-lang-dropdown" x-data="{ openLang: false }" @click.away="openLang = false">
+            <button @click="openLang = !openLang" type="button" class="ts-lang-dropdown-btn flex items-center gap-1.5">
+                <template x-if="lang === 'vi'">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 20" class="w-5 h-3.5 rounded-[2px] shadow-sm">
+                        <rect width="30" height="20" fill="#da251d" />
+                        <polygon fill="#ffff00" points="15,4 16.18,8.27 20.76,8.27 17.06,10.91 18.47,15.18 15,12.54 11.53,15.18 12.94,10.91 9.24,8.27 13.82,8.27" />
+                    </svg>
+                </template>
+                <template x-if="lang === 'en'">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" class="w-5 h-3.5 rounded-[2px] shadow-sm">
+                        <rect width="60" height="30" fill="#012169" />
+                        <path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6" />
+                        <path d="M0,0 L30,15 M60,30 L30,15 M60,0 L30,15 M0,30 L30,15" stroke="#c8102e" stroke-width="2" />
+                        <path d="M30,0 L30,30 M0,15 L60,15" stroke="#fff" stroke-width="10" />
+                        <path d="M30,0 L30,30 M0,15 L60,15" stroke="#c8102e" stroke-width="6" />
+                    </svg>
+                </template>
+                <span class="font-label-sm text-[11px] font-bold uppercase" x-text="lang"></span>
+                <span class="material-symbols-outlined text-[14px] transition-transform" :class="openLang ? 'rotate-180' : ''">expand_more</span>
+            </button>
+            <div x-show="openLang" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" class="ts-lang-dropdown-menu absolute right-0 mt-2 w-32 z-[60]" x-cloak>
+                <div class="flex flex-col gap-0.5">
+                    <button @click="typeof setLang === 'function' ? setLang('vi') : (lang='vi', window.dispatchEvent(new CustomEvent('ts-lang-changed', {detail: {lang: 'vi'}}))); openLang = false" type="button" class="ts-lang-dropdown-item w-full text-left px-3 py-2 flex items-center gap-3 cursor-pointer" :class="lang === 'vi' ? 'ts-lang-active' : ''">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 20" class="w-5 h-3.5 rounded-[2px] shrink-0 shadow-sm">
+                            <rect width="30" height="20" fill="#da251d" />
+                            <polygon fill="#ffff00" points="15,4 16.18,8.27 20.76,8.27 17.06,10.91 18.47,15.18 15,12.54 11.53,15.18 12.94,10.91 9.24,8.27 13.82,8.27" />
+                        </svg>
+                        <span class="text-[12px] font-bold">Tiếng Việt</span>
+                    </button>
+                    <button @click="typeof setLang === 'function' ? setLang('en') : (lang='en', window.dispatchEvent(new CustomEvent('ts-lang-changed', {detail: {lang: 'en'}}))); openLang = false" type="button" class="ts-lang-dropdown-item w-full text-left px-3 py-2 flex items-center gap-3 cursor-pointer" :class="lang === 'en' ? 'ts-lang-active' : ''">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" class="w-5 h-3.5 rounded-[2px] shrink-0 shadow-sm">
+                            <rect width="60" height="30" fill="#012169" />
+                            <path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6" />
+                            <path d="M0,0 L30,15 M60,30 L30,15 M60,0 L30,15 M0,30 L30,15" stroke="#c8102e" stroke-width="2" />
+                            <path d="M30,0 L30,30 M0,15 L60,15" stroke="#fff" stroke-width="10" />
+                            <path d="M30,0 L30,30 M0,15 L60,15" stroke="#c8102e" stroke-width="6" />
+                        </svg>
+                        <span class="text-[12px] font-bold">English</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+                    </div>
+                </div>
+           </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+        <div class="flex flex-col gap-2 flex-grow mt-2">
+            <a class="flex items-center gap-3 [.sidebar-collapsed_&]:gap-0 [.sidebar-collapsed_&]:justify-center px-4 py-3 text-on-surface-variant font-medium opacity-60 hover:bg-surface-variant/40 hover:opacity-100 transition-all duration-300 rounded-lg group border-l-4 border-transparent"
+                href="/coach">
+                <span class="material-symbols-outlined shrink-0">chat_bubble</span>
+                <span
+                    class="font-body-md text-[17px] transition-all duration-300 [.sidebar-collapsed_&]:opacity-0 [.sidebar-collapsed_&]:w-0 [.sidebar-collapsed_&]:overflow-hidden whitespace-nowrap"
+                    data-i18n="nav.coach">&nbsp;</span>
+            </a>
+            <a class="flex items-center gap-3 [.sidebar-collapsed_&]:gap-0 [.sidebar-collapsed_&]:justify-center px-4 py-3 text-on-surface-variant font-medium opacity-60 hover:bg-surface-variant/40 hover:opacity-100 transition-all duration-300 rounded-lg group border-l-4 border-transparent"
+                href="/diary">
+                <span class="material-symbols-outlined shrink-0">book</span>
+                <span
+                    class="font-body-md text-[17px] transition-all duration-300 [.sidebar-collapsed_&]:opacity-0 [.sidebar-collapsed_&]:w-0 [.sidebar-collapsed_&]:overflow-hidden whitespace-nowrap"
+                    data-i18n="nav.diary">&nbsp;</span>
+            </a>
+            <a class="flex items-center gap-3 [.sidebar-collapsed_&]:gap-0 [.sidebar-collapsed_&]:justify-center px-4 py-3 text-on-surface-variant font-medium opacity-60 hover:bg-surface-variant/40 hover:opacity-100 transition-all duration-300 rounded-lg group border-l-4 border-transparent"
+                href="/aoa">
+                <span class="material-symbols-outlined shrink-0">hub</span>
+                <span
+                    class="font-body-md text-[17px] transition-all duration-300 [.sidebar-collapsed_&]:opacity-0 [.sidebar-collapsed_&]:w-0 [.sidebar-collapsed_&]:overflow-hidden whitespace-nowrap"
+                    data-i18n="nav.aoa">&nbsp;</span>
+            </a>
+            <a class="flex items-center gap-3 [.sidebar-collapsed_&]:gap-0 [.sidebar-collapsed_&]:justify-center px-4 py-3 text-primary-fixed font-bold border-l-4 border-primary-fixed-dim bg-gradient-to-r from-primary-fixed/10 to-transparent rounded-r-lg group"
+                href="/tasks">
+                <span class="material-symbols-outlined shrink-0"
+                    style="font-variation-settings: 'FILL' 1;">checklist</span>
+                <span
+                    class="font-body-md text-[17px] transition-all duration-300 [.sidebar-collapsed_&]:opacity-0 [.sidebar-collapsed_&]:w-0 [.sidebar-collapsed_&]:overflow-hidden whitespace-nowrap"
+                    data-i18n="nav.tasks">&nbsp;</span>
+            </a>
+
+            <a class="flex items-center gap-3 [.sidebar-collapsed_&]:gap-0 [.sidebar-collapsed_&]:justify-center px-4 py-3 text-on-surface-variant font-medium opacity-60 hover:bg-surface-variant/40 hover:opacity-100 transition-all duration-300 rounded-lg group border-l-4 border-transparent"
+                href="/cohort">
+                <span class="material-symbols-outlined shrink-0">groups</span>
+                <span
+                    class="font-body-md text-[17px] transition-all duration-300 [.sidebar-collapsed_&]:opacity-0 [.sidebar-collapsed_&]:w-0 [.sidebar-collapsed_&]:overflow-hidden whitespace-nowrap"
+                    data-i18n="nav.personal_roadmap">&nbsp;</span>
+            </a>
+        </div>
+        <div class="mt-auto p-2 mx-3 bg-surface/20 border border-outline-variant/30 rounded-xl mb-4 flex items-center box-border">
+            <div class="w-[38.4px] h-[38.4px] rounded-[12px] bg-[#fbbf24]/10 border border-[#fbbf24]/80 flex items-center justify-center shrink-0 overflow-hidden transition-colors hover:bg-[#fbbf24]/20 cursor-pointer"
+                @click="window.location.href='/aoa?tab=mine'">
+                <template x-if="user.avatar">
+                    <img :src="user.avatar" referrerpolicy="no-referrer" class="w-full h-full object-cover">
+                </template>
+                <template x-if="!user.avatar">
+                    <span class="material-symbols-outlined text-[#fbbf24] text-[29px]"
+                        style="font-variation-settings: 'wght' 300;">person</span>
+                </template>
+            </div>
+            
+            <div class="flex flex-col justify-center min-w-0 transition-all duration-300 [.sidebar-collapsed_&]:opacity-0 [.sidebar-collapsed_&]:w-0 cursor-pointer ml-3 mr-auto group"
+                @click="window.location.href='/aoa?tab=mine'">
+                <p class="font-label-sm text-[15px] font-bold text-on-surface truncate w-full group-hover:text-[#fbbf24] transition-colors"
+                    x-text="user.displayName || user.username || 'user'"></p>
+            </div>
+            
+            <button @click="logout()" title="Đăng xuất"
+                class="w-[38.4px] h-[38.4px] rounded-[12px] bg-error/10 border border-error/50 flex items-center justify-center shrink-0 hover:bg-error/20 transition-colors text-error [.sidebar-collapsed_&]:hidden ml-2">
+                <span class="material-symbols-outlined text-[20px]">logout</span>
+            </button>
+        </div>
+        <!-- App Version -->
+        <div class="flex justify-center pb-2 pt-1">
+            <span
+                class="app-version-badge text-[10px] font-mono tracking-widest text-on-surface-variant/30 hover:text-on-surface-variant/60 transition-all duration-300 cursor-default select-none [.sidebar-collapsed_&]:opacity-0 [.sidebar-collapsed_&]:pointer-events-none"
+                title="Thapsang version">v0.1</span>
+        </div>
+        <script>fetch('/version.txt').then(r => r.text()).then(v => { document.querySelector('.app-version-badge').textContent = 'v' + v.trim(); }).catch(() => { });</script>
+    </aside>
+
+    <!-- Premium Glassmorphism Page Loading Screen -->
+    <div x-show="pageLoading" x-transition.opacity x-cloak :class="isSidebarCollapsed ? 'md:left-20' : 'md:left-64'"
+        class="fixed top-0 bottom-0 left-0 right-0 bg-[#000000]/60  z-[100] flex flex-col items-center justify-center transition-all duration-300">
+        <div
+            class="glass-panel p-8 rounded-3xl border border-[#fbbf24]/20 shadow-[0_8px_32px_rgba(0,0,0,0.35)] flex flex-col items-center gap-4 bg-[#0a0a0a]/80 max-w-xs text-center animate-modal-in">
+            <div class="relative w-12 h-12 flex items-center justify-center shrink-0">
+                <div class="absolute inset-0 rounded-full border border-[#fbbf24]/20 animate-ping"></div>
+                <div
+                    class="absolute w-10 h-10 rounded-full border-2 border-t-[#fbbf24] border-r-transparent border-l-transparent border-b-transparent animate-spin">
+                </div>
+                <span class="material-symbols-outlined text-[#fbbf24] text-xl">checklist</span>
+            </div>
+            <p class="text-xs font-bold uppercase tracking-[0.15em] text-[#fbbf24] font-mono mt-2"
+                x-text="lang === 'vi' ? 'ĐỒNG BỘ NHIỆM VỤ...' : 'SYNCING TASKS...'"></p>
+            <p class="text-[12px] text-on-surface-variant/80 font-medium leading-relaxed"
+                x-text="lang === 'vi' ? 'Hệ thống đang đồng bộ danh sách nhiệm vụ từ Socratic Coach...' : 'Syncing tasks list from Socratic Coach...'">
+            </p>
+        </div>
+    </div>
+
+    <!-- Main Content Canvas -->
+    <main :class="isSidebarCollapsed ? 'md:ml-20' : 'md:ml-64'"
+        class="ml-0 p-8 h-screen flex flex-col relative z-10 animate-page-fade transition-all duration-300">
+        <!-- Header -->
+        <header class="flex justify-between items-end border-b border-surface-variant pb-4 mb-6">
+            <div>
+                <h2 class="font-headline-md text-[29px] font-bold text-on-surface" data-i18n="tasks.title">Nhiệm vụ</h2>
+                <!-- Selected Session Indicator -->
+                <p class="text-[19px] text-on-surface mt-1 font-extrabold">
+                    <span
+                        x-text="selectedSessionFilter === 'all' ? (lang === 'vi' ? 'Tất cả phiên làm việc' : 'All sessions') : cleanText(selectedSessionFilter)"></span>
+                </p>
+            </div>
+            <div class="flex items-center gap-3 relative">
+                <!-- Notification Bell Button -->
+                <div class="relative" x-data="{ openNotifications: false }">
+                    <button @click="openNotifications = !openNotifications" @click.away="openNotifications = false"
+                        class="relative flex items-center justify-center w-10 h-10 bg-surface-variant/30 border border-outline-variant/30 text-on-surface hover:text-[#fbbf24] hover:bg-surface-variant/50 transition-all rounded-lg shadow-[0_0_15px_rgba(233,196,0,0.03)] cursor-pointer group">
+                        <span class="material-symbols-outlined text-[21px]"
+                            :class="notifications.filter(n => !n.read).length > 0 ? 'animate-swing' : ''">notifications</span>
+
+                        <!-- Glow Badge -->
+                        <template x-if="notifications.filter(n => !n.read).length > 0">
+                            <span
+                                class="absolute -top-1.5 -right-1.5 w-5 h-5 bg-error text-background text-[11px] font-extrabold rounded flex items-center justify-center border border-surface shadow-[0_0_8px_#ffb4ab]"
+                                x-text="notifications.filter(n => !n.read).length"></span>
+                        </template>
+                    </button>
+
+                    <!-- Notifications Dropdown List -->
+                    <div x-show="openNotifications" x-transition.opacity.duration.200ms style="display: none;"
+                        class="absolute right-0 mt-2 w-80 bg-surface border border-outline-variant rounded-xl shadow-2xl overflow-hidden z-50 glass-panel">
+                        <div
+                            class="p-3 border-b border-outline-variant/30 bg-surface-variant/10 flex justify-between items-center">
+                            <span class="text-xs font-bold normal-case tracking-wider text-on-surface-variant"
+                                x-text="lang === 'en' ? 'Deadline Alerts' : 'Thông Báo Hạn Chót'"></span>
+                            <template x-if="notifications.filter(n => !n.read).length > 0">
+                                <button
+                                    @click="notifications.forEach(n => n.read = true); saveToLocal(); showGlobalToast(lang === 'en' ? 'Marked All As Read' : 'Đã Đọc Tất Cả', 'success')"
+                                    class="text-[11px] text-primary-fixed hover:underline font-bold bg-transparent border-0 cursor-pointer">
+                                    <span x-text="lang === 'en' ? 'Mark All Read' : 'Đọc Tất Cả'"></span>
+                                </button>
+                            </template>
+                        </div>
+                        <div class="max-h-80 overflow-y-auto divide-y divide-outline-variant/25 hide-scroll">
+                            <template x-if="notifications.length === 0">
+                                <div class="p-6 text-center text-on-surface-variant/60 text-xs italic">
+                                    <span
+                                        class="material-symbols-outlined text-[33px] text-on-surface-variant/30 mb-1 block">notifications_off</span>
+                                    <span
+                                        x-text="lang === 'en' ? 'No deadline alerts' : 'Không có thông báo hạn chót'"></span>
+                                </div>
+                            </template>
+                            <template x-for="notif in notifications" :key="notif.id">
+                                <div @click="notif.read = true; saveToLocal(); openPlanModal(notif.task); openNotifications = false"
+                                    class="p-3.5 hover:bg-surface-variant/20 transition-colors cursor-pointer flex gap-3 relative group/item">
+                                    <div class="w-2 h-2 rounded-full mt-1.5 shrink-0"
+                                        :class="notif.read ? 'bg-transparent' : (notif.type === 'error' ? 'bg-error shadow-[0_0_6px_#ffb4ab]' : 'bg-[#fbbf24] shadow-[0_0_6px_#fbbf24]')">
+                                    </div>
+                                    <div class="flex-grow">
+                                        <p class="text-[14px] leading-relaxed font-semibold"
+                                            :class="notif.read ? 'text-on-surface-variant/70' : 'text-white'"
+                                            x-text="notif.message"></p>
+                                        <div class="flex items-center gap-1.5 mt-1.5">
+                                            <span
+                                                class="text-[10px] font-bold capitalize px-1.5 py-0.5 rounded border tracking-wider"
+                                                :class="notif.type === 'error' ? 'text-error/80 border-error/20 bg-error/5' : 'text-primary-fixed/80 border-primary-fixed/20 bg-primary-fixed/5'"
+                                                x-text="notif.time"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- History Dropdown -->
+                <div class="relative" x-data="{ openFilter: false }">
+                    <button @click="openFilter = !openFilter" @click.away="openFilter = false"
+                        class="flex items-center gap-2 px-4 py-2 bg-surface-variant/30 border border-outline-variant/30 text-on-surface rounded-lg font-bold hover:bg-surface-variant/50 transition-colors shadow-[0_0_15px_rgba(233,196,0,0.05)]">
+                        <span class="material-symbols-outlined text-[19px]">history</span> <span
+                            data-i18n="tasks.work_history">Lịch sử làm việc</span>
+                        <span class="material-symbols-outlined text-[19px]">expand_more</span>
+                    </button>
+                    <div x-show="openFilter" x-transition.opacity.duration.200ms style="display: none;"
+                        class="absolute right-0 mt-2 w-72 bg-surface border border-outline-variant rounded-lg shadow-xl overflow-hidden z-50">
+                        <div class="max-h-64 overflow-y-auto">
+                            <button @click="selectedSessionFilter = 'all'; openFilter = false"
+                                class="w-full text-left px-4 py-3 text-[15px] text-on-surface hover:bg-surface-variant/50 transition-colors border-b border-outline-variant/30 font-bold"
+                                :class="selectedSessionFilter === 'all' ? 'text-primary-fixed' : ''">
+                                <span data-i18n="tasks.all_sessions">Tất cả phiên làm việc</span>
+                            </button>
+                            <template x-for="session in uniqueSessions" :key="session">
+                                <button @click="selectedSessionFilter = session; openFilter = false"
+                                    class="w-full text-left px-4 py-3 text-[14px] text-on-surface-variant hover:bg-surface-variant/50 hover:text-white transition-colors border-b border-outline-variant/30 truncate"
+                                    :class="selectedSessionFilter === session ? 'text-primary-fixed font-bold bg-primary-fixed/5' : ''"
+                                    x-text="cleanText(session)">
+                                </button>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Kanban Board (DO) -->
+        <div class="flex-1 overflow-x-auto flex gap-6 pb-4 hide-scroll">
+
+            <!-- Column 1: PLAN (Backlog) -->
+            <div :class="{ 'flex': activePanel === 'backlog', 'hidden md:flex': activePanel !== 'backlog', 'drag-over': dragOverCol === 'backlog' }"
+                class="flex-1 min-w-[300px] flex flex-col bg-surface-variant/10 rounded-xl border border-outline-variant/30 overflow-hidden"
+                @dragover.prevent="dragOverCol = 'backlog'" @dragleave="dragOverCol = null" @drop="drop('backlog')">
+                <div
+                    class="p-4 border-b border-outline-variant/30 bg-surface-variant/30 flex justify-between items-center h-14">
+                    <h3
+                        class="font-bold text-on-surface normal-case tracking-widest text-[14px] flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[17px] text-on-surface-variant">list_alt</span>
+                        <span data-i18n="tasks.plan">Nhiệm vụ đang thực hiện</span>
+                    </h3>
+                    <span
+                        class="w-6 h-6 flex items-center justify-center rounded-full bg-surface-variant/40 border border-outline-variant/30 text-[12px] font-bold text-on-surface-variant"
+                        x-text="tasks.filter(t => t.status === 'backlog').length"></span>
+                </div>
+                <div class="p-4 flex-1 overflow-y-auto kanban-col space-y-4">
+                    <template
+                        x-for="task in tasks.filter(t => t.status === 'backlog' && (selectedSessionFilter === 'all' || t.contextLink === selectedSessionFilter))"
+                        :key="task.id">
+                        <div draggable="true" @dragstart="dragStart(task.id, $event)" @dragend="dragEnd($event)"
+                             @click="openPlanModal(task)"
+                             class="glass-panel p-4 rounded-lg draggable-task-card hover:border-primary-fixed/50 hover:-translate-y-1 transition-all group relative">
+                            <div
+                                class="absolute left-0 top-0 bottom-0 w-1 bg-outline-variant rounded-l-lg group-hover:bg-primary-fixed transition-colors">
+                            </div>
+                            <div class="flex justify-between items-start mb-2">
+                                <span
+                                    class="text-[11px] normal-case text-primary-fixed/80 tracking-wider bg-primary-fixed/10 px-2 py-0.5 rounded border border-primary-fixed/20"
+                                    x-text="toTitleCase(cleanText(task.contextLink))"></span>
+                            </div>
+                            <h4 class="font-bold text-[15px] text-on-surface mb-1 leading-tight group-hover:text-primary-fixed"
+                                x-text="cleanText(task.title)"></h4>
+                            <p class="text-[14px] text-on-surface-variant line-clamp-2 mb-3"
+                               x-text="cleanText(task.goal) || t('tasks.no_goal')"></p>
+                            <div
+                                class="flex items-center justify-between text-[12px] text-on-surface-variant/70 border-t border-outline-variant/30 pt-2">
+                                <div class="flex items-center gap-1"><span
+                                        class="material-symbols-outlined text-[15px]">timer</span> <span
+                                        x-text="task.effort + ' ' + (lang === 'en' ? 'subtasks' : 'nhiệm vụ phụ')"></span>
+                                </div>
+                                <div class="flex items-center gap-1" :class="task.deadline ? 'text-error' : ''"><span
+                                        class="material-symbols-outlined text-[15px]">event</span> <span
+                                        x-text="task.deadline || (lang === 'en' ? 'No deadline' : 'Chưa có hạn chót')"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Column 2: DO (In Progress) -->
+            <div :class="{ 'flex': activePanel === 'in_progress', 'hidden md:flex': activePanel !== 'in_progress', 'drag-over': dragOverCol === 'in_progress' }"
+                class="flex-1 min-w-[300px] flex flex-col bg-surface-variant/10 rounded-xl border border-outline-variant/30 overflow-hidden"
+                @dragover.prevent="dragOverCol = 'in_progress'" @dragleave="dragOverCol = null"
+                @drop="drop('in_progress')">
+                <div
+                    class="p-4 border-b border-primary-fixed/30 bg-primary-fixed/5 flex justify-between items-center shadow-[0_4px_20px_rgba(233,196,0,0.05)] h-14">
+                    <h3
+                        class="font-bold text-primary-fixed normal-case tracking-widest text-[14px] flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[17px]">bolt</span> <span data-i18n="tasks.do">Thực
+                            thi (Do)</span>
+                    </h3>
+                    <span
+                        class="w-6 h-6 flex items-center justify-center rounded-full bg-primary-fixed/10 border border-primary-fixed/40 text-[12px] font-bold text-primary-fixed"
+                        x-text="tasks.filter(t => t.status === 'in_progress').length"></span>
+                </div>
+                <div class="p-4 flex-1 overflow-y-auto kanban-col space-y-4">
+                    <template
+                        x-for="task in tasks.filter(t => t.status === 'in_progress' && (selectedSessionFilter === 'all' || t.contextLink === selectedSessionFilter))"
+                        :key="task.id">
+                        <div draggable="true" @dragstart="dragStart(task.id, $event)" @dragend="dragEnd($event)"
+                             @click="openPlanModal(task)"
+                             class="bg-white dark:bg-surface/60 border border-primary-fixed p-4 rounded-lg draggable-task-card hover:shadow-[0_0_15px_rgba(233,196,0,0.15)] transition-all relative overflow-hidden">
+                            <div
+                                class="absolute inset-0 bg-gradient-to-br from-primary-fixed/10 to-transparent pointer-events-none">
+                            </div>
+                            <div class="absolute left-0 top-0 bottom-0 w-1 bg-primary-fixed shadow-[0_0_10px_#f59e0b]">
+                            </div>
+                            <h4 class="font-bold text-[15px] text-[#162061] dark:text-white mb-2 ml-1"
+                                x-text="cleanText(task.title)"></h4>
+
+                            <!-- Subtasks / Micro-steps -->
+                            <div class="space-y-1 mb-3 ml-1">
+                                <template x-for="(sub, sIdx) in task.subtasks" :key="sIdx">
+                                    <label class="flex items-center gap-2 cursor-pointer group/sub" @click.stop>
+                                        <input type="checkbox" x-model="sub.completed" @change="toggleSubtask(task)"
+                                               class="w-3 h-3 rounded-sm bg-white dark:bg-surface border-outline-variant text-primary-fixed focus:ring-0 cursor-pointer" />
+                                        <span class="text-[12px] group-hover/sub:text-primary-fixed transition-colors"
+                                              :class="sub.completed ? 'line-through opacity-50 text-[#162061] dark:text-on-surface-variant' : 'text-[#162061] dark:text-on-surface'"
+                                              x-text="cleanText(sub.title)"></span>
+                                    </label>
+                                </template>
+                            </div>
+
+                            <div
+                                class="flex items-center justify-between mt-2 pt-2 border-t border-primary-fixed/20 ml-1 relative z-10">
+
+                                <button @click.stop="moveToCheck(task)" title="Hoàn thành"
+                                        class="w-7 h-7 rounded border border-primary-fixed flex items-center justify-center text-primary-fixed hover:bg-primary-fixed hover:text-background transition-colors">
+                                    <span class="material-symbols-outlined text-[17px]">check</span>
+                                </button>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Column 3: CHECK (Reviewing / Done) -->
+            <div :class="{ 'flex': activePanel === 'done', 'hidden md:flex': activePanel !== 'done', 'drag-over': dragOverCol === 'done' }"
+                class="flex-1 min-w-[300px] flex flex-col bg-surface-variant/10 rounded-xl border border-outline-variant/30 overflow-hidden"
+                @dragover.prevent="dragOverCol = 'done'" @dragleave="dragOverCol = null" @drop="drop('done')">
+                <div class="p-4 border-b border-green-500/20 bg-green-500/5 flex justify-between items-center h-14">
+                    <h3
+                        class="font-bold text-green-400 normal-case tracking-widest text-[14px] flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[17px] text-green-400">task_alt</span> <span
+                            data-i18n="tasks.check">Kiểm tra (Check)</span>
+                    </h3>
+                    <span
+                        class="w-6 h-6 flex items-center justify-center rounded-full bg-green-500/10 border border-green-500/30 text-[12px] font-bold text-green-400"
+                        x-text="tasks.filter(t => t.status === 'done').length"></span>
+                </div>
+                <div class="p-4 flex-1 overflow-y-auto kanban-col space-y-4">
+                    <template
+                        x-for="task in tasks.filter(t => t.status === 'done' && (selectedSessionFilter === 'all' || t.contextLink === selectedSessionFilter))"
+                        :key="task.id">
+                        <div draggable="true" @dragstart="dragStart(task.id, $event)" @dragend="dragEnd($event)"
+                             @click="openPlanModal(task)"
+                             class="bg-surface/40 border border-green-500/20 border-l-4 border-l-green-500 p-4 rounded-lg draggable-task-card hover:border-green-500/40 hover:shadow-[0_0_15px_rgba(34,197,94,0.05)] opacity-95 hover:opacity-100 transition-all relative overflow-hidden group cursor-pointer">
+                            <h4 class="font-bold text-[15px] text-on-surface leading-tight"
+                                :class="task.title.toLowerCase().includes('task') ? 'line-through decoration-on-surface-variant/50' : ''"
+                                x-text="cleanText(task.title)"></h4>
+                            <p class="text-[12px] text-green-400/80 mt-2 italic flex items-center gap-1 font-medium"
+                               x-show="!task.contextLink || !task.contextLink.toLowerCase().includes('lộ trình cá nhân')">
+                                <span class="material-symbols-outlined text-[15px] text-green-400">check_circle</span>
+                                <span data-i18n="tasks.ai_review">Đã được AI Review</span>
+                            </p>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Mobile Floating Switcher Tab Bar -->
+        <div
+            class="ts-mobile-nav md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-40 bg-[#171717]/90  border border-[#fbbf24]/30 px-3 py-2 rounded-full flex items-center gap-2 shadow-[0_8px_32px_rgba(0,0,0,0.5)] transition-all duration-300">
+            <!-- Backlog Column Button -->
+            <button @click="activePanel = 'backlog'"
+                :class="activePanel === 'backlog' ? 'bg-gradient-to-r from-primary-fixed-dim via-primary-fixed to-primary-fixed-dim text-on-primary-fixed shadow-[0_4px_14px_rgba(255,225,109,0.35)] scale-105 font-semibold' : 'text-on-surface-variant hover:text-on-surface hover:bg-white/5'"
+                class="flex items-center gap-2 px-5 py-2.5 rounded-full font-label-sm text-[14px] tracking-wider font-bold transition-all duration-300">
+                <span class="material-symbols-outlined text-base">list_alt</span>
+                <span data-i18n="tasks.plan">Nhiệm vụ</span>
+            </button>
+            <!-- In Progress Column Button -->
+            <button @click="activePanel = 'in_progress'"
+                :class="activePanel === 'in_progress' ? 'bg-gradient-to-r from-primary-fixed-dim via-primary-fixed to-primary-fixed-dim text-on-primary-fixed shadow-[0_4px_14px_rgba(255,225,109,0.35)] scale-105 font-semibold' : 'text-on-surface-variant hover:text-on-surface hover:bg-white/5'"
+                class="flex items-center gap-2 px-5 py-2.5 rounded-full font-label-sm text-[14px] tracking-wider font-bold transition-all duration-300">
+                <span class="material-symbols-outlined text-base">bolt</span>
+                <span data-i18n="tasks.do">Đang thực hiện</span>
+            </button>
+            <!-- Done Column Button -->
+            <button @click="activePanel = 'done'"
+                :class="activePanel === 'done' ? 'bg-gradient-to-r from-primary-fixed-dim via-primary-fixed to-primary-fixed-dim text-on-primary-fixed shadow-[0_4px_14px_rgba(255,225,109,0.35)] scale-105 font-semibold' : 'text-on-surface-variant hover:text-on-surface hover:bg-white/5'"
+                class="flex items-center gap-2 px-5 py-2.5 rounded-full font-label-sm text-[14px] tracking-wider font-bold transition-all duration-300">
+                <span class="material-symbols-outlined text-base">task_alt</span>
+                <span data-i18n="tasks.check">Hoàn thành</span>
+            </button>
+        </div>
+    </main>
+
+
+
+    <style>
+        .theme-done .text-primary-fixed {
+            color: #4ade80 !important;
+        }
+
+        .theme-done .bg-primary-fixed {
+            background-color: #22c55e !important;
+        }
+
+        .theme-done .bg-primary-fixed\/5 {
+            background-color: rgba(34, 197, 94, 0.05) !important;
+        }
+
+        .theme-done .bg-primary-fixed\/10 {
+            background-color: rgba(34, 197, 94, 0.1) !important;
+        }
+
+        .theme-done .bg-primary-fixed\/20 {
+            background-color: rgba(34, 197, 94, 0.2) !important;
+        }
+
+        .theme-done .border-primary-fixed {
+            border-color: #22c55e !important;
+        }
+
+        .theme-done .border-primary-fixed\/20 {
+            border-color: rgba(34, 197, 94, 0.2) !important;
+        }
+
+        .theme-done .border-primary-fixed\/50 {
+            border-color: rgba(34, 197, 94, 0.5) !important;
+        }
+
+        .theme-done .border-t-primary-fixed {
+            border-top-color: #22c55e !important;
+        }
+
+        .theme-done .focus\:border-primary-fixed:focus {
+            border-color: #22c55e !important;
+        }
+
+        .theme-done .focus\:ring-primary-fixed:focus {
+            --tw-ring-color: #22c55e !important;
+        }
+    </style>
+
+    <!-- PLAN MODAL: Edit Task Details -->
+    <div x-show="showPlanModal" x-transition
+        class="fixed inset-0 z-[60] bg-black/60  flex items-center justify-center p-4">
+        <div :class="selectedTask?.status === 'done' ? 'theme-done' : ''"
+            class="glass-panel w-full max-w-2xl rounded-2xl flex flex-col shadow-2xl border border-outline-variant/50 overflow-hidden"
+            @click.away="savePlan()">
+            <div class="p-6 border-b border-outline-variant/30 bg-surface/50 flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <span class="material-symbols-outlined text-primary-fixed text-[25px]">edit_document</span>
+                    <h3 class="font-headline-md text-[21px] text-white"
+                        x-text="selectedTask?.status === 'done' ? (lang === 'en' ? 'Completed Task' : 'Nhiệm Vụ Đã Hoàn Thành') : (selectedTask?.status === 'in_progress' ? (lang === 'en' ? 'Task in Progress' : 'Nhiệm Vụ Đang Thực Hiện') : (lang === 'en' ? 'Task' : 'Nhiệm Vụ'))">
+                    </h3>
+                </div>
+                <div class="flex items-center gap-3">
+                    <!-- Quick Move Button -->
+                    <template
+                        x-if="selectedTask && (selectedTask.status === 'backlog' || selectedTask.status === 'in_progress')">
+                        <button @click="quickMoveStatus()"
+                            class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[13px] font-bold transition-all border shadow-sm cursor-pointer group"
+                            :class="selectedTask.status === 'backlog' 
+                                    ? 'bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border-amber-500/30' 
+                                    : 'bg-green-500/10 hover:bg-green-500/20 text-green-400 border-green-500/30'">
+                            <span class="material-symbols-outlined text-[17px]"
+                                x-text="selectedTask.status === 'backlog' ? 'play_arrow' : 'check_circle'"></span>
+                            <span x-text="selectedTask.status === 'backlog' 
+                                ? (lang === 'en' ? 'Start' : 'Thực hiện') 
+                                : (lang === 'en' ? 'Complete' : 'Hoàn thành')"></span>
+                            <span
+                                class="material-symbols-outlined text-[15px] opacity-75 group-hover:translate-x-0.5 transition-transform">arrow_forward</span>
+                        </button>
+                    </template>
+                    <button @click="showPlanModal = false"
+                        class="text-on-surface-variant hover:text-white flex items-center justify-center p-1 rounded-full hover:bg-surface-variant/30 transition-all"><span
+                            class="material-symbols-outlined">close</span></button>
+                </div>
+            </div>
+
+            <div class="p-6 flex-1 overflow-y-auto space-y-6 max-h-[70vh] hide-scroll">
+                <div class="bg-primary-fixed/5 border border-primary-fixed/20 p-4 rounded-xl flex items-start gap-3">
+                    <span class="material-symbols-outlined text-primary-fixed text-[21px] mt-0.5">link</span>
+                    <div>
+                        <p class="text-[11px] normal-case font-bold text-primary-fixed/80 tracking-widest mb-1"
+                            x-text="lang === 'en' ? 'Session' : 'Phiên Làm Việc'"></p>
+                        <p class="text-[15px] text-on-surface"
+                            x-text="cleanText(selectedTask?.contextLink) || (lang === 'en' ? 'Manual task' : 'Task tạo thủ công')">
+                        </p>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-[14px] font-bold text-on-surface-variant normal-case tracking-widest mb-2"
+                        x-text="lang === 'en' ? 'Task Name' : 'Tên Nhiệm Vụ'"></label>
+                    <input type="text" x-model="editTitle[lang]" :readonly="selectedTask?.status === 'done'"
+                        class="w-full bg-surface-variant/50 border border-outline-variant/50 rounded-lg p-3 text-white focus:border-primary-fixed focus:ring-1 focus:ring-primary-fixed transition-colors font-bold text-[17px]"
+                        :class="{'opacity-70 cursor-not-allowed': selectedTask?.status === 'done'}" />
+                </div>
+
+                <div>
+                    <div class="flex justify-between items-center mb-2">
+                        <label class="block text-[14px] font-bold text-on-surface-variant normal-case tracking-widest"
+                            x-text="lang === 'en' ? 'Goal' : 'Mục Tiêu'"></label>
+                        <span class="text-[12px] font-bold text-on-surface-variant/60"
+                            :class="(editGoal[lang] || '').length >= 200 ? 'text-error font-extrabold' : ''"
+                            x-text="((editGoal[lang] || '').length) + ' / 200 ' + (lang === 'en' ? 'chars' : 'ký tự')"></span>
+                    </div>
+                    <textarea x-model="editGoal[lang]" rows="3" maxlength="200"
+                        :readonly="selectedTask?.status === 'done'"
+                        class="w-full bg-surface-variant/50 border border-outline-variant/50 rounded-lg p-3 text-white focus:border-primary-fixed focus:ring-1 focus:ring-primary-fixed transition-colors text-[15px] resize-none"
+                        :class="{'opacity-70 cursor-not-allowed': selectedTask?.status === 'done'}"
+                        :placeholder="lang === 'en' ? 'Define clearly what the expected output is and why you need to do it.' : 'Định nghĩa rõ ràng output kỳ vọng của task này là gì? Tại sao phải làm?'"></textarea>
+                </div>
+
+                <div class="grid grid-cols-2 gap-6">
+                    <div>
+                        <label
+                            class="block text-[14px] font-bold text-on-surface-variant normal-case tracking-widest mb-2"
+                            x-text="lang === 'en' ? 'Deadline' : 'Hạn Chót'"></label>
+                        <input type="date" x-model="selectedTask.deadline" :readonly="selectedTask?.status === 'done'"
+                            class="w-full bg-surface-variant/50 border border-outline-variant/50 rounded-lg p-3 text-white focus:border-primary-fixed focus:ring-1 focus:ring-primary-fixed transition-colors text-[15px] [color-scheme:dark]"
+                            :class="{'opacity-70 cursor-not-allowed': selectedTask?.status === 'done'}" />
+                    </div>
+                    <div x-show="selectedTask?.status !== 'done'">
+                        <label
+                            class="block text-[14px] font-bold text-on-surface-variant normal-case tracking-widest mb-2"
+                            x-text="lang === 'en' ? 'Deconstruct Task' : 'Chia Nhỏ Nhiệm Vụ'"></label>
+                        <div class="relative flex items-center">
+                            <input type="number" min="1" x-model.number="selectedTask.effort"
+                                @change="triggerAiMicrosteps()" @keydown.enter="triggerAiMicrosteps()"
+                                class="w-full bg-surface-variant/50 border border-outline-variant/50 rounded-lg p-3 pr-20 text-center text-white font-bold focus:border-primary-fixed focus:ring-1 focus:ring-primary-fixed transition-colors text-[15px] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
+                            <div class="absolute right-2 flex items-center gap-1.5">
+                                <!-- AI Regenerate button (refresh icon) -->
+                                <button x-show="editSubtasks && editSubtasks.length > 0" @click="triggerAiMicrosteps()"
+                                    :disabled="generatingMicrosteps" title="AI Tạo lại / AI Regenerate"
+                                    class="p-1 flex items-center justify-center rounded-md text-primary-fixed hover:bg-primary-fixed/20 hover:scale-110 transition-all cursor-pointer">
+                                    <span class="material-symbols-outlined text-[21px]"
+                                        :class="generatingMicrosteps ? 'animate-spin' : ''">refresh</span>
+                                </button>
+                                <!-- AI Deconstruct checkmark button -->
+                                <button @click="triggerAiMicrosteps()" title="Chia nhỏ nhiệm vụ / Deconstruct"
+                                    class="p-1 flex items-center justify-center rounded-md text-primary-fixed hover:bg-primary-fixed/20 hover:scale-110 transition-all cursor-pointer">
+                                    <span class="material-symbols-outlined text-[21px]">check</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Subtasks Builder -->
+                <div>
+                    <div class="flex justify-between items-center mb-3">
+                        <label class="block text-[14px] font-bold text-on-surface-variant normal-case tracking-widest">
+                            <span x-text="lang === 'en' ? 'List of Substask' : 'Danh Sách Các Bước'"></span>
+                        </label>
+                    </div>
+
+                    <!-- Spinner loading state with premium glassmorphism overlay style -->
+                    <div x-show="generatingMicrosteps" x-transition.opacity
+                        class="flex items-center justify-center py-6 gap-3 bg-surface-variant/20 border border-primary-fixed/20 rounded-xl  animate-pulse mb-3 shadow-[inset_0_1px_24px_rgba(251,191,36,0.05)]">
+                        <div class="relative w-6 h-6 flex items-center justify-center shrink-0">
+                            <div class="absolute inset-0 rounded-full border border-primary-fixed/20 animate-ping">
+                            </div>
+                            <div
+                                class="absolute w-5 h-5 rounded-full border-2 border-t-primary-fixed border-r-transparent border-b-transparent border-l-transparent animate-spin">
+                            </div>
+                        </div>
+                        <span class="text-xs font-bold text-primary-fixed uppercase tracking-[0.1em] font-mono"
+                            x-text="lang === 'vi' ? 'AI đang tự động chia nhỏ nhiệm vụ...' : 'AI is auto-generating micro-steps...'"></span>
+                    </div>
+
+                    <div class="space-y-2" x-data="{ draggedIdx: null }" x-show="!generatingMicrosteps" x-transition>
+                        <template x-for="(sub, idx) in editSubtasks" :key="idx">
+                            <div class="flex items-center gap-2" :class="draggedIdx === idx ? 'opacity-40' : ''"
+                                :draggable="selectedTask?.status !== 'done'"
+                                @dragstart="draggedIdx = idx; $event.dataTransfer.effectAllowed = 'move';"
+                                @dragover.prevent="$event.dataTransfer.dropEffect = 'move';" @drop.prevent="
+                                    if (draggedIdx !== null && draggedIdx !== idx) {
+                                        const subtasks = editSubtasks;
+                                        const item = subtasks.splice(draggedIdx, 1)[0];
+                                        subtasks.splice(idx, 0, item);
+                                    }
+                                    draggedIdx = null;
+                                " @dragend="draggedIdx = null">
+                                <span x-show="selectedTask?.status !== 'done'"
+                                    class="material-symbols-outlined text-outline-variant cursor-grab active:cursor-grabbing hover:text-white transition-colors">drag_indicator</span>
+                                <input type="text" x-model="sub.editTitle[lang]"
+                                    :readonly="selectedTask?.status === 'done'"
+                                    class="flex-1 bg-surface-variant/30 border border-outline-variant/30 rounded p-2 text-[15px] text-white focus:border-primary-fixed subtask-input"
+                                    :class="{ 'completed': sub.completed, 'opacity-70 cursor-not-allowed': selectedTask?.status === 'done' }"
+                                    :placeholder="lang === 'en' ? 'Step details...' : 'Tên bước nhỏ...'" />
+                                <!-- Nút tick hoàn thành subtask -->
+                                <button x-show="selectedTask && selectedTask.status === 'in_progress'"
+                                    @click="sub.completed = !sub.completed"
+                                    class="p-2 transition-all duration-300 hover:scale-110 flex items-center justify-center rounded-md shrink-0"
+                                    :class="sub.completed ? 'text-primary-fixed bg-primary-fixed/10' : 'text-on-surface-variant/50 hover:text-white hover:bg-surface-variant/20'"
+                                    title="Hoàn thành / Complete">
+                                    <span class="material-symbols-outlined text-[19px]"
+                                        x-text="sub.completed ? 'check_box' : 'check_box_outline_blank'"></span>
+                                </button>
+                                <button @click="editSubtasks.splice(idx, 1)" x-show="selectedTask?.status !== 'done'"
+                                    class="text-error/70 hover:text-error p-2 shrink-0"><span
+                                        class="material-symbols-outlined text-[19px]">delete</span></button>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+
+                <div x-show="selectedTask?.status === 'done'">
+                    <div class="flex justify-between items-center mb-2 mt-4">
+                        <label class="block text-[14px] font-bold text-on-surface-variant normal-case tracking-widest"
+                            x-text="lang === 'en' ? 'Task Reflection' : 'Cảm Nghĩ Về Nhiệm Vụ'"></label>
+                    </div>
+                    <textarea x-model="selectedTask.feedback" rows="4"
+                        class="w-full bg-surface-variant/50 border border-outline-variant/50 rounded-lg p-3 text-white focus:border-primary-fixed focus:ring-1 focus:ring-primary-fixed transition-colors text-[15px] resize-none"
+                        :placeholder="lang === 'en' ? 'Your reflection...' : 'Cảm nghĩ của bạn về nhiệm vụ này...'"></textarea>
+                </div>
+            </div>
+
+            <div class="p-6 border-t border-outline-variant/30 bg-surface/50 flex justify-between items-center gap-3">
+                <button @click="confirmDeleteTask()" x-show="selectedTask?.status !== 'done'"
+                    class="flex items-center gap-2 text-error hover:bg-error/10 px-4 py-2 rounded-lg transition-colors font-bold text-[15px]">
+                    <span class="material-symbols-outlined text-[19px]">delete</span> <span
+                        x-text="lang === 'en' ? 'Delete' : 'Xóa'"></span>
+                </button>
+                <!-- Dùng empty div đẩy nút Đóng sang phải nếu nút Xóa bị ẩn -->
+                <div x-show="selectedTask?.status === 'done'"></div>
+                <div class="flex gap-3">
+                    <button @click="showPlanModal = false"
+                        class="px-6 py-2 rounded-lg font-bold text-on-surface-variant hover:bg-surface-variant transition-colors"><span
+                            x-text="lang === 'en' ? 'Cancel' : 'Đóng'"></span></button>
+                    <button @click="savePlan()"
+                        class="px-6 py-2 bg-primary-fixed text-background rounded-lg font-bold hover:bg-white transition-colors"><span
+                            x-text="selectedTask?.status === 'done' ? (lang === 'en' ? 'Save' : 'Lưu') : (lang === 'en' ? 'Save Plan' : 'Lưu Kế Hoạch')"></span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DELETE CONFIRM MODAL (Glassmorphism) -->
+    <div x-show="showDeleteModal" x-transition.opacity
+        class="fixed inset-0 z-[100] bg-black/60  flex items-center justify-center p-4">
+        <div class="glass-panel border border-error/30 w-full max-w-sm rounded-2xl p-6 flex flex-col shadow-2xl relative text-center"
+            @click.away="showDeleteModal = false">
+            <div class="w-16 h-16 rounded-full bg-error/10 flex items-center justify-center mx-auto mb-4 border border-error/30 shadow-[0_0_20px_rgba(255,59,48,0.2)]">
+                <span class="material-symbols-outlined text-[32px] text-error">delete_forever</span>
+            </div>
+            <h3 class="font-headline-sm text-[21px] text-white font-bold mb-2" x-text="lang === 'en' ? 'Delete Task?' : 'Xóa nhiệm vụ?'"></h3>
+            <p class="text-on-surface-variant/80 text-[14px] mb-6 leading-relaxed" x-text="lang === 'en' ? 'Are you sure you want to permanently delete this task? This action cannot be undone.' : 'Bạn có chắc chắn muốn xóa task này vĩnh viễn không? Hành động này không thể hoàn tác.'"></p>
+            <div class="flex items-center gap-3 w-full">
+                <button @click="showDeleteModal = false"
+                    class="flex-1 py-3 rounded-xl font-bold border border-outline-variant/30 text-on-surface-variant hover:bg-surface-variant/50 hover:text-white transition-colors">
+                    <span x-text="lang === 'en' ? 'Cancel' : 'Hủy'"></span>
+                </button>
+                <button @click="executeDeleteTask()"
+                    class="flex-1 py-3 rounded-xl font-bold bg-error text-white hover:bg-error/80 transition-colors shadow-[0_0_15px_rgba(255,59,48,0.3)] flex items-center justify-center gap-2">
+                    <span class="material-symbols-outlined text-[19px]">delete</span>
+                    <span x-text="lang === 'en' ? 'Delete' : 'Xóa'"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI CHECK-IN MODAL (CHECK & ACT) -->
+    <div x-show="showCheckModal" x-transition
+        class="fixed inset-0 z-[60] bg-black/80  flex items-center justify-center p-4">
+        <div class="bg-surface border border-outline-variant/50 w-full max-w-2xl rounded-2xl flex flex-col shadow-2xl overflow-hidden relative"
+            @click.away="showCheckModal = false">
+
+            <!-- Dynamic Header based on Status -->
+            <div class="p-6 border-b border-outline-variant/30 flex items-start gap-4 relative overflow-hidden"
+                :class="checkTask?.status === 'done' ? 'bg-green-500/10' : 'bg-error/10'">
+                <div class="absolute right-0 top-0 opacity-10 pointer-events-none">
+                    <span class="material-symbols-outlined text-[121px]"
+                        x-text="checkTask?.status === 'done' ? 'emoji_events' : 'psychology_alt'"></span>
+                </div>
+                <div class="w-12 h-12 rounded-full flex items-center justify-center shrink-0 border-2 z-10"
+                    :class="checkTask?.status === 'done' ? 'bg-green-500/20 border-green-500/50 text-green-400' : 'bg-error/20 border-error/50 text-error'">
+                    <span class="material-symbols-outlined text-[25px]"
+                        x-text="checkTask?.status === 'done' ? 'check' : 'warning'"></span>
+                </div>
+                <div class="z-10">
+                    <h3 class="font-headline-md text-[21px] text-white"
+                        x-text="checkTask?.status === 'done' ? (lang === 'en' ? 'Congratulations on completing the task!' : 'Chúc mừng đã hoàn thành nhiệm vụ!') : (lang === 'en' ? 'AI Check-in: Barrier Analysis' : 'AI Check-in: Phân Tích Lực Cản')">
+                    </h3>
+                    <p class="text-[15px] text-on-surface-variant mt-1" x-text="cleanText(checkTask?.title)"></p>
+                </div>
+            </div>
+
+            <div class="p-6 flex-1 space-y-6">
+                <!-- AI Socratic Prompt -->
+                <div class="bg-surface-variant/40 border border-outline-variant/30 p-5 rounded-xl relative">
+                    <div
+                        class="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-primary-fixed flex items-center justify-center border-4 border-surface shadow-lg">
+                        <span class="material-symbols-outlined text-[17px] text-background">psychology</span>
+                    </div>
+                    <p class="text-[17px] text-on-surface italic leading-relaxed ml-2"
+                        x-text="checkTask?.status === 'done' 
+                            ? (lang === 'en' ? 'Excellent job! What core driver helped you stay focused and complete this task?' : 'Bạn đã làm rất tốt! Yếu tố cốt lõi nào đã giúp bạn giữ được sự tập trung và hoàn thành nhiệm vụ này?')
+                            : (lang === 'en' ? 'It seems this task is stuck. Don\'t worry. Be honest: what was your biggest barrier during execution? (Due to wrong time estimation, lack of resources, or psychological barriers?)' : 'Có vẻ như task này đang bị kẹt. Đừng lo lắng. Hãy trung thực nhìn nhận: Rào cản lớn nhất của bạn lúc thực thi là gì? (Do ước lượng sai thời gian, thiếu tài nguyên hay do rào cản tâm lý?)')">
+                    </p>
+                </div>
+
+                <!-- User Reflection Input -->
+                <div>
+                    <label class="block text-[14px] font-bold text-on-surface-variant normal-case tracking-widest mb-2"
+                        x-text="lang === 'en' ? 'Your review' : 'Đánh giá của bạn'"></label>
+                    <textarea x-model="checkFeedback" rows="4"
+                        class="w-full bg-background border border-outline-variant/50 rounded-lg p-4 text-white focus:border-primary-fixed focus:ring-1 focus:ring-primary-fixed transition-colors text-[15px] resize-none"
+                        :placeholder="lang === 'en' ? 'Document your learning breakthroughs or core barriers here...' : 'Ghi lại bài học hoặc đánh giá tại đây...'"></textarea>
+                </div>
+            </div>
+
+            <!-- ACT Phase Actions -->
+            <div
+                class="p-6 border-t border-outline-variant/30 bg-surface/50 flex flex-wrap justify-between items-center gap-4">
+                <p class="text-[14px] text-on-surface-variant/70 italic flex-1 min-w-[200px]"
+                    x-html="lang === 'en' ? 'This data will be used by the <span class=\'text-primary-fixed\'>AI Coach to update your Mindset</span> in future sessions.' : 'Dữ liệu này sẽ được dùng để <span class=\'text-primary-fixed\'>AI tham vấn hiểu hơn</span> về bạn trong các phiên làm việc tới.'">
+                </p>
+
+                <div class="flex flex-wrap justify-end gap-3 shrink-0 w-full sm:w-auto">
+                    <!-- ACT = Publish / Finish -->
+                    <template x-if="checkTask?.status === 'done'">
+                        <button @click="actPublish()"
+                            class="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 bg-surface-variant border border-primary-fixed/50 text-primary-fixed rounded-lg font-bold hover:bg-primary-fixed/10 transition-colors text-[15px]">
+                            <span class="material-symbols-outlined text-[19px]">public</span> <span
+                                x-text="lang === 'en' ? 'Publish to AOA' : 'Đăng lên AOA'"></span>
+                        </button>
+                    </template>
+
+                    <button @click="submitCheck()"
+                        class="flex-1 sm:flex-none px-4 py-2 bg-primary-fixed text-background rounded-lg font-bold hover:bg-white transition-colors text-[15px]">
+                        <span x-text="lang === 'en' ? 'Save' : 'Lưu'"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Global Toast Notification -->
+    <div id="global-toast"
+        style="display:none;position:fixed;bottom:24px;right:24px;z-index:9999;padding:12px 20px;border-radius:12px;border:1px solid;box-shadow:0 8px 30px rgba(0,0,0,0.4);display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;transition:opacity 0.3s;opacity:0;pointer-events:none;"
+        class="flex items-center gap-3">
+        <span id="global-toast-icon" style="font-family:'Material Symbols Outlined';font-size:19px;">check_circle</span>
+        <span id="global-toast-msg"></span>
+    </div>
+
+    <script>
+        function showGlobalToast(msg, type) {
+            const el = document.getElementById('global-toast');
+            const icon = document.getElementById('global-toast-icon');
+            const msgEl = document.getElementById('global-toast-msg');
+            if (!el) return;
+            el.setAttribute('data-type', type || 'info');
+            msgEl.textContent = msg;
+            if (type === 'success') {
+                el.style.background = 'rgba(6,78,59,0.95)';
+                el.style.borderColor = 'rgba(74,222,128,0.5)';
+                el.style.color = '#86efac';
+                icon.textContent = 'check_circle';
+            } else if (type === 'error') {
+                el.style.background = 'rgba(69,10,10,0.95)';
+                el.style.borderColor = 'rgba(255,180,171,0.5)';
+                el.style.color = '#ffb4ab';
+                icon.textContent = 'error';
+            } else {
+                el.style.background = 'rgba(22,27,34,0.97)';
+                el.style.borderColor = 'rgba(255,225,109,0.4)';
+                el.style.color = '#fbbf24';
+                icon.textContent = 'info';
+            }
+            el.style.display = 'flex';
+            setTimeout(() => el.style.opacity = '1', 10);
+            clearTimeout(el._hideTimer);
+            el._hideTimer = setTimeout(() => {
+                el.style.opacity = '0';
+                setTimeout(() => el.style.display = 'none', 300);
+            }, 3500);
+        }
+
+        function tasksApp() {
+            return {
+                isSidebarCollapsed: localStorage.getItem('thapsang_sidebar_collapsed') === 'true',
+                toggleSidebar() {
+                    this.isSidebarCollapsed = !this.isSidebarCollapsed;
+                    localStorage.setItem('thapsang_sidebar_collapsed', this.isSidebarCollapsed);
+                },
+                user: JSON.parse(localStorage.getItem('thapsang_user') || '{}'),
+                tasks: [],
+                draggedTaskId: null,
+                dragOverCol: null,
+                pageLoading: true,
+                activePanel: 'backlog',
+
+                // Modals
+                showPlanModal: false,
+                generatingMicrosteps: false,
+                notifications: [],
+                selectedTask: {
+                    title: '',
+                    goal: '',
+                    deadline: '',
+                    effort: 1,
+                    subtasks: [],
+                    contextLink: ''
+                },
+                editTitle: { vi: '', en: '' },
+                editGoal: { vi: '', en: '' },
+                editSubtasks: [],
+                planModalSnapshot: null,
+                lang: localStorage.getItem('thapsang_lang') || 'vi',
+                toSentenceCase(str) {
+                    if (!str) return '';
+                    str = String(str).trim();
+                    if (str.length === 0) return '';
+                    const lower = str.toLowerCase();
+                    return lower.replace(/(^\s*|[.!?]\s+)(.)/g, (match, separator, char) => {
+                        return separator + char.toUpperCase();
+                    });
+                },
+                toTitleCase(str) {
+                    if (!str) return '';
+                    str = String(str).trim();
+                    if (str.length === 0) return '';
+                    return str.toLowerCase().replace(/(^\s*|[.\s]+)(.)/g, (match, separator, char) => {
+                        return separator + char.toUpperCase();
+                    });
+                },
+                cleanText(text) {
+                    if (!text) return '';
+                    if (typeof text === 'string' && (text.startsWith('{') || text.startsWith('['))) {
+                        return text;
+                    }
+                    let result = text;
+                    if (text.includes(' ||| ')) {
+                        const parts = text.split(' ||| ');
+                        if (parts.length > 1) {
+                            result = this.lang === 'en' ? parts[1].trim() : parts[0].trim();
+                        }
+                    } else {
+                        let separator = null;
+                        if (text.includes(' / ')) separator = ' / ';
+                        else if (text.includes(' | ')) separator = ' | ';
+                        else if (text.includes('/')) separator = '/';
+                        else if (text.includes('|')) separator = '|';
+
+                        if (separator) {
+                            const parts = text.split(separator);
+                            if (parts.length > 1) {
+                                const p0 = parts[0].trim();
+                                const p1 = parts[1].trim();
+
+                                // Regex for detecting Vietnamese accented characters
+                                const viRegex = /[àáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệđìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵ]/i;
+                                const hasViAccents0 = viRegex.test(p0);
+                                const hasViAccents1 = viRegex.test(p1);
+
+                                let vi = p0;
+                                let en = p1;
+
+                                if (hasViAccents1 && !hasViAccents0) {
+                                    vi = p1;
+                                    en = p0;
+                                } else if (hasViAccents0 && !hasViAccents1) {
+                                    vi = p0;
+                                    en = p1;
+                                } else {
+                                    // Fallback: check common Vietnamese lowercase words/consonants
+                                    const commonViWords = /\b(tôi|bạn|học|tuần|nhiệm|vụ|cốt|lõi|bổ|trợ|phụ|bài|nhật|ký|chiêm|nghiệm|định|kiến|thông|tin|mục|tiêu|chặng)\b/i;
+                                    if (commonViWords.test(p1) && !commonViWords.test(p0)) {
+                                        vi = p1;
+                                        en = p0;
+                                    } else if (commonViWords.test(p0) && !commonViWords.test(p1)) {
+                                        vi = p0;
+                                        en = p1;
+                                    } else {
+                                        vi = p0;
+                                        en = p1;
+                                    }
+                                }
+                                result = this.lang === 'en' ? en : vi;
+                            }
+                        }
+                    }
+                    return this.toSentenceCase(result);
+                },
+
+                showCheckModal: false,
+                showDeleteModal: false,
+                checkTask: null,
+                checkFeedback: '',
+                selectedSessionFilter: 'all',
+                get uniqueSessions() {
+                    const sessions = this.tasks
+                        .map(t => t.contextLink)
+                        .filter(link => link && link.trim() !== '');
+                    return [...new Set(sessions)];
+                },
+
+                async init() {
+                    this.$watch('lang', (newVal) => {
+                        this.checkDeadlines();
+                    });
+                    this.pageLoading = true;
+                    // Xóa cache cũ nếu có để giải phóng bộ nhớ
+                    localStorage.removeItem(`thapsang_pdca_tasks_${this.user?.username || 'user'}`);
+
+                    // Xóa cache API cho các endpoints nhiệm vụ/trò chuyện để tránh đệm/cache
+                    if (window.caches) {
+                        try {
+                            const cache = await caches.open('thapsang-api-cache-v1');
+                            const keys = await cache.keys();
+                            for (const r of keys) {
+                                if (r.url.includes('/api/v1/tasks') || r.url.includes('/api/v1/db/chats')) {
+                                    await cache.delete(r);
+                                }
+                            }
+                        } catch (e) {
+                            console.warn('Failed to clear Cache API:', e);
+                        }
+                    }
+
+                    this.tasks = [];
+
+                    // Deduplicate immediately upon loading
+                    this.deduplicateTasks();
+
+                    // Luôn đồng bộ profile từ backend để sidebar hiển thị đúng tên/avatar
+                    await this.refreshProfileFromBackend();
+
+                    // Tải dữ liệu chính chủ từ server và đồng bộ ngược lên
+                    await this.loadTasksFromServer();
+
+                    // Sync tasks từ Coach AI Sessions
+                    await this.syncFromCoach();
+
+                    this.checkDeadlines();
+
+                    // Trì hoãn nhẹ 400ms để hiệu ứng loading chuyển trang mượt mà
+                    setTimeout(() => {
+                        this.pageLoading = false;
+                    }, 400);
+                },
+
+                deduplicateTasks() {
+                    const clean = (str) => (str || "").normalize("NFC").substring(0, 255).replace(/[\s\r\n]+/g, ' ').trim().toLowerCase();
+                    const seen = new Set();
+                    const unique = [];
+                    let hasDuplicates = false;
+                    for (const t of this.tasks) {
+                        const key = clean(t.title) + '|' + clean(t.contextLink);
+                        if (seen.has(key)) {
+                            hasDuplicates = true;
+                            // Silently delete duplicate from server if it has a real DB id
+                            if (t.id && !String(t.id).startsWith('cohort_')) {
+                                fetch(`/api/v1/tasks/${t.id}`, { method: 'DELETE' }).catch(() => { });
+                            }
+                        } else {
+                            seen.add(key);
+                            unique.push(t);
+                        }
+                    }
+                    this.tasks = unique;
+                    if (hasDuplicates || this.tasks.length !== unique.length) {
+                        this.saveToLocal();
+                    }
+                },
+
+                async loadTasksFromServer() {
+                    if (!this.user || !this.user.username) return;
+                    try {
+                        const res = await fetch(`/api/v1/tasks/${encodeURIComponent(this.user.email || this.user.username)}`);
+                        if (res.ok) {
+                            const serverTasks = await res.json();
+
+                            // Migration block removed to prevent resurrecting deleted tasks
+
+                            this.tasks = serverTasks;
+                            this.deduplicateTasks();
+                            this.checkDeadlines();
+                        }
+                    } catch (e) {
+                        console.error("Lỗi tải tasks từ server:", e);
+                    }
+                },
+
+                async syncFromCoach() {
+                    if (!this.user || !this.user.username) return;
+                    try {
+                        const res = await fetch(`/api/v1/db/chats?username=${encodeURIComponent(this.user.email || this.user.username)}`);
+                        if (res.ok) {
+                            const chats = await res.json();
+                            let isUpdated = false;
+                            const clean = (str) => (str || "").normalize("NFC").substring(0, 255).replace(/[\s\r\n]+/g, ' ').trim().toLowerCase();
+
+                            if (!this.syncingTasksLock) this.syncingTasksLock = new Set();
+
+                            for (const chatId of Object.keys(chats)) {
+                                const chat = chats[chatId];
+                                let chatUpdated = false;
+                                if (chat.tasks && chat.tasks.length > 0) {
+                                    for (const t of chat.tasks) {
+                                        if (t.synced) continue;
+
+                                        let title = '';
+                                        let goal = '';
+                                        if (t.content_vi && t.content_en) {
+                                            title = `${t.content_vi} ||| ${t.content_en}`;
+                                        } else {
+                                            title = typeof t === 'string' ? t : (t.content || '');
+                                        }
+
+                                        if (t.goal_vi && t.goal_en) {
+                                            goal = `${t.goal_vi} ||| ${t.goal_en}`;
+                                        } else {
+                                            goal = typeof t === 'object' ? (t.goal || 'Được phân tích từ luồng suy nghĩ Socratic ||| Analyzed from Socratic dialogue') : 'Được phân tích từ luồng suy nghĩ Socratic ||| Analyzed from Socratic dialogue';
+                                        }
+
+                                        if (!title.trim()) continue;
+                                        const exists = this.tasks.find(pt => {
+                                            const ptTitle = clean(pt.title);
+                                            const ptOriginal = clean(pt.originalContent);
+                                            const cleanTTitle = clean(title);
+                                            const cleanTVi = clean(t.content_vi || '');
+                                            const cleanTEn = clean(t.content_en || '');
+                                            const cleanTContent = clean(t.content || '');
+
+                                            return ptTitle === cleanTTitle ||
+                                                ptOriginal === cleanTTitle ||
+                                                (cleanTVi && (ptTitle.includes(cleanTVi) || ptOriginal.includes(cleanTVi))) ||
+                                                (cleanTEn && (ptTitle.includes(cleanTEn) || ptOriginal.includes(cleanTEn))) ||
+                                                (cleanTContent && (ptTitle.includes(cleanTContent) || ptOriginal.includes(cleanTContent)));
+                                        });
+
+                                        if (exists) {
+                                            t.synced = true;
+                                            chatUpdated = true;
+                                            continue;
+                                        }
+
+                                        if (!exists) {
+                                            const aiMsgWithTitle = chat.chat_history?.find(m => m.title || m.reasoning);
+                                            const sessionTitle = chat.custom_title || (aiMsgWithTitle ? (aiMsgWithTitle.title || aiMsgWithTitle.reasoning) : "Coach Session");
+
+                                            // Không cho phép đồng bộ Task của lộ trình The Great Rebuild sang trang Task chung
+                                            const sTitleLower = sessionTitle.toLowerCase();
+                                            if (sTitleLower.includes("great rebuild") || sTitleLower.includes("tái thiết") || sTitleLower.includes("roadmap") || sTitleLower.includes("lộ trình")) {
+                                                continue;
+                                            }
+
+                                            // Prevent concurrent POSTs
+                                            const syncKey = clean(title) + '|' + clean(sessionTitle);
+                                            if (this.syncingTasksLock.has(syncKey)) {
+                                                t.synced = true;
+                                                chatUpdated = true;
+                                                continue;
+                                            }
+                                            this.syncingTasksLock.add(syncKey);
+
+                                            const payload = {
+                                                title: title,
+                                                goal: goal,
+                                                status: 'backlog',
+                                                deadline: t.deadline || '',
+                                                effort: 1,
+                                                subtasks: [],
+                                                contextLink: sessionTitle
+                                            };
+                                            try {
+                                                const postRes = await fetch(`/api/v1/tasks/${encodeURIComponent(this.user.email || this.user.username)}`, {
+                                                    method: 'POST',
+                                                    headers: { 'Content-Type': 'application/json' },
+                                                    body: JSON.stringify(payload)
+                                                });
+                                                if (postRes.ok) {
+                                                    const data = await postRes.json();
+                                                    const syncedTask = { ...data.task, originalContent: title };
+                                                    this.tasks.push(syncedTask);
+
+                                                    t.synced = true;
+                                                    chatUpdated = true;
+                                                    isUpdated = true;
+                                                }
+                                            } catch (err) {
+                                                console.error("Lỗi lưu task đồng bộ lên server:", err);
+                                            }
+                                        }
+                                    }
+                                }
+
+                                if (chatUpdated) {
+                                    const singleChatPayload = {};
+                                    singleChatPayload[chatId] = chat;
+                                    try {
+                                        await fetch('/api/v1/db/chats', {
+                                            method: 'POST',
+                                            headers: { 'Content-Type': 'application/json' },
+                                            body: JSON.stringify(singleChatPayload)
+                                        });
+                                    } catch (e) { }
+                                }
+                            }
+
+                            if (isUpdated) {
+                                this.deduplicateTasks();
+                                this.checkDeadlines();
+                            }
+                        }
+                    } catch (e) {
+                        console.error("Lỗi đồng bộ Tasks từ Coach:", e);
+                    }
+                },
+
+                saveToLocal() {
+                    const readIds = this.notifications.filter(n => n.read).map(n => n.id);
+                    localStorage.setItem('thapsang_pdca_read_notifications', JSON.stringify(readIds));
+                },
+
+                // --- KANBAN LOGIC ---
+                dragStart(id, ev) {
+                    this.draggedTaskId = id;
+                    ev.target.classList.add('dragging');
+                    ev.dataTransfer.effectAllowed = 'move';
+                },
+                dragEnd(ev) {
+                    ev.target.classList.remove('dragging');
+                    this.dragOverCol = null;
+                },
+                async drop(statusCol) {
+                    this.dragOverCol = null;
+                    if (!this.draggedTaskId) return;
+
+                    const idx = this.tasks.findIndex(t => t.id === this.draggedTaskId);
+                    if (idx > -1) {
+                        const oldStatus = this.tasks[idx].status;
+                        if (oldStatus !== statusCol) {
+                            const originalTask = JSON.parse(JSON.stringify(this.tasks[idx]));
+
+                            // 1. Cập nhật trạng thái cục bộ ngay lập tức (Optimistic UI)
+                            this.tasks[idx].status = statusCol;
+                            this.saveToLocal();
+                            this.checkDeadlines();
+
+                            // Chuẩn bị payload đồng bộ
+                            const updatePayload = { ...originalTask, status: statusCol };
+
+                            // 2. Chạy ngầm việc đồng bộ hóa lên máy chủ
+                            try {
+                                const res = await fetch(`/api/v1/tasks/${this.draggedTaskId}`, {
+                                    method: 'PATCH',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify(updatePayload)
+                                });
+                                if (res.ok) {
+                                    const data = await res.json();
+                                    // Cập nhật lại với dữ liệu chính xác từ máy chủ
+                                    const currentIdx = this.tasks.findIndex(t => t.id === this.draggedTaskId);
+                                    if (currentIdx > -1) {
+                                        this.tasks[currentIdx] = data.task;
+                                        this.saveToLocal();
+                                        this.checkDeadlines();
+
+                                        if (statusCol === 'done') {
+                                            setTimeout(() => {
+                                                if (!this.tasks[currentIdx].contextLink || !this.tasks[currentIdx].contextLink.toLowerCase().includes('lộ trình cá nhân')) {
+                                                    this.openCheckModal(this.tasks[currentIdx]);
+                                                }
+                                            }, 200);
+                                        }
+                                    }
+                                } else {
+                                    showGlobalToast("Đồng bộ trạng thái thất bại. Đang khôi phục...", "error");
+                                    // Khôi phục lại trạng thái cũ nếu lỗi
+                                    const revertIdx = this.tasks.findIndex(t => t.id === this.draggedTaskId);
+                                    if (revertIdx > -1) {
+                                        this.tasks[revertIdx].status = oldStatus;
+                                        this.saveToLocal();
+                                        this.checkDeadlines();
+                                    }
+                                }
+                            } catch (e) {
+                                console.error("Lỗi cập nhật trạng thái:", e);
+                                showGlobalToast("Mất kết nối máy chủ. Đang khôi phục...", "error");
+                                // Khôi phục lại trạng thái cũ nếu lỗi kết nối
+                                const revertIdx = this.tasks.findIndex(t => t.id === this.draggedTaskId);
+                                if (revertIdx > -1) {
+                                    this.tasks[revertIdx].status = oldStatus;
+                                    this.saveToLocal();
+                                    this.checkDeadlines();
+                                }
+                            }
+                        }
+                    }
+                    this.draggedTaskId = null;
+                },
+
+                async addTask() {
+                    const payload = {
+                        title: 'Nhiệm vụ mới',
+                        goal: '',
+                        status: 'backlog',
+                        deadline: '',
+                        effort: 1,
+                        subtasks: [],
+                        contextLink: 'Tạo thủ công'
+                    };
+                    try {
+                        const res = await fetch(`/api/v1/tasks/${encodeURIComponent(this.user.email || this.user.username)}`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+                        if (res.ok) {
+                            const data = await res.json();
+                            this.tasks.push(data.task);
+                            this.saveToLocal();
+                            this.openPlanModal(data.task);
+                        } else {
+                            showGlobalToast("Không thể tạo nhiệm vụ trên máy chủ.", "error");
+                        }
+                    } catch (e) {
+                        console.error("Lỗi khi thêm nhiệm vụ:", e);
+                        showGlobalToast("Không thể kết nối đến máy chủ.", "error");
+                    }
+                },
+
+                // --- PLAN PHASE ---
+                openPlanModal(task) {
+                    this.selectedTask = JSON.parse(JSON.stringify(task)); // Deep copy
+
+                    const splitBilingual = (str) => {
+                        if (!str) return { vi: '', en: '' };
+                        if (str.includes(' ||| ')) {
+                            const parts = str.split(' ||| ');
+                            return { vi: parts[0] || '', en: parts[1] || '' };
+                        }
+                        return { vi: str, en: str };
+                    };
+
+                    this.editTitle = splitBilingual(task.title);
+                    this.editGoal = splitBilingual(task.goal);
+
+                    this.editSubtasks = (task.subtasks || []).map(sub => {
+                        return {
+                            completed: sub.completed || false,
+                            editTitle: splitBilingual(sub.title)
+                        };
+                    });
+
+                    // Chụp ảnh nhanh trạng thái ban đầu của các trường thông tin để phát hiện thay đổi
+                    this.planModalSnapshot = JSON.stringify({
+                        title: this.editTitle,
+                        goal: this.editGoal,
+                        effort: this.selectedTask.effort,
+                        deadline: this.selectedTask.deadline || '',
+                        subtasks: this.editSubtasks,
+                        status: this.selectedTask.status || '',
+                        feedback: this.selectedTask.feedback || ''
+                    });
+
+                    this.showPlanModal = true;
+                },
+                checkDeadlines() {
+                    this.notifications = [];
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+
+                    const savedRead = localStorage.getItem('thapsang_pdca_read_notifications');
+                    const readIds = savedRead ? JSON.parse(savedRead) : [];
+
+                    this.tasks.forEach(task => {
+                        if (task.status !== 'done' && task.deadline) {
+                            const due = new Date(task.deadline.replace(/-/g, '/'));
+                            due.setHours(0, 0, 0, 0);
+
+                            const diffTime = due.getTime() - today.getTime();
+                            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                            if (diffDays >= 0 && diffDays <= 1) {
+                                let msg = '';
+                                if (diffDays === 0) {
+                                    msg = this.lang === 'en'
+                                        ? `Task "${this.cleanText(task.title)}" is due TODAY! Complete it now.`
+                                        : `Nhiệm vụ "${this.cleanText(task.title)}" HẾT HẠN HÔM NAY! Mau chóng hoàn thành.`;
+                                } else {
+                                    msg = this.lang === 'en'
+                                        ? `Task "${this.cleanText(task.title)}" is due tomorrow (${task.deadline}).`
+                                        : `Nhiệm vụ "${this.cleanText(task.title)}" sắp hết hạn ngày mai (${task.deadline}), hãy hoàn thành sớm.`;
+                                }
+
+                                this.notifications.push({
+                                    id: task.id,
+                                    task: task,
+                                    message: msg,
+                                    type: 'warning',
+                                    time: diffDays === 0
+                                        ? (this.lang === 'en' ? 'Today' : 'Hôm nay')
+                                        : (this.lang === 'en' ? 'Tomorrow' : 'Ngày mai'),
+                                    read: readIds.includes(task.id)
+                                });
+                            } else if (diffDays < 0) {
+                                const overdueDays = Math.abs(diffDays);
+                                const msg = this.lang === 'en'
+                                    ? `Task "${this.cleanText(task.title)}" is overdue by ${overdueDays} day(s)!`
+                                    : `Nhiệm vụ "${this.cleanText(task.title)}" đã trễ hạn ${overdueDays} ngày!`;
+
+                                this.notifications.push({
+                                    id: task.id,
+                                    task: task,
+                                    message: msg,
+                                    type: 'error',
+                                    time: this.lang === 'en' ? 'Overdue' : 'Quá hạn',
+                                    read: readIds.includes(task.id)
+                                });
+                            }
+                        }
+                    });
+                },
+                async triggerAiMicrosteps() {
+                    if (!this.selectedTask) return;
+
+                    const joinBilingual = (obj) => {
+                        const vi = (obj.vi || '').trim();
+                        const en = (obj.en || '').trim();
+                        if (vi && en) return `${vi} ||| ${en}`;
+                        return vi || en || '';
+                    };
+
+                    const title = joinBilingual(this.editTitle);
+                    const goal = joinBilingual(this.editGoal);
+                    const effort = parseInt(this.selectedTask.effort) || 1;
+                    if (effort < 1) return;
+
+                    this.generatingMicrosteps = true;
+                    try {
+                        const res = await fetch('/api/v1/tasks/generate-microsteps', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                title: title,
+                                goal: goal,
+                                effort: effort,
+                                lang: this.lang
+                            })
+                        });
+                        if (res.ok) {
+                            const data = await res.json();
+                            if (data && Array.isArray(data.subtasks)) {
+                                const splitBilingual = (str) => {
+                                    if (!str) return { vi: '', en: '' };
+                                    if (str.includes(' ||| ')) {
+                                        const parts = str.split(' ||| ');
+                                        return { vi: parts[0] || '', en: parts[1] || '' };
+                                    }
+                                    return { vi: str, en: str };
+                                };
+                                this.editSubtasks = data.subtasks.map(sub => {
+                                    return {
+                                        completed: sub.completed || false,
+                                        editTitle: splitBilingual(sub.title)
+                                    };
+                                });
+                                showGlobalToast(
+                                    this.lang === 'vi' ? 'Đã tự động sinh các bước nhỏ bằng AI!' : 'Auto-generated subtasks using AI!',
+                                    'success'
+                                );
+                            }
+                        } else {
+                            console.error("Failed to generate microsteps via AI.");
+                            showGlobalToast(
+                                this.lang === 'vi' ? 'Không thể kết nối dịch vụ AI. Đang tự động phân rã bước...' : 'Could not reach AI service. Auto-deconstructing steps...',
+                                'info'
+                            );
+                        }
+                    } catch (e) {
+                        console.error("Error generating microsteps:", e);
+                    } finally {
+                        this.generatingMicrosteps = false;
+                    }
+                },
+                async quickMoveStatus() {
+                    if (!this.selectedTask) return;
+                    if (this.selectedTask.status === 'backlog') {
+                        this.selectedTask.status = 'in_progress';
+                    } else if (this.selectedTask.status === 'in_progress') {
+                        this.selectedTask.status = 'done';
+                    }
+                    await this.savePlan();
+                },
+                async savePlan() {
+                    const originalTasksList = JSON.parse(JSON.stringify(this.tasks));
+
+                    try {
+                        // So sánh trạng thái hiện tại với trạng thái ban đầu (Snapshot)
+                        const currentState = JSON.stringify({
+                            title: this.editTitle,
+                            goal: this.editGoal,
+                            effort: this.selectedTask.effort,
+                            deadline: this.selectedTask.deadline || '',
+                            subtasks: this.editSubtasks,
+                            status: this.selectedTask.status || '',
+                            feedback: this.selectedTask.feedback || ''
+                        });
+
+                        const hasChanges = this.planModalSnapshot !== currentState;
+                        if (!hasChanges) {
+                            // Không có thay đổi gì, đóng modal lặng lẽ mà không gọi API hay hiện Toast
+                            this.showPlanModal = false;
+                            return;
+                        }
+                        const joinBilingual = (obj) => {
+                            const vi = this.toSentenceCase(obj.vi || '');
+                            const en = this.toSentenceCase(obj.en || '');
+                            if (vi && en) return `${vi} ||| ${en}`;
+                            return vi || en || '';
+                        };
+
+                        // 1. Chuẩn bị dữ liệu cập nhật
+                        const updatedTitle = joinBilingual(this.editTitle);
+                        const updatedGoal = joinBilingual(this.editGoal);
+                        const updatedSubtasks = this.editSubtasks.map(sub => {
+                            return {
+                                title: joinBilingual(sub.editTitle),
+                                completed: sub.completed
+                            };
+                        });
+
+                        // 2. Cập nhật selectedTask
+                        this.selectedTask.title = updatedTitle;
+                        this.selectedTask.goal = updatedGoal;
+                        this.selectedTask.subtasks = updatedSubtasks;
+
+                        // 3. Cập nhật danh sách nhiệm vụ cục bộ (Optimistic UI)
+                        const idx = this.tasks.findIndex(t => t.id === this.selectedTask.id);
+                        if (idx > -1) {
+                            this.tasks[idx] = {
+                                ...this.tasks[idx],
+                                title: updatedTitle,
+                                goal: updatedGoal,
+                                subtasks: updatedSubtasks,
+                                deadline: this.selectedTask.deadline,
+                                effort: this.selectedTask.effort,
+                                status: this.selectedTask.status,
+                                feedback: this.selectedTask.feedback || ''
+                            };
+                        }
+
+                        // 4. Đóng modal, hiển thị thông báo thành công và cập nhật UI ngay lập tức
+                        this.showPlanModal = false;
+                        const toastMsg = this.selectedTask.status === 'done'
+                            ? (this.lang === 'en' ? "Reflection saved!" : "Đã lưu cảm nghĩ!")
+                            : (this.lang === 'en' ? "Plan saved successfully!" : "Đã lưu kế hoạch thành công!");
+                        showGlobalToast(toastMsg, "success");
+                        this.saveToLocal();
+                        this.checkDeadlines();
+
+                        // 5. Đồng bộ hóa ngầm lên máy chủ
+                        const res = await fetch(`/api/v1/tasks/${this.selectedTask.id}`, {
+                            method: 'PATCH',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(this.selectedTask)
+                        });
+
+                        if (res.ok) {
+                            const data = await res.json();
+                            const finalIdx = this.tasks.findIndex(t => t.id === this.selectedTask.id);
+                            if (finalIdx > -1) {
+                                this.tasks[finalIdx] = data.task;
+                                this.saveToLocal();
+                                this.checkDeadlines();
+                                if (data.task.status === 'done' && (!data.task.contextLink || !data.task.contextLink.toLowerCase().includes('lộ trình cá nhân'))) {
+                                    this.openCheckModal(data.task);
+                                }
+                            }
+                        } else {
+                            console.error("Không thể đồng bộ kế hoạch lên máy chủ.");
+                            showGlobalToast("Không thể đồng bộ với máy chủ. Đang khôi phục...", "error");
+                            this.tasks = originalTasksList;
+                            this.saveToLocal();
+                            this.checkDeadlines();
+                        }
+                    } catch (e) {
+                        console.error("Lỗi đồng bộ kế hoạch:", e);
+                        showGlobalToast("Mất kết nối máy chủ. Đang khôi phục...", "error");
+                        this.tasks = originalTasksList;
+                        this.saveToLocal();
+                        this.checkDeadlines();
+                    }
+                },
+                confirmDeleteTask() {
+                    this.showDeleteModal = true;
+                },
+                async executeDeleteTask() {
+                    this.showDeleteModal = false;
+                    try {
+                        const res = await fetch(`/api/v1/tasks/${this.selectedTask.id}`, {
+                            method: 'DELETE'
+                        });
+                        if (res.ok) {
+                            this.tasks = this.tasks.filter(t => t.id !== this.selectedTask.id);
+                            this.saveToLocal();
+                            this.checkDeadlines();
+                            showGlobalToast("Đã xóa nhiệm vụ thành công!", "success");
+                        } else {
+                            showGlobalToast("Không thể xóa nhiệm vụ trên máy chủ.", "error");
+                        }
+                    } catch (e) {
+                        console.error("Lỗi xóa nhiệm vụ:", e);
+                        showGlobalToast("Không thể kết nối đến máy chủ.", "error");
+                    }
+                    this.showPlanModal = false;
+                },
+
+                // --- DO PHASE (Focus Mode & Actions) ---
+                async moveToCheck(task) {
+                    const targetTask = this.tasks.find(t => t.id === task.id);
+                    if (targetTask) {
+                        const originalTask = JSON.parse(JSON.stringify(targetTask));
+                        originalTask.status = 'done';
+
+                        try {
+                            const res = await fetch(`/api/v1/tasks/${task.id}`, {
+                                method: 'PATCH',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(originalTask)
+                            });
+                            if (res.ok) {
+                                const data = await res.json();
+                                const idx = this.tasks.findIndex(t => t.id === task.id);
+                                if (idx > -1) {
+                                    this.tasks[idx] = data.task;
+                                    this.saveToLocal();
+                                    this.checkDeadlines();
+                                    if (!this.tasks[idx].contextLink || !this.tasks[idx].contextLink.toLowerCase().includes('lộ trình cá nhân')) {
+                                        this.openCheckModal(this.tasks[idx]);
+                                    }
+                                }
+                            } else {
+                                showGlobalToast("Không thể hoàn thành nhiệm vụ trên máy chủ.", "error");
+                            }
+                        } catch (e) {
+                            console.error("Lỗi hoàn thành nhiệm vụ:", e);
+                            showGlobalToast("Không thể kết nối đến máy chủ.", "error");
+                        }
+                    }
+                },
+
+                async toggleSubtask(task) {
+                    try {
+                        const res = await fetch(`/api/v1/tasks/${task.id}`, {
+                            method: 'PATCH',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(task)
+                        });
+                        if (res.ok) {
+                            const data = await res.json();
+                            const idx = this.tasks.findIndex(t => t.id === task.id);
+                            if (idx > -1) {
+                                this.tasks[idx] = data.task;
+                                this.saveToLocal();
+                            }
+                        }
+                    } catch (e) {
+                        console.error("Lỗi lưu trạng thái bước nhỏ:", e);
+                    }
+                },
+
+
+                // --- CHECK & ACT PHASE ---
+                openCheckModal(task) {
+                    this.checkTask = task;
+                    this.checkFeedback = '';
+                    this.showCheckModal = true;
+                },
+                async submitCheck() {
+                    if (this.checkTask) {
+                        this.checkTask.feedback = this.checkFeedback;
+
+                        // Optimistic UI update locally
+                        const idx = this.tasks.findIndex(t => t.id === this.checkTask.id);
+                        if (idx > -1) {
+                            this.tasks[idx].feedback = this.checkFeedback;
+                            this.saveToLocal();
+                        }
+                    }
+
+                    this.showCheckModal = false;
+                    showGlobalToast(this.lang === 'en' ? "Reflection saved!" : "Đã lưu cảm nghĩ!", "success");
+
+                    try {
+                        const res = await fetch(`/api/v1/tasks/${this.checkTask.id}`, {
+                            method: 'PATCH',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(this.checkTask)
+                        });
+                        if (!res.ok) {
+                            console.error("Lỗi lưu phản hồi AI check-in trên server.");
+                        }
+                    } catch (e) {
+                        console.error("Lỗi lưu phản hồi AI check-in:", e);
+                    }
+                },
+                actReplan() {
+                    this.showCheckModal = false;
+                    this.checkTask.status = 'backlog';
+                    // Open Plan modal to break down task
+                    this.openPlanModal(this.checkTask);
+                },
+                actPublish() {
+                    this.showCheckModal = false;
+
+                    if (this.checkTask) {
+                        this.checkTask.feedback = this.checkFeedback;
+
+                        // Optimistic UI update locally
+                        const idx = this.tasks.findIndex(t => t.id === this.checkTask.id);
+                        if (idx > -1) {
+                            this.tasks[idx].feedback = this.checkFeedback;
+                            this.saveToLocal();
+                        }
+
+                        fetch(`/api/v1/tasks/${this.checkTask.id}`, {
+                            method: 'PATCH',
+                            keepalive: true,
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(this.checkTask)
+                        }).catch(e => console.error("Lỗi lưu phản hồi vào task:", e));
+                    } else {
+                        this.saveToLocal();
+                    }
+
+                    // Optimistic UI: Show success toast immediately
+                    showGlobalToast(this.lang === 'en' ? "Successfully posted to AOA Feed community!" : "Đã đăng lên cộng đồng AOA Feed thành công!", "success");
+
+                    // Optimistic API Call: runs in the background
+                    fetch('/api/v1/aoa/posts', {
+                        method: 'POST',
+                        keepalive: true,
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            author_name: this.user.username,
+                            author_displayName: this.user.displayName || this.user.username,
+                            author_avatar: this.user.avatar || "",
+                            content: this.lang === 'en'
+                                ? `Completed: **${this.cleanText(this.checkTask.title)}**\n\n---\n\n💡 **Reflection:**\n${this.checkFeedback}\n\n#Task #Thapsang`
+                                : `Đã hoàn thành: **${this.cleanText(this.checkTask.title)}**\n\n---\n\n💡 **Đánh giá cá nhân:**\n${this.checkFeedback}\n\n#Task #Thapsang`,
+                            graph_data: {},
+                            post_privacy: "public"
+                        })
+                    }).then(res => {
+                        if (!res.ok) {
+                            showGlobalToast(this.lang === 'en' ? "An error occurred while posting." : "Có lỗi xảy ra khi đăng bài ngầm.", "error");
+                        }
+                    }).catch(e => {
+                        console.error("Lỗi khi đăng lên AOA:", e);
+                        showGlobalToast(this.lang === 'en' ? "Cannot connect to the server." : "Không thể kết nối đến máy chủ khi đăng ngầm.", "error");
+                    });
+                },
+
+                async refreshProfileFromBackend() {
+                    if (!this.user || !this.user.username) return;
+                    try {
+                        const res = await fetch(`/api/v1/auth/profile/${encodeURIComponent(this.user.email || this.user.username)}?_t=${Date.now()}`);
+                        if (res.ok) {
+                            const profile = await res.json();
+                            this.user = {
+                                ...this.user,
+                                displayName: profile.displayName || this.user.displayName,
+                                bio: profile.bio || this.user.bio,
+                                avatar: profile.avatar || this.user.avatar,
+                                banner: profile.banner || this.user.banner,
+                                following_list: profile.following_list || this.user.following_list || []
+                            };
+                            localStorage.setItem('thapsang_user', JSON.stringify(this.user));
+                        }
+                    } catch (e) {
+                        console.error("Không thể tải hồ sơ từ máy chủ:", e);
+                    }
+                },
+
+                logout() {
+                    const keys = Object.keys(localStorage);
+                    keys.forEach(k => {
+                        if (k.startsWith('thapsang_cohort_') || k.startsWith('optimistic_aoa_posts') || k === 'thapsang_user' || k === 'thapsang_remembered_email') {
+                            localStorage.removeItem(k);
+                        }
+                    });
+                    window.location.href = '/';
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

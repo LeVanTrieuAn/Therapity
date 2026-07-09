@@ -1,0 +1,13 @@
+{
+  "data": {
+    "createdAt": "2026-06-16T05:53:53.853Z",
+    "speed": 1,
+    "id": "d9ebbd05-f3f4-4bb7-97d1-83fcef5d580c",
+    "media_url": "https://s3.iz.io.vn/mojo-upload/app/2026/06/16/server/generate_voice/f517fc7e-a7ef-4170-8a06-fe46fcc765eb.wav",
+    "status": "done",
+    "text": "Xin chào, đây là bài kiểm tra.",
+    "mojo_voices_fk": "9ad1317a-9dca-41cd-80b2-d3d069a762d3",
+    "error_key": null,
+    "character": 30
+  }
+}
