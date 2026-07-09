@@ -30,7 +30,7 @@ if not api_key:
 import httpx
 client = OpenAI(
     api_key=api_key,
-    base_url=os.getenv("LLM_BASE_URL", "https://llmapi.digiforce.vn/v1"),
+    base_url=os.getenv("LLM_BASE_URL", "http://localhost:11434/v1"),
     timeout=httpx.Timeout(500.0)
 )
 
@@ -1105,7 +1105,7 @@ def personalize_week_endpoint(req: PersonalizeWeekRequest, background_tasks: Bac
             from openai import OpenAI as _OpenAI
             _client = _OpenAI(
                 api_key=os.getenv("OPENAI_API_KEY"),
-                base_url=os.getenv("LLM_BASE_URL", "https://llmapi.digiforce.vn/v1")
+                base_url=os.getenv("LLM_BASE_URL", "http://localhost:11434/v1")
             )
             model_name = os.getenv("LLM_MODEL", "thapsang").split(",")[0].strip()
 
@@ -1620,7 +1620,7 @@ def generate_retrospective_helper(username: str, display_name: str, progress: fl
         from openai import OpenAI as _OpenAI
         _client = _OpenAI(
             api_key=os.getenv("OPENAI_API_KEY"),
-            base_url=os.getenv("LLM_BASE_URL", "https://llmapi.digiforce.vn/v1")
+            base_url=os.getenv("LLM_BASE_URL", "http://localhost:11434/v1")
         )
         resp = _client.chat.completions.create(
             model=os.getenv("LLM_MODEL", "thapsang").split(",")[0].strip(),
@@ -1771,7 +1771,7 @@ Hãy trả về DUY NHẤT một đối tượng JSON hợp lệ tuân thủ ch�
         from openai import OpenAI as _OpenAI
         _client = _OpenAI(
             api_key=os.getenv("OPENAI_API_KEY"),
-            base_url=os.getenv("LLM_BASE_URL", "https://llmapi.digiforce.vn/v1")
+            base_url=os.getenv("LLM_BASE_URL", "http://localhost:11434/v1")
         )
         resp = _client.chat.completions.create(
             model=os.getenv("LLM_MODEL", "thapsang").split(",")[0].strip(),
@@ -2123,7 +2123,7 @@ def create_diary(username: str, req: DiaryEntryRequest):
             from openai import OpenAI as _OpenAI
             _client = _OpenAI(
                 api_key=os.getenv("OPENAI_API_KEY"),
-                base_url=os.getenv("LLM_BASE_URL", "https://llmapi.digiforce.vn/v1")
+                base_url=os.getenv("LLM_BASE_URL", "http://localhost:11434/v1")
             )
             resp = _client.chat.completions.create(
                 model=os.getenv("LLM_MODEL", "thapsang").split(",")[0].strip(),
@@ -3309,7 +3309,7 @@ QUAN TRỌNG NHẤT: BẠN CÓ QUYỀN CẬP NHẬT FILE CŨ HOẶC TẠO FILE M
             from openai import OpenAI as _OpenAI
             _client = _OpenAI(
                 api_key=os.getenv("OPENAI_API_KEY"),
-                base_url=os.getenv("LLM_BASE_URL", "https://llmapi.digiforce.vn/v1")
+                base_url=os.getenv("LLM_BASE_URL", "http://localhost:11434/v1")
             )
             
             model_env = os.getenv("LLM_MODEL", "thapsang")
@@ -4558,7 +4558,7 @@ async def check_voice_status(request: Request):
                             import uuid
                             from urllib.parse import urlparse
                             
-                            cms_base_url = os.getenv("CMS_BASE_URL", "https://thapsang.digiforce.vn/api")
+                            cms_base_url = os.getenv("CMS_BASE_URL", "http://localhost:13000/api")
                             cms_api_key = os.getenv("CMS_API_KEY")
                             upload_headers = {"Authorization": f"Bearer {cms_api_key}"}
                             upload_url = f"{cms_base_url}/attachments:create"
@@ -4628,7 +4628,7 @@ Requirements:
         from openai import OpenAI as _OpenAI
         _client = _OpenAI(
             api_key=os.getenv("OPENAI_API_KEY"),
-            base_url=os.getenv("LLM_BASE_URL", "https://llmapi.digiforce.vn/v1")
+            base_url=os.getenv("LLM_BASE_URL", "http://localhost:11434/v1")
         )
         model_name = os.getenv("LLM_MODEL", "thapsang").split(",")[0].strip()
         

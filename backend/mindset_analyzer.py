@@ -38,7 +38,7 @@ def get_client() -> OpenAI:
     if _ai_client is None:
         _ai_client = OpenAI(
             api_key=os.getenv("OPENAI_API_KEY"),
-            base_url=os.getenv("LLM_BASE_URL", "https://llmapi.digiforce.vn/v1"),
+            base_url=os.getenv("LLM_BASE_URL", "http://localhost:11434/v1"),
         )
     return _ai_client
 

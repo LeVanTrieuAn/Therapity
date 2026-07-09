@@ -7,7 +7,7 @@ load_dotenv("backend/.env")
 api_key = os.getenv("OPENAI_API_KEY")
 client = OpenAI(
     api_key=api_key,
-    base_url=os.getenv("LLM_BASE_URL", "https://llmapi.digiforce.vn/v1")
+    base_url=os.getenv("LLM_BASE_URL", "http://localhost:11434/v1")
 )
 
 try:

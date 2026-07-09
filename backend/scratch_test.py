@@ -53,7 +53,7 @@ try:
     from openai import OpenAI as _OpenAI
     _client = _OpenAI(
         api_key=os.getenv('OPENAI_API_KEY'),
-        base_url=os.getenv('LLM_BASE_URL', 'https://llmapi.digiforce.vn/v1')
+        base_url=os.getenv('LLM_BASE_URL', 'http://localhost:11434/v1')
     )
     model_name = os.getenv('LLM_MODEL', 'thapsang').split(',')[0].strip()
     
