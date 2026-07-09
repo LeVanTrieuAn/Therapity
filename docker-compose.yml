@@ -12,6 +12,7 @@ services:
     volumes:
       - ./database:/app/database
       - ./backend:/app/backend
+      - ./frontend/assets/voices:/app/frontend/assets/voices
     restart: unless-stopped
 
   frontend:

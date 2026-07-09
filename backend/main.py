@@ -4556,25 +4556,15 @@ async def check_voice_status(request: Request):
                         audio_resp = await client.get(media_url, timeout=15.0)
                         if audio_resp.status_code == 200:
                             import uuid
-                            from urllib.parse import urlparse
-                            
-                            cms_base_url = os.getenv("CMS_BASE_URL", "http://localhost:13000/api")
-                            cms_api_key = os.getenv("CMS_API_KEY")
-                            upload_headers = {"Authorization": f"Bearer {cms_api_key}"}
-                            upload_url = f"{cms_base_url}/attachments:create"
-                            
-                            filename = f"voice_{uuid.uuid4().hex}.wav"
-                            files = {"file": (filename, audio_resp.content, "audio/wav")}
-                            
-                            upload_resp = await client.post(upload_url, headers=upload_headers, files=files, timeout=30.0)
-                            if upload_resp.status_code == 200:
-                                upload_data = upload_resp.json().get("data", {})
-                                relative_url = upload_data.get("url")
-                                if relative_url:
-                                    parsed_url = urlparse(cms_base_url)
-                                    cms_origin = f"{parsed_url.scheme}://{parsed_url.netloc}"
-                                    new_media_url = f"{cms_origin}{relative_url}"
-                                    result["data"]["media_url"] = new_media_url
+                             # cms_base_url = os.getenv("CMS_BASE_URL", "http://localhost:13000/api")  # //
+                             # cms_api_key = os.getenv("CMS_API_KEY")  # //
+                             
+                             filename = f"voice_{uuid.uuid4().hex}.wav"
+                             local_path = os.path.join("/app/frontend/assets/voices", filename)
+                             os.makedirs(os.path.dirname(local_path), exist_ok=True)
+                             with open(local_path, "wb") as f:
+                                 f.write(audio_resp.content)
+                             result["data"]["media_url"] = f"/assets/voices/{filename}"
                     except Exception as upload_err:
                         print(f"Error uploading voice to CMS: {upload_err}")
                         

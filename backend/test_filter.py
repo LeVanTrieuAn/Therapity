@@ -5,8 +5,8 @@ from dotenv import load_dotenv
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 load_dotenv(os.path.join(BASE_DIR, ".env"), override=False)
 
-CMS_BASE_URL = os.getenv("CMS_BASE_URL", "http://localhost:13000/api")
-CMS_API_KEY = os.getenv("CMS_API_KEY")
+# CMS_BASE_URL = os.getenv("CMS_BASE_URL", "http://localhost:13000/api")  # //
+# CMS_API_KEY = os.getenv("CMS_API_KEY")  # //
 
 headers = {
     "Authorization": f"Bearer {CMS_API_KEY}",
