@@ -1953,7 +1953,7 @@
                 let apiBase = localStorage.getItem('thapsang_api_base');
                 if (!apiBase) {
                     if (window.location.protocol === 'file:') {
-                        apiBase = 'https://thapsang.mojo.vn';
+                        apiBase = 'http://localhost:8000';
                     } else {
                         apiBase = window.location.origin;
                     }

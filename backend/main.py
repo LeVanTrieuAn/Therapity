@@ -12,7 +12,6 @@ from fastapi.responses import FileResponse
 import uvicorn
 
 import aoa
-import great_rebuild
 import user_profile
 import mindset_analyzer
 import context_learner
@@ -4474,104 +4473,7 @@ def submit_quiz_endpoint(req: SubmitQuizRequest):
     }
 
 
-# --- VOICE API ENDPOINTS ---
-@app.post("/api/v1/voice:generate")
-async def generate_voice(request: Request):
-    try:
-        data = await request.json()
-        text = data.get("text")
-        voice_id = data.get("voice_id")
-        
-        url = "https://mapi.mojo.vn/v2/api/generate"
-        import os
-        api_key = os.getenv("VOICE_API_KEY")
-        if not api_key:
-            raise HTTPException(status_code=500, detail="VOICE_API_KEY is missing")
-        
-        headers = {
-            "Authorization": f"Bearer {api_key}",
-            "Content-Type": "application/json",
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-        }
-        payload = {
-            "platform": "web",
-            "index": "gen-voice",
-            "data": {
-                "app_name": "gen-voice",
-                "speed": 1,
-                "text": text,
-                "voice": voice_id
-            }
-        }
-        
-        import httpx
-        async with httpx.AsyncClient() as client:
-            resp = await client.post(url, headers=headers, json=payload, timeout=15.0)
-            if resp.status_code != 200:
-                print("Mojo API Generate Error:", resp.status_code, resp.text)
-            resp.raise_for_status()
-            result = resp.json()
-            return result
-    except Exception as e:
-        print(f"Error generating voice: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
-
-@app.post("/api/v1/voice:status")
-async def check_voice_status(request: Request):
-    try:
-        data = await request.json()
-        ref_id = data.get("id")
-        
-        url = "https://mapi.mojo.vn/v2/api/get"
-        import os
-        api_key = os.getenv("VOICE_GET_API_KEY")
-        if not api_key:
-            raise HTTPException(status_code=500, detail="VOICE_GET_API_KEY is missing")
-            
-        headers = {
-            "Authorization": f"Bearer {api_key}",
-            "Content-Type": "application/json",
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-        }
-        payload = {
-            "platform": "web",
-            "index": "gen-voice",
-            "data": {
-                "id": ref_id
-            }
-        }
-        
-        import httpx
-        async with httpx.AsyncClient() as client:
-            resp = await client.post(url, headers=headers, json=payload, timeout=15.0)
-            if resp.status_code != 200:
-                print("Mojo API Status Error:", resp.status_code, resp.text)
-            resp.raise_for_status()
-            result = resp.json()
-            
-            if result.get("data", {}).get("status") == "done":
-                media_url = result["data"].get("media_url")
-                if media_url and "mapi.mojo.vn" in media_url:
-                    try:
-                        audio_resp = await client.get(media_url, timeout=15.0)
-                        if audio_resp.status_code == 200:
-                            import uuid
-                            # cms_base_url = os.getenv("CMS_BASE_URL", "http://localhost:13000/api")  # //
-                            # cms_api_key = os.getenv("CMS_API_KEY")  # //
-                            
-                            filename = f"voice_{uuid.uuid4().hex}.wav"
-                            local_path = os.path.join("/app/frontend/assets/voices", filename)
-                            os.makedirs(os.path.dirname(local_path), exist_ok=True)
-                            with open(local_path, "wb") as f:
-                                f.write(audio_resp.content)
-                            result["data"]["media_url"] = f"/assets/voices/{filename}"
-                    except Exception as upload_err:
-                        print(f"Error uploading voice to CMS: {upload_err}")
-                        
-            return result
-    except Exception as e:
-        print(f"Error checking voice status: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+# --- VOICE API ENDPOINTS REMOVED ---
 
 
 # --- TASKS API ENDPOINTS ---
