@@ -4556,15 +4556,15 @@ async def check_voice_status(request: Request):
                         audio_resp = await client.get(media_url, timeout=15.0)
                         if audio_resp.status_code == 200:
                             import uuid
-                             # cms_base_url = os.getenv("CMS_BASE_URL", "http://localhost:13000/api")  # //
-                             # cms_api_key = os.getenv("CMS_API_KEY")  # //
-                             
-                             filename = f"voice_{uuid.uuid4().hex}.wav"
-                             local_path = os.path.join("/app/frontend/assets/voices", filename)
-                             os.makedirs(os.path.dirname(local_path), exist_ok=True)
-                             with open(local_path, "wb") as f:
-                                 f.write(audio_resp.content)
-                             result["data"]["media_url"] = f"/assets/voices/{filename}"
+                            # cms_base_url = os.getenv("CMS_BASE_URL", "http://localhost:13000/api")  # //
+                            # cms_api_key = os.getenv("CMS_API_KEY")  # //
+                            
+                            filename = f"voice_{uuid.uuid4().hex}.wav"
+                            local_path = os.path.join("/app/frontend/assets/voices", filename)
+                            os.makedirs(os.path.dirname(local_path), exist_ok=True)
+                            with open(local_path, "wb") as f:
+                                f.write(audio_resp.content)
+                            result["data"]["media_url"] = f"/assets/voices/{filename}"
                     except Exception as upload_err:
                         print(f"Error uploading voice to CMS: {upload_err}")
                         
