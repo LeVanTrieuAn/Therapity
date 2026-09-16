@@ -11,3 +11,7 @@ check.txt
 temp.txt
 database/debug_login.txt
 brain/
+_legacy/
+node_modules/
+dist/
+.env.local

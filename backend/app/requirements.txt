@@ -1,0 +1,15 @@
+fastapi
+uvicorn[standard]
+pydantic
+pydantic-settings
+python-dotenv
+openai
+httpx
+tiktoken
+sqlalchemy[asyncio]
+asyncpg
+alembic
+bcrypt
+python-jose[cryptography]
+python-multipart
+aiofiles
