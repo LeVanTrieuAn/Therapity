@@ -542,6 +542,36 @@
   .font-display        { font-family: var(--font-display); }
   .font-body           { font-family: var(--font-sans); }
 
+  /* ── Scene background (real generated images) ── */
+  .scene-bg-sunset {
+    background-image: url('/sunset_bg.png');
+    background-size: cover;
+    background-position: center 40%;
+    background-repeat: no-repeat;
+  }
+  .scene-bg-abyss {
+    background-image: url('/abyss_bg.png');
+    background-size: cover;
+    background-position: center 40%;
+    background-repeat: no-repeat;
+  }
+
+  /* ── Taste-skill diamond star shape ── */
+  .ts-diamond {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    background: currentColor;
+    clip-path: polygon(50% 0%, 65% 35%, 100% 50%, 65% 65%, 50% 100%, 35% 65%, 0% 50%, 35% 35%);
+  }
+  .ts-diamond-sm {
+    display: inline-block;
+    width: 0.5em;
+    height: 0.5em;
+    background: currentColor;
+    clip-path: polygon(50% 0%, 65% 35%, 100% 50%, 65% 65%, 50% 100%, 35% 65%, 0% 50%, 35% 35%);
+  }
+
   /* Star field (dark mode) */
   .star-field {
     position: absolute;
@@ -558,18 +588,5 @@
     border-radius: 50%;
     animation: star-twinkle var(--duration, 3s) ease-in-out infinite;
     animation-delay: var(--delay, 0s);
-  }
-
-  /* Wave bg (light mode) */
-  .wave-bg {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 200%;
-    height: 120px;
-    background: linear-gradient(transparent, rgba(199,154,245,0.08));
-    clip-path: polygon(0 60%, 2% 55%, 4% 50%, 6% 55%, 8% 60%, 10% 65%, 12% 60%, 14% 55%, 16% 50%, 18% 55%, 20% 60%, 22% 65%, 24% 60%, 26% 55%, 28% 50%, 30% 55%, 32% 60%, 34% 65%, 36% 60%, 38% 55%, 40% 50%, 42% 55%, 44% 60%, 46% 65%, 48% 60%, 50% 55%, 52% 50%, 54% 55%, 56% 60%, 58% 65%, 60% 60%, 62% 55%, 64% 50%, 66% 55%, 68% 60%, 70% 65%, 72% 60%, 74% 55%, 76% 50%, 78% 55%, 80% 60%, 82% 65%, 84% 60%, 86% 55%, 88% 50%, 90% 55%, 92% 60%, 94% 65%, 96% 60%, 98% 55%, 100% 60%, 100% 100%, 0 100%);
-    animation: wave 8s linear infinite;
-    opacity: 0.5;
   }
 }

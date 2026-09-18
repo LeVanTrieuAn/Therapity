@@ -104,7 +104,7 @@ export default function LoginPage() {
       const res = await authAPI.login({ username: form.email, password: form.password });
       const d = res.data;
       login({ username: d.username, displayName: d.displayName, avatar: d.avatar, bio: d.bio, onboarded: d.onboarded, following_list: d.following_list }, d.access_token, d.refresh_token);
-      navigate(d.onboarded ? '/coach' : '/onboarding');
+      navigate(d.onboarded ? '/dashboard' : '/onboarding');
     } catch (err) { setError(err.response?.data?.detail || 'Lỗi hệ thống'); }
     finally { setLoading(false); }
   };

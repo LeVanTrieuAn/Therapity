@@ -3,6 +3,7 @@ import useAuthStore from './store/authStore';
 import AppLayout from './components/Layout/AppLayout';
 import LoginPage from './pages/LoginPage';
 import OnboardingPage from './pages/OnboardingPage';
+import DashboardPage from './pages/DashboardPage';
 import CoachPage from './pages/CoachPage';
 import DiaryPage from './pages/DiaryPage';
 import TasksPage from './pages/TasksPage';
@@ -21,13 +22,14 @@ export default function App() {
         {/* Public */}
         <Route path="/" element={<LoginPage />} />
 
-        {/* Onboarding (requires auth but no sidebar) */}
+        {/* Onboarding (requires auth, no sidebar) */}
         <Route path="/onboarding" element={
           <ProtectedRoute><OnboardingPage /></ProtectedRoute>
         } />
 
         {/* Protected with Layout */}
         <Route element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
+          <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/coach" element={<CoachPage />} />
           <Route path="/diary" element={<DiaryPage />} />
           <Route path="/tasks" element={<TasksPage />} />
