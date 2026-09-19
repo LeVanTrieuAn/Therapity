@@ -184,7 +184,7 @@ function ActionCard({ to, icon, title, subtitle, gradient, delay = 0 }) {
     >
       <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
         style={{ background: gradient }}>
-        <span style={{ fontSize: '1.2rem' }}>{icon}</span>
+        <span style={{ display: 'flex', color: 'white' }}>{icon}</span>
       </div>
       <div>
         <p className="font-semibold text-sm" style={{ color: 'var(--color-text-primary)' }}>{title}</p>
@@ -339,22 +339,47 @@ export default function DashboardPage() {
         </p>
         <div className="grid grid-cols-2 gap-3 mb-6">
           <ActionCard to="/diary"
-            icon="📓" title={lang === 'en' ? 'Diary' : 'Nhật ký'}
+            icon={
+              <svg width="22" height="22" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M10 3 A7 7 0 0 1 10 17 A5 5 0 0 0 10 3 Z" opacity="0.9"/>
+                <circle cx="14" cy="6" r="1.2"/>
+                <circle cx="15.5" cy="10" r="0.8" opacity="0.6"/>
+              </svg>
+            }
+            title={lang === 'en' ? 'Diary' : 'Nhật ký'}
             subtitle={lang === 'en' ? 'Record reflections' : 'Ghi lại cảm xúc'}
             gradient="linear-gradient(135deg, #F4A8C6, #C9A4F5)"
             delay={0.35}/>
           <ActionCard to="/tasks"
-            icon="✅" title={lang === 'en' ? 'Tasks' : 'Nhiệm vụ'}
+            icon={
+              <svg width="22" height="22" viewBox="0 0 20 20" fill="none">
+                <circle cx="10" cy="10" r="7.5" stroke="currentColor" strokeWidth="1.4"/>
+                <path d="M7 10.5 L9 12.5 L13.5 8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            }
+            title={lang === 'en' ? 'Tasks' : 'Nhiệm vụ'}
             subtitle={lang === 'en' ? 'Track growth actions' : 'Theo dõi hành động'}
             gradient="linear-gradient(135deg, #FFBFA3, #F4A8C6)"
             delay={0.42}/>
           <ActionCard to="/aoa"
-            icon="🌐" title={lang === 'en' ? 'AOA Feed' : 'Bản tin AOA'}
+            icon={
+              <svg width="22" height="22" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M10 2 L11.2 8.8 L18 10 L11.2 11.2 L10 18 L8.8 11.2 L2 10 L8.8 8.8 Z" opacity="0.85"/>
+                <circle cx="10" cy="10" r="2" fill="none" stroke="currentColor" strokeWidth="0.8"/>
+              </svg>
+            }
+            title={lang === 'en' ? 'AOA Feed' : 'Bản tin AOA'}
             subtitle={lang === 'en' ? 'Community insights' : 'Góc nhìn cộng đồng'}
             gradient="linear-gradient(135deg, #C9A4F5, #7C3AED)"
             delay={0.49}/>
           <ActionCard to="/cohort"
-            icon="✦" title={lang === 'en' ? 'Roadmap' : 'Lộ trình'}
+            icon={
+              <svg width="22" height="22" viewBox="0 0 20 20" fill="currentColor">
+                <polygon points="10,3 18,16 2,16" opacity="0.85"/>
+                <polygon points="10,9 15,17 5,17" fill="rgba(255,255,255,0.4)"/>
+              </svg>
+            }
+            title={lang === 'en' ? 'Roadmap' : 'Lộ trình'}
             subtitle={lang === 'en' ? 'Learning path' : 'Hành trình học'}
             gradient="linear-gradient(135deg, #A78BFA, #60A5FA)"
             delay={0.56}/>

@@ -78,7 +78,7 @@ export default function CoachPage() {
   const [reasoning, setReasoning] = useState('');
   const [sessionTitle, setSessionTitle] = useState('');
   const [graphData, setGraphData] = useState(null);
-  const [showMap, setShowMap] = useState(false);
+  const [showMap, setShowMap] = useState(true);
 
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
@@ -166,24 +166,30 @@ export default function CoachPage() {
   const graphStep = graphData?.current_step;
 
   return (
-    <div className="h-[calc(100vh-3rem)] flex gap-4 relative overflow-hidden">
+    <div className="h-[calc(100vh-3rem)] flex gap-4 relative overflow-hidden" style={{ borderRadius: '1.25rem' }}>
 
       {/* ── Full-page background image ───────────────── */}
       <div
         className={`absolute inset-0 pointer-events-none ${isDark ? 'scene-bg-abyss' : 'scene-bg-sunset'}`}
-        style={{ opacity: isDark ? 0.45 : 0.55, backgroundPosition: 'center 30%' }}
+        style={{
+          opacity: isDark ? 0.6 : 0.72,
+          backgroundPosition: 'center 25%',
+          borderRadius: '1.25rem',
+          overflow: 'hidden',
+        }}
       />
       {/* Bottom fade */}
       <div className="absolute inset-0 pointer-events-none" style={{
         background: isDark
-          ? 'linear-gradient(to bottom, transparent 20%, var(--color-bg-primary) 70%)'
-          : 'linear-gradient(to bottom, transparent 25%, var(--color-bg-primary) 65%)',
+          ? 'linear-gradient(to bottom, transparent 15%, var(--color-bg-primary) 75%)'
+          : 'linear-gradient(to bottom, transparent 20%, var(--color-bg-primary) 68%)',
+        borderRadius: '1.25rem',
       }}/>
 
       {/* ══════════════════════════════════════════════
           LEFT: Chat panel
       ══════════════════════════════════════════════ */}
-      <div className={`flex flex-col transition-all duration-300 relative z-10 ${showMap ? 'flex-1' : 'w-full'}`}>
+      <div className={`flex flex-col transition-all duration-300 relative z-10 px-5 pt-4 pb-3 ${showMap ? 'flex-1' : 'w-full'}`}>
 
         {/* Header */}
         <motion.div className="flex items-center justify-between mb-4"
@@ -337,27 +343,93 @@ export default function CoachPage() {
                 )}
               </div>
 
-              {/* Legend */}
-              <div className="flex items-center gap-3 flex-shrink-0">
-                <div className="flex items-center gap-1">
-                  <div className="w-2 h-2 rounded-full" style={{ background: '#6DB97B' }}/>
-                  <span style={{ fontSize: '0.68rem', color: 'var(--color-text-muted)' }}>
+              {/* Legend — theme-synced gem symbols */}
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 flex-shrink-0">
+                {/* Thought node */}
+                <div className="flex items-center gap-1.5">
+                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                    <path d="M5 0.5 L6.1 3.9 L9.5 5 L6.1 6.1 L5 9.5 L3.9 6.1 L0.5 5 L3.9 3.9 Z"
+                      fill={isDark ? '#7C3AED' : '#C9A4F5'} stroke={isDark ? '#A78BFA' : '#B07FD4'} strokeWidth="0.4"/>
+                  </svg>
+                  <span style={{ fontSize: '0.67rem', color: 'var(--color-text-muted)', letterSpacing: '0.01em' }}>
                     {lang === 'en' ? 'Thought' : 'Suy nghĩ'}
                   </span>
                 </div>
-                <div className="flex items-center gap-1">
-                  <div className="w-2 h-2 rounded-full" style={{ background: '#E06B8A' }}/>
-                  <span style={{ fontSize: '0.68rem', color: 'var(--color-text-muted)' }}>
+                {/* Contradiction node */}
+                <div className="flex items-center gap-1.5">
+                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                    <path d="M5 0.5 L6.1 3.9 L9.5 5 L6.1 6.1 L5 9.5 L3.9 6.1 L0.5 5 L3.9 3.9 Z"
+                      fill={isDark ? '#1F0D18' : '#FFF0F3'} stroke={isDark ? '#F87171' : '#F4607E'} strokeWidth="0.4"/>
+                  </svg>
+                  <span style={{ fontSize: '0.67rem', color: 'var(--color-text-muted)', letterSpacing: '0.01em' }}>
                     {lang === 'en' ? 'Contradiction' : 'Mâu thuẫn'}
                   </span>
                 </div>
-                <div className="flex items-center gap-1">
-                  <svg width="12" height="8" viewBox="0 0 12 8"><line x1="0" y1="4" x2="12" y2="4" stroke="var(--color-text-muted)" strokeWidth="1" strokeDasharray="3 2"/></svg>
-                  <span style={{ fontSize: '0.68rem', color: 'var(--color-text-muted)' }}>
-                    {lang === 'en' ? 'Contradiction edge' : 'Cạnh mâu thuẫn'}
+                {/* Contradiction edge */}
+                <div className="flex items-center gap-1.5">
+                  <svg width="14" height="6" viewBox="0 0 14 6">
+                    <line x1="0" y1="3" x2="14" y2="3"
+                      stroke={isDark ? '#F87171' : '#F4607E'}
+                      strokeWidth="1.2" strokeDasharray="3.5 2.5"/>
+                  </svg>
+                  <span style={{ fontSize: '0.67rem', color: 'var(--color-text-muted)', letterSpacing: '0.01em' }}>
+                    {lang === 'en' ? 'Contradiction' : 'Mâu thuẫn'}
+                  </span>
+                </div>
+                {/* Normal edge */}
+                <div className="flex items-center gap-1.5">
+                  <svg width="14" height="6" viewBox="0 0 14 6">
+                    <line x1="0" y1="3" x2="11" y2="3"
+                      stroke={isDark ? 'rgba(124,58,237,0.6)' : 'rgba(176,127,212,0.7)'}
+                      strokeWidth="1.2"/>
+                    <polygon points="14,3 10,1.2 10,4.8"
+                      fill={isDark ? 'rgba(124,58,237,0.6)' : 'rgba(176,127,212,0.7)'}/>
+                  </svg>
+                  <span style={{ fontSize: '0.67rem', color: 'var(--color-text-muted)', letterSpacing: '0.01em' }}>
+                    {lang === 'en' ? 'Connection' : 'Liên kết'}
                   </span>
                 </div>
               </div>
+
+              {/* Step phase badge */}
+              {graphData?.current_step && (
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  <motion.div
+                    key={graphData.current_step}
+                    initial={{ scale: 0.85, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
+                    className="flex items-center gap-1.5 px-2.5 py-1 rounded-full"
+                    style={{
+                      background: graphData.current_step === 'soi_chieu'
+                        ? (isDark ? 'rgba(248,113,113,0.12)' : 'rgba(244,96,126,0.10)')
+                        : (isDark ? 'rgba(124,58,237,0.15)' : 'rgba(201,164,245,0.20)'),
+                      border: `1px solid ${graphData.current_step === 'soi_chieu'
+                        ? (isDark ? 'rgba(248,113,113,0.3)' : 'rgba(244,96,126,0.3)')
+                        : (isDark ? 'rgba(124,58,237,0.3)' : 'rgba(176,127,212,0.4)')}`,
+                    }}
+                  >
+                    <motion.div
+                      className="w-1.5 h-1.5 rounded-full"
+                      style={{
+                        background: graphData.current_step === 'soi_chieu'
+                          ? (isDark ? '#F87171' : '#F4607E')
+                          : (isDark ? '#A78BFA' : '#B07FD4'),
+                      }}
+                      animate={{ scale: graphData.current_step === 'soi_chieu' ? [1, 1.4, 1] : 1 }}
+                      transition={{ duration: 1.2, repeat: Infinity, ease: 'easeInOut' }}
+                    />
+                    <span style={{
+                      fontSize: '0.67rem', fontWeight: 600, letterSpacing: '0.03em',
+                      color: graphData.current_step === 'soi_chieu'
+                        ? (isDark ? '#F87171' : '#F4607E')
+                        : (isDark ? '#A78BFA' : '#7C3AED'),
+                    }}>
+                      {graphData.current_step === 'soi_chieu'
+                        ? (lang === 'en' ? 'Reflection' : 'Soi chiếu')
+                        : (lang === 'en' ? 'Exploration' : 'Khám phá')}
+                    </span>
+                  </motion.div>
+                </div>
+              )}
 
               <div className="divider"/>
 
