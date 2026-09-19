@@ -18,6 +18,48 @@ from app.services.llm_service import get_llm_service
 router = APIRouter(prefix="/api/v1/tasks", tags=["Tasks"])
 
 
+@router.post("/microsteps")
+async def generate_microsteps(req: MicrostepsRequest):
+    """AI generates Pomodoro-style micro-steps for a task."""
+    is_en = req.lang == "en"
+    prompt = f"""Bạn là một AI thuộc hệ thống Therapity, chuyên gia chia nhỏ nhiệm vụ theo phương pháp Pomodoro.
+Nhiệm vụ: "{req.title}"
+Mục tiêu: "{req.goal}"
+Mức độ nỗ lực (1-5): {req.effort}
+
+Hãy chia thành 2-5 bước nhỏ, mỗi bước kéo dài khoảng 25 phút (1 Pomodoro).
+Mỗi bước phải cụ thể, rõ ràng, khả thi ngay lập tức.
+
+Trả về đúng 1 JSON hợp lệ:
+{{
+    "subtasks": [
+        {{"title": "Bước 1: ...", "done": false}},
+        {{"title": "Bước 2: ...", "done": false}}
+    ]
+}}
+
+{'Write in English.' if is_en else 'Viết bằng tiếng Việt.'}
+"""
+
+    llm = get_llm_service()
+    json_result, _, _ = llm.chat_completion_json(
+        messages=[{"role": "user", "content": prompt}],
+        temperature=0.3,
+        max_tokens=1000,
+    )
+
+    if json_result and "subtasks" in json_result:
+        return json_result
+
+    return {
+        "subtasks": [
+            {"title": "Bước 1: Nghiên cứu và hiểu rõ nhiệm vụ" if not is_en else "Step 1: Research and understand the task", "done": False},
+            {"title": "Bước 2: Thực hiện phần cốt lõi" if not is_en else "Step 2: Execute the core part", "done": False},
+            {"title": "Bước 3: Kiểm tra và hoàn thiện" if not is_en else "Step 3: Review and finalize", "done": False},
+        ]
+    }
+
+
 @router.get("/{username}")
 async def get_tasks(username: str, db: AsyncSession = Depends(get_db)):
     """Get all tasks for a user."""
@@ -115,46 +157,3 @@ async def delete_task(username: str, task_id: str, db: AsyncSession = Depends(ge
     await db.delete(task)
     await db.commit()
     return {"status": "success"}
-
-
-@router.post("/microsteps")
-async def generate_microsteps(req: MicrostepsRequest):
-    """AI generates Pomodoro-style micro-steps for a task."""
-    is_en = req.lang == "en"
-    prompt = f"""Bạn là một AI thuộc hệ thống Therapity, chuyên gia chia nhỏ nhiệm vụ theo phương pháp Pomodoro.
-Nhiệm vụ: "{req.title}"
-Mục tiêu: "{req.goal}"
-Mức độ nỗ lực (1-5): {req.effort}
-
-Hãy chia thành 2-5 bước nhỏ, mỗi bước kéo dài khoảng 25 phút (1 Pomodoro).
-Mỗi bước phải cụ thể, rõ ràng, khả thi ngay lập tức.
-
-Trả về đúng 1 JSON hợp lệ:
-{{
-    "subtasks": [
-        {{"title": "Bước 1: ...", "done": false}},
-        {{"title": "Bước 2: ...", "done": false}}
-    ]
-}}
-
-{'Write in English.' if is_en else 'Viết bằng tiếng Việt.'}
-"""
-
-    llm = get_llm_service()
-    json_result, _, _ = llm.chat_completion_json(
-        messages=[{"role": "user", "content": prompt}],
-        temperature=0.3,
-        max_tokens=1000,
-    )
-
-    if json_result and "subtasks" in json_result:
-        return json_result
-
-    # Fallback
-    return {
-        "subtasks": [
-            {"title": "Bước 1: Nghiên cứu và hiểu rõ nhiệm vụ" if not is_en else "Step 1: Research and understand the task", "done": False},
-            {"title": "Bước 2: Thực hiện phần cốt lõi" if not is_en else "Step 2: Execute the core part", "done": False},
-            {"title": "Bước 3: Kiểm tra và hoàn thiện" if not is_en else "Step 3: Review and finalize", "done": False},
-        ]
-    }
