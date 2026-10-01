@@ -3,11 +3,9 @@ import useAuthStore from './store/authStore';
 import AppLayout from './components/Layout/AppLayout';
 import LoginPage from './pages/LoginPage';
 import OnboardingPage from './pages/OnboardingPage';
-import DashboardPage from './pages/DashboardPage';
 import CoachPage from './pages/CoachPage';
 import DiaryPage from './pages/DiaryPage';
 import TasksPage from './pages/TasksPage';
-import AOAPage from './pages/AOAPage';
 import CohortPage from './pages/CohortPage';
 
 function ProtectedRoute({ children }) {
@@ -29,11 +27,9 @@ export default function App() {
 
         {/* Protected with Layout */}
         <Route element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
-          <Route path="/dashboard" element={<DashboardPage />} />
-          <Route path="/coach" element={<CoachPage />} />
-          <Route path="/diary" element={<DiaryPage />} />
-          <Route path="/tasks" element={<TasksPage />} />
-          <Route path="/aoa" element={<AOAPage />} />
+          <Route path="/coach"  element={<CoachPage />} />
+          <Route path="/diary"  element={<DiaryPage />} />
+          <Route path="/tasks"  element={<TasksPage />} />
           <Route path="/cohort" element={<CohortPage />} />
         </Route>
 

@@ -10,6 +10,7 @@ export default defineConfig({
   server: {
     port: 3000,
     host: true,
+    historyApiFallback: true,
     proxy: {
       '/api': {
         target: process.env.VITE_API_URL || 'http://backend:8000',

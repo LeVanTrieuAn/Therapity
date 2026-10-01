@@ -56,15 +56,15 @@ async def add_no_cache_header(request: Request, call_next):
 
 
 # --- Register Routers ---
-from app.routers import auth, chat, diary, tasks, aoa, profile, health
+from app.routers import auth, chat, diary, tasks, profile, health, cohort
 
 app.include_router(auth.router)
 app.include_router(chat.router)
 app.include_router(diary.router)
 app.include_router(tasks.router)
-app.include_router(aoa.router)
 app.include_router(profile.router)
 app.include_router(health.router)
+app.include_router(cohort.router)
 
 
 # --- Root endpoint ---

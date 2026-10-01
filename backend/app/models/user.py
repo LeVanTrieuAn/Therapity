@@ -34,7 +34,6 @@ class User(Base):
     diary_entries = relationship("DiaryEntry", back_populates="user", cascade="all, delete-orphan")
     diary_folders = relationship("DiaryFolder", back_populates="user", cascade="all, delete-orphan")
     tasks = relationship("Task", back_populates="user", cascade="all, delete-orphan")
-    aoa_posts = relationship("AOAPost", back_populates="author", cascade="all, delete-orphan")
     cohort_memberships = relationship("CohortMember", back_populates="user", cascade="all, delete-orphan")
     personal_roadmaps = relationship("PersonalRoadmap", back_populates="user", cascade="all, delete-orphan")
 

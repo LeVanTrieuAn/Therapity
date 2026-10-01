@@ -86,39 +86,6 @@ class MicrostepsRequest(BaseModel):
     lang: Optional[str] = "vi"
 
 
-# === AOA ===
-class PostRequest(BaseModel):
-    author_name: str
-    author_displayName: Optional[str] = ""
-    author_avatar: Optional[str] = ""
-    content: str
-    graph_data: dict = {}
-    post_privacy: Optional[str] = "public"
-
-class CommentRequest(BaseModel):
-    author_name: str
-    author_displayName: Optional[str] = ""
-    author_avatar: Optional[str] = ""
-    content: str
-
-class RepostRequest(BaseModel):
-    original_post_id: str
-    author_name: str
-    author_displayName: Optional[str] = ""
-    author_avatar: Optional[str] = ""
-    content: str
-    post_privacy: Optional[str] = "public"
-
-class UpdatePostRequest(BaseModel):
-    username: str
-    content: str
-
-class ReportPostRequest(BaseModel):
-    username: str
-    category: str
-    details: str
-
-
 # === Cohort ===
 class CohortJoinRequest(BaseModel):
     username: str

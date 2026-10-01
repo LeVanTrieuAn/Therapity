@@ -14,12 +14,6 @@ import useThemeStore from '../../store/themeStore';
  */
 
 const TsIcon = {
-  /* ✦ 4-pointed diamond star — Dashboard */
-  dashboard: (
-    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-      <path d="M10 1 L11.8 8.2 L19 10 L11.8 11.8 L10 19 L8.2 11.8 L1 10 L8.2 8.2 Z"/>
-    </svg>
-  ),
 
   /* ◎ Double circle / eye — Coach / mirror */
   coach: (
@@ -36,14 +30,6 @@ const TsIcon = {
       <path d="M10 3 A7 7 0 0 1 10 17 A5 5 0 0 0 10 3 Z" opacity="0.9"/>
       <circle cx="14" cy="6" r="1.2"/>
       <circle cx="15.5" cy="10" r="0.8" opacity="0.6"/>
-    </svg>
-  ),
-
-  /* ✤ Compass rose — AOA / global */
-  aoa: (
-    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-      <path d="M10 2 L11.2 8.8 L18 10 L11.2 11.2 L10 18 L8.8 11.2 L2 10 L8.8 8.8 Z" opacity="0.85"/>
-      <circle cx="10" cy="10" r="2" fill="none" stroke="currentColor" strokeWidth="1"/>
     </svg>
   ),
 
@@ -111,12 +97,10 @@ const TarotLogo = ({ theme }) => {
 };
 
 const navItems = [
-  { path: '/dashboard', icon: TsIcon.dashboard, labelVi: 'Tổng quan',  labelEn: 'Dashboard' },
-  { path: '/coach',     icon: TsIcon.coach,     labelVi: 'Tham vấn',  labelEn: 'Dialogue'  },
-  { path: '/diary',     icon: TsIcon.diary,     labelVi: 'Nhật ký',   labelEn: 'Diary'     },
-  { path: '/aoa',       icon: TsIcon.aoa,       labelVi: 'Bản tin',   labelEn: 'AOA Feed'  },
-  { path: '/tasks',     icon: TsIcon.tasks,     labelVi: 'Nhiệm vụ',  labelEn: 'Tasks'     },
-  { path: '/cohort',    icon: TsIcon.cohort,    labelVi: 'Lộ trình',  labelEn: 'Roadmap'   },
+  { path: '/coach',  icon: TsIcon.coach,  labelVi: 'Tham vấn',  labelEn: 'Dialogue' },
+  { path: '/diary',  icon: TsIcon.diary,  labelVi: 'Nhật ký',   labelEn: 'Diary'    },
+  { path: '/tasks',  icon: TsIcon.tasks,  labelVi: 'Nhiệm vụ',  labelEn: 'Tasks'    },
+  { path: '/cohort', icon: TsIcon.cohort, labelVi: 'Lộ trình',  labelEn: 'Roadmap'  },
 ];
 
 const sidebarVariants = {

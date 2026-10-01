@@ -51,17 +51,6 @@ export const tasksAPI = {
   microsteps: (data) => api.post('/tasks/microsteps', data),
 };
 
-// AOA API
-export const aoaAPI = {
-  getPosts: () => api.get('/aoa/posts'),
-  createPost: (data) => api.post('/aoa/posts', data),
-  addComment: (postId, data) => api.post(`/aoa/posts/${postId}/comments`, data),
-  toggleLike: (postId, data) => api.post(`/aoa/posts/${postId}/like`, data),
-  postAction: (postId, data) => api.post(`/aoa/posts/${postId}/action`, data),
-  updatePost: (postId, data) => api.put(`/aoa/posts/${postId}`, data),
-  reportPost: (postId, data) => api.post(`/aoa/posts/${postId}/report`, data),
-  trending: () => api.post('/aoa/trending'),
-};
 
 // Profile API
 export const profileAPI = {
@@ -72,6 +61,22 @@ export const profileAPI = {
   getContext: (username) => api.get(`/profile/${username}/context`),
   getStats: (username) => api.get(`/profile/${username}/stats`),
   getMindset: (username) => api.get(`/profile/${username}/mindset`),
+};
+
+// Cohort / Roadmap API
+export const cohortAPI = {
+  getSyllabus: (username, week) => api.get(`/cohort/syllabus?username=${username}&week=${week}`),
+  getActivity: () => api.get('/cohort/activity'),
+  getMembers: () => api.get('/cohort/members'),
+  getTasks: (username) => api.get(`/cohort/tasks/${username}`),
+  checkContext: (username) => api.get(`/cohort/check-context?username=${username}`),
+  join: (data) => api.post('/cohort/join', data),
+  personalizeWeek: (data) => api.post('/cohort/personalize-week', data),
+  patchTask: (taskId, data) => api.patch(`/cohort/tasks/${taskId}`, data),
+  updateProgress: (data) => api.post('/cohort/update-progress', data),
+  generateQuiz: (data) => api.post('/cohort/generate-quiz', data),
+  submitQuiz: (data) => api.post('/cohort/submit-quiz', data),
+  aiRetrospective: (data) => api.post('/cohort/ai-retrospective', data),
 };
 
 export default api;
